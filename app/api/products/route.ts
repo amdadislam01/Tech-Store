@@ -10,6 +10,9 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const category = searchParams.get("category");
     const search = searchParams.get("search");
+    const page = parseInt(searchParams.get("page") || "1");
+    const limit = parseInt(searchParams.get("limit") || "12");
+    const skip = (page - 1) * limit;
 
     const query: any = {};
     if (category && category !== "All") {
@@ -19,9 +22,13 @@ export async function GET(req: Request) {
       query.name = { $regex: search, $options: "i" };
     }
 
-    const products = await Product.find(query).sort({ createdAt: -1 });
+    const totalProducts = await Product.countDocuments(query);
+    const products = await Product.find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
     
-    // Map products to ensure images array exists for old items
+    // Normalize product data by ensuring the 'images' array is populated, even for legacy items
     const migratedProducts = products.map(p => {
         const productObj = p.toObject();
         if (!productObj.images || productObj.images.length === 0) {
@@ -30,7 +37,14 @@ export async function GET(req: Request) {
         return productObj;
     });
 
-    return NextResponse.json(migratedProducts);
+    const totalPages = Math.ceil(totalProducts / limit);
+
+    return NextResponse.json({
+        products: migratedProducts,
+        totalPages,
+        currentPage: page,
+        totalProducts
+    });
   } catch (error) {
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }

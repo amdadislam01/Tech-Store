@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 
-// Sections
 import Hero from "@/components/Sections/Hero";
 import BrandPartners from "@/components/Sections/BrandPartners";
 import CategoryGrid from "@/components/Sections/CategoryGrid";
@@ -50,9 +49,8 @@ export default function HomePageClient({ initialProducts }: { initialProducts: a
   useEffect(() => {
     const timer = setTimeout(() => {
         fetchProducts();
-    }, 300); // Debounce search
+    }, 300); // Delay execution to prevent frequent API calls during rapid typing
     return () => clearTimeout(timer);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category, search]);
 
   return (
@@ -65,7 +63,6 @@ export default function HomePageClient({ initialProducts }: { initialProducts: a
       
       <BrandPartners />
 
-      {/* Main Content Area */}
       <motion.section 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}

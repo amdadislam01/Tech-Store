@@ -6,7 +6,7 @@ const ProductSchema = new Schema(
     description: { type: String, required: true },
     price: { type: Number, required: true },
     images: { type: [String], default: [] },
-    image: { type: String }, // Keeping for backward compatibility
+    image: { type: String }, // Legacy field retained for compatibility with existing product documents
     category: { type: String, required: true },
     brand: { type: String },
     modelName: { type: String },
@@ -29,7 +29,7 @@ const ProductSchema = new Schema(
   { timestamps: true }
 );
 
-// Force re-registration if fields are missing (Common Next.js HMR issue)
+// Address potential Hot Module Replacement (HMR) issues by clearing the model if schema components are missing
 if (models.Product && !models.Product.schema.path("reviews")) {
   delete models.Product;
 }

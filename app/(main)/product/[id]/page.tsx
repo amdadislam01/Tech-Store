@@ -110,7 +110,6 @@ export default function ProductDetails() {
     }).format(new Date(dateString));
   };
 
-  // Calculate review distribution
   const reviewStats = useMemo(() => {
     if (!product?.reviews) return null;
     const stats = [0, 0, 0, 0, 0];
@@ -157,7 +156,6 @@ export default function ProductDetails() {
 
   return (
     <div className="bg-white min-h-screen">
-      {/* Decorative backdrop */}
       <div className="absolute top-0 left-0 w-full h-[60vh] bg-gradient-to-b from-zinc-50 to-transparent -z-10" />
       
       <div className="container-custom py-12">
@@ -167,7 +165,6 @@ export default function ProductDetails() {
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-            {/* Left Column: Media Gallery */}
             <div className="w-full">
                 <div className="sticky top-12 space-y-6">
                     <motion.div 
@@ -196,7 +193,6 @@ export default function ProductDetails() {
                             </motion.div>
                         </AnimatePresence>
                         
-                        {/* Interactive floating badge */}
                         <div className="absolute top-6 left-6">
                              <div className="bg-white/70 backdrop-blur-md px-4 py-2 rounded-xl shadow-lg border border-white/50 flex items-center gap-2">
                                  <Sparkles size={14} className="text-primary animate-pulse" />
@@ -223,7 +219,6 @@ export default function ProductDetails() {
                 </div>
             </div>
 
-            {/* Right Column: Product Intelligence */}
             <motion.div 
                 initial="hidden"
                 animate="visible"
@@ -358,9 +353,8 @@ export default function ProductDetails() {
             </motion.div>
         </div>
 
-        {/* Dynamic Context Tabs */}
         <div className="mt-32">
-             <div className="flex justify-center border-b border-gray-100/60 mb-12 overflow-x-auto no-scrollbar gap-8 md:gap-12">
+             <div className="flex justify-center border-b border-gray-100/60 mb-12 overflow-x-auto no-scrollbar gap-10 md:gap-16">
                 {[
                     { id: "description", label: "Overview", icon: FileText },
                     { id: "specs", label: "Intelligence", icon: ListTodo },
@@ -369,16 +363,16 @@ export default function ProductDetails() {
                     <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id as any)}
-                        className={`relative py-6 text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap flex items-center gap-2.5 ${
+                        className={`relative py-8 px-2 text-[11px] font-black uppercase tracking-[0.25em] transition-all whitespace-nowrap flex items-center gap-3 group ${
                             activeTab === tab.id ? "text-primary" : "text-gray-400 hover:text-gray-600"
                         }`}
                     >
-                        <tab.icon size={14} />
+                        <tab.icon size={16} className={`transition-all duration-300 ${activeTab === tab.id ? "scale-110" : "group-hover:scale-110"}`} />
                         {tab.label}
                         {activeTab === tab.id && (
                             <motion.div 
                                 layoutId="activeTab"
-                                className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full"
+                                className="absolute bottom-0 left-0 right-0 h-1 bg-primary rounded-t-full shadow-[0_-4px_12px_rgba(34,197,94,0.3)]"
                             />
                         )}
                     </button>
@@ -481,9 +475,7 @@ export default function ProductDetails() {
                             exit={{ opacity: 0, y: -20 }}
                             className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20"
                         >
-                            {/* Review Stats & Form */}
                             <div className="lg:col-span-5 space-y-10">
-                                {/* Rating Summary */}
                                 <div className="bg-zinc-50/50 p-8 rounded-3xl border border-white shadow-xl shadow-gray-100/20">
                                     <div className="flex items-center justify-between mb-8">
                                         <div>
@@ -518,7 +510,6 @@ export default function ProductDetails() {
                                     </div>
                                 </div>
 
-                                {/* Form Section */}
                                 <div className="relative p-8 bg-white rounded-3xl border border-zinc-100 shadow-2xl shadow-gray-100/40">
                                     <div className="flex items-center gap-3 mb-8">
                                         <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary">
@@ -576,7 +567,6 @@ export default function ProductDetails() {
                                 </div>
                             </div>
 
-                            {/* Feed Section */}
                             <div className="lg:col-span-7">
                                 <div className="space-y-6">
                                     <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-100/60">

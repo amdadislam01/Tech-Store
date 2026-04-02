@@ -18,13 +18,19 @@ function ProductsContent() {
   const [category, setCategory] = useState("All");
   const [search, setSearch] = useState(initialSearch);
   const [viewType, setViewType] = useState<"grid" | "list">("grid");
+  
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalProducts, setTotalProducts] = useState(0);
 
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/products?category=${category}&search=${search}`);
+      const res = await fetch(`/api/products?category=${category}&search=${search}&page=${page}&limit=9`);
       const data = await res.json();
-      setProducts(data);
+      setProducts(data.products || []);
+      setTotalPages(data.totalPages || 1);
+      setTotalProducts(data.totalProducts || 0);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
@@ -33,16 +39,19 @@ function ProductsContent() {
   };
 
   useEffect(() => {
+    setPage(1); // Ensure navigation starts at page one when applying new filters
+  }, [category, search]);
+
+  useEffect(() => {
     const timer = setTimeout(() => {
         fetchProducts();
     }, 300);
     return () => clearTimeout(timer);
-  }, [category, search]);
+  }, [category, search, page]);
 
   return (
     <div className="bg-[#F8FAFC] min-h-screen pt-12 pb-24">
       <div className="container-custom">
-        {/* Header Area */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
                 <motion.div
@@ -74,7 +83,6 @@ function ProductsContent() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
-            {/* Sidebar Filters */}
             <aside className="lg:col-span-1 space-y-10">
                 <div>
                     <h3 className="text-sm font-black uppercase tracking-widest text-foreground mb-6 flex items-center gap-2">
@@ -125,10 +133,9 @@ function ProductsContent() {
                 </div>
             </aside>
 
-            {/* Product Display Area */}
             <main className="lg:col-span-3">
                 <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
-                    <p className="text-sm font-bold text-gray-500">Showing <span className="text-foreground">{products.length}</span> revolutionary devices</p>
+                    <p className="text-sm font-bold text-gray-500">Showing <span className="text-foreground">{totalProducts}</span> revolutionary devices</p>
                     <select className="bg-transparent border-none focus:ring-0 text-sm font-black text-foreground cursor-pointer">
                         <option>Newest Arrivals</option>
                         <option>Price: Low to High</option>
@@ -161,6 +168,46 @@ function ProductsContent() {
                     )}
                     </motion.div>
                 </AnimatePresence>
+
+                {totalPages > 1 && (
+                    <motion.div 
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="flex items-center justify-center gap-2 mt-16"
+                    >
+                        <button
+                            disabled={page === 1}
+                            onClick={() => setPage(prev => Math.max(1, prev - 1))}
+                            className="px-6 py-3 bg-white border border-gray-100 rounded-xl text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-primary hover:border-primary disabled:opacity-30 disabled:hover:text-gray-500 disabled:hover:border-gray-100 transition-all shadow-sm active:scale-95 cursor-pointer"
+                        >
+                            Previous
+                        </button>
+                        
+                        <div className="flex items-center gap-1 mx-4">
+                            {Array.from({ length: totalPages }).map((_, i) => (
+                                <button
+                                    key={i + 1}
+                                    onClick={() => setPage(i + 1)}
+                                    className={`w-10 h-10 rounded-xl text-[10px] font-black transition-all cursor-pointer ${
+                                        page === i + 1 
+                                        ? "bg-primary text-white shadow-lg shadow-primary/20 scale-110" 
+                                        : "bg-white text-gray-400 border border-gray-100 hover:bg-gray-50"
+                                    }`}
+                                >
+                                    {i + 1}
+                                </button>
+                            ))}
+                        </div>
+
+                        <button
+                            disabled={page === totalPages}
+                            onClick={() => setPage(prev => Math.min(totalPages, prev + 1))}
+                            className="px-6 py-3 bg-white border border-gray-100 rounded-xl text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-primary hover:border-primary disabled:opacity-30 disabled:hover:text-gray-500 disabled:hover:border-gray-100 transition-all shadow-sm active:scale-95 cursor-pointer"
+                        >
+                            Next
+                        </button>
+                    </motion.div>
+                )}
             </main>
         </div>
       </div>

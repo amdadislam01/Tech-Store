@@ -55,7 +55,6 @@ const ProductCard = ({ product }: ProductProps) => {
         whileHover={{ y: -8 }}
         className="group relative bg-white rounded-[2.5rem] border border-gray-100 overflow-hidden transition-all duration-500 flex flex-col h-full shadow-premium hover:shadow-premium-hover"
     >
-      {/* Premium Badge */}
       <div className="absolute top-5 left-5 z-20 flex flex-col gap-2 pointer-events-none">
           <div className="glass-morphism px-4 py-2 rounded-2xl shadow-sm flex items-center gap-2">
               <div className="w-1.5 h-1.5 bg-primary rounded-full animate-pulse" />
@@ -86,7 +85,6 @@ const ProductCard = ({ product }: ProductProps) => {
           </motion.button>
       </div>
 
-      {/* Image Spotlight area */}
       <Link href={`/product/${product._id}`} className="relative aspect-[1/1] overflow-hidden bg-zinc-50 group-hover:bg-white transition-colors duration-700">
         <Image
           src={product.images?.[0] || product.image || "/placeholder.png"}
@@ -105,7 +103,6 @@ const ProductCard = ({ product }: ProductProps) => {
         </div>
       </Link>
       
-      {/* Content Meta */}
       <div className="p-8 flex flex-col flex-grow">
         <div className="flex items-center gap-4 mb-6">
             <div className="flex items-center gap-1.5 bg-yellow-400/10 px-3 py-1.5 rounded-xl border border-yellow-400/10">

@@ -33,13 +33,13 @@ const Navbar = () => {
   ];
   const { items } = useSelector((state: RootState) => state.cart);
   const cartCount = items.reduce((total, item) => total + item.quantity, 0);
+  const { wishlistItems } = useSelector((state: RootState) => state.wishlist);
   const { data: session } = useSession();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
     <nav className="bg-white/80 backdrop-blur-xl border-b border-gray-100 sticky top-0 z-50 transition-all duration-300">
       <div className="container-custom h-20 flex items-center justify-between">
-        {/* Logo */}
         <Link href="/" className="text-2xl font-black text-primary flex items-center gap-2 group">
           <div className="w-10 h-10 bg-primary rounded-2xl flex items-center justify-center text-white shadow-xl shadow-primary/20 group-hover:rotate-12 transition-transform duration-500">
             <Store size={22} />
@@ -47,7 +47,6 @@ const Navbar = () => {
           <span className="hidden sm:block tracking-tighter">Tech<span className="text-foreground">Store</span></span>
         </Link>
 
-        {/* Desktop Menu */}
         <div className="hidden lg:flex items-center gap-8">
           {links.map((link) => {
             const isActive = pathname === link.href;
@@ -69,8 +68,8 @@ const Navbar = () => {
           })}
         </div>
 
-        {/* Search & Actions */}
-        <div className="flex items-center gap-2 md:gap-5">
+          {/* Search & Actions was here, but removed the comment */}
+          <div className="flex items-center gap-2 md:gap-5">
           <div className="hidden lg:flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-2xl border border-gray-100 focus-within:bg-white focus-within:ring-2 focus-within:ring-primary/10 transition-all">
             <Search size={18} className="text-gray-400" />
             <input 
@@ -81,9 +80,18 @@ const Navbar = () => {
           </div>
           
           <div className="flex items-center gap-1 md:gap-2">
-            <button className="p-2.5 hover:bg-gray-50 rounded-2xl transition-colors text-gray-400 hidden sm:block">
-                <Heart size={20} />
-            </button>
+            <Link href="/wishlist" className="p-2.5 hover:bg-gray-50 rounded-2xl transition-colors relative text-gray-500 group hidden sm:block">
+                <Heart size={22} className="group-hover:scale-110 group-hover:text-red-500 transition-all" />
+                {wishlistItems.length > 0 && (
+                <motion.span 
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    className="absolute top-1 right-1 bg-red-500 text-white text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-lg border-2 border-white"
+                >
+                    {wishlistItems.length}
+                </motion.span>
+                )}
+            </Link>
             <Link href="/cart" className="p-2.5 hover:bg-gray-50 rounded-2xl transition-colors relative text-gray-500 group">
                 <ShoppingCart size={22} className="group-hover:scale-110 transition-transform" />
                 {cartCount > 0 && (
@@ -118,7 +126,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
             <motion.div

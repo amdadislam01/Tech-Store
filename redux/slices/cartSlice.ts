@@ -21,7 +21,7 @@ const initialState: CartState = {
   totalPrice: 0,
 };
 
-// Calculate total price helper
+// Helper to compute the total price of all items currently in the cart
 const calculateTotal = (items: CartItem[]) => {
   return items.reduce((total, item) => total + item.price * item.quantity, 0);
 };
