@@ -459,7 +459,7 @@ export default function ProductDetails() {
                                                 disabled={submittingReview}
                                                 className="w-full bg-foreground text-white py-6 rounded-[2.5rem] font-black text-xs uppercase tracking-[0.3em] shadow-2xl hover:bg-primary transition-all duration-500 disabled:opacity-50 active:scale-95"
                                             >
-                                                {submittingReview ? "Processing Data..." : "Transmit Review"}
+                                                {submittingReview ? "Processing Data..." : "Submit Review"}
                                             </button>
                                         </form>
                                     ) : (
