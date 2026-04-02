@@ -38,7 +38,7 @@ export default function HomePageClient({ initialProducts }: { initialProducts: a
     try {
       const res = await fetch(`/api/products?category=${category}&search=${search}`);
       const data = await res.json();
-      setProducts(data);
+      setProducts(data.products || []);
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {

@@ -60,7 +60,7 @@ export default function ProductCatalog({
             <div className="flex items-center gap-6 text-gray-500 text-sm font-bold border-l border-gray-100 pl-8">
                 <div className="flex items-center gap-2">
                     <Zap size={16} className="text-primary" />
-                    <span>{products.slice(0, 4).length} Items</span>
+                    <span>{(Array.isArray(products) ? products : []).slice(0, 4).length} Items</span>
                 </div>
                 <div className="flex items-center gap-2">
                     <TrendingUp size={16} className="text-primary" />
@@ -79,8 +79,8 @@ export default function ProductCatalog({
             >
             {loading ? (
                 Array.from({ length: 4 }).map((_, i) => <ProductSkeleton key={i} />)
-            ) : products.length > 0 ? (
-                products.slice(0, 4).map((product: any) => (
+            ) : (Array.isArray(products) ? products : []).length > 0 ? (
+                (Array.isArray(products) ? products : []).slice(0, 4).map((product: any) => (
                 <motion.div key={product._id} variants={itemVariants}>
                     <ProductCard product={product} />
                 </motion.div>

@@ -52,7 +52,8 @@ export default async function DashboardPage() {
   const lowStockProducts = await Product.find()
     .sort({ stock: 1 })
     .limit(3)
-    .select("name stock");
+    .select("name stock")
+    .lean();
 
   // Sales Trend Aggregation (Last 7 Days)
   const last7Days = new Date();
