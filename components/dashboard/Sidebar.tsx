@@ -116,7 +116,7 @@ const Sidebar = ({ role }: SidebarProps) => {
       <div className="p-4 border-t border-gray-100">
         <button
           onClick={() => signOut({ callbackUrl: "/login" })}
-          className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 transition-all font-medium"
+          className="w-full flex items-center gap-4 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 transition-all font-medium cursor-pointer"
         >
           <LogOut size={22} />
           {!isCollapsed && <span>Sign Out</span>}

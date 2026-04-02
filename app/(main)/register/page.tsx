@@ -116,7 +116,7 @@ export default function RegisterPage() {
                         whileTap={{ scale: 0.98 }}
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-slate-950 text-white py-5 rounded-2xl font-black text-base uppercase tracking-wider hover:bg-primary transition-all shadow-xl shadow-slate-900/10 hover:shadow-primary/20 disabled:opacity-50 flex items-center justify-center gap-3 mt-6"
+                        className="w-full bg-slate-950 text-white py-5 rounded-2xl font-black text-base uppercase tracking-wider hover:bg-primary transition-all shadow-xl shadow-slate-900/10 hover:shadow-primary/20 disabled:opacity-50 flex items-center justify-center gap-3 mt-6 cursor-pointer"
                     >
                         {loading ? "Creating account..." : "Register Now"}
                         {!loading && <ArrowRight size={18} />}

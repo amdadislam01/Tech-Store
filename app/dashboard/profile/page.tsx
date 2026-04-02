@@ -12,11 +12,13 @@ import {
   ArrowLeft,
   Loader2,
   Sparkles,
-  Mail
+  Mail,
+  BadgeCheck,
+  Globe
 } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 export default function ProfileSettings() {
   const { data: session, update } = useSession();
@@ -47,7 +49,7 @@ export default function ProfileSettings() {
     if (!file) return;
 
     if (file.size > 2 * 1024 * 1024) {
-      return toast.error("Identity signature must be under 2MB.");
+      return toast.error("Image must be under 2MB.");
     }
 
     setUploading(true);
@@ -62,7 +64,7 @@ export default function ProfileSettings() {
       const data = await res.json();
       if (data.success) {
         setImage(data.data.url);
-        toast.success("Identity visual updated.");
+        toast.success("Avatar updated successfully.");
       } else {
         toast.error("Cloud synchronization failed.");
       }
@@ -86,11 +88,10 @@ export default function ProfileSettings() {
       const data = await res.json();
 
       if (res.ok) {
-        // Force session update
         await update({ name, image });
-        toast.success("Profile synthesized successfully!");
+        toast.success("Profile updated successfully!");
       } else {
-        toast.error(data.error || "Synthesis failed.");
+        toast.error(data.error || "Update failed.");
       }
     } catch (err) {
       toast.error("A core error occurred.");
@@ -130,178 +131,179 @@ export default function ProfileSettings() {
   };
 
   return (
-    <div className="bg-[#FCFCFD] min-h-screen py-12">
-      <div className="container-custom max-w-5xl">
-        <Link href="/dashboard" className="inline-flex items-center gap-3 text-gray-400 hover:text-primary transition-all mb-12 group font-black text-[10px] uppercase tracking-widest">
-          <ArrowLeft size={16} className="group-hover:-translate-x-2 transition-transform" />
-          <span>Exit Settings</span>
-        </Link>
+    <div className="bg-[#F9FAFB] min-h-screen pb-20">
+      {/* Subtle Top Header */}
+      <div className="bg-white/70 backdrop-blur-lg sticky top-0 z-30 border-b border-gray-100 mb-8">
+        <div className="container-custom max-w-6xl py-5 flex items-center justify-between">
+          <Link href="/dashboard" className="flex items-center gap-2 text-gray-500 hover:text-primary transition-all font-semibold text-sm group">
+            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
+            <span>Back to Dashboard</span>
+          </Link>
+          <div className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Account Settings</div>
+        </div>
+      </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-          {/* Dashboard Profile Sidebar */}
+      <div className="container-custom max-w-6xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          {/* Sidebar Profile Card */}
           <div className="lg:col-span-4">
-             <div className="bg-white p-10 rounded-[3rem] shadow-2xl shadow-gray-100 border border-white sticky top-12 overflow-hidden group">
-                <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
-                    <Sparkles size={120} />
+            <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100 sticky top-24 overflow-hidden">
+              <div className="absolute top-[-10%] right-[-10%] text-primary/5 rotate-12">
+                <Sparkles size={160} />
+              </div>
+
+              <div className="relative flex flex-col items-center">
+                <div className="relative group/avatar mb-6">
+                  <div className="w-32 h-32 rounded-[2.5rem] overflow-hidden ring-4 ring-gray-50 shadow-inner relative transition-transform duration-500 group-hover/avatar:scale-105">
+                    {image ? (
+                      <Image src={image} alt={name} fill className="object-cover" />
+                    ) : (
+                      <div className="w-full h-full bg-zinc-50 flex items-center justify-center text-gray-300">
+                        <User size={50} strokeWidth={1.5} />
+                      </div>
+                    )}
+                    {uploading && (
+                      <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center">
+                        <Loader2 className="text-primary animate-spin" size={24} />
+                      </div>
+                    )}
+                  </div>
+                  <button 
+                    onClick={() => fileInputRef.current?.click()}
+                    className="absolute -bottom-2 -right-2 bg-primary text-white p-3 rounded-2xl shadow-xl hover:scale-110 active:scale-95 transition-all border-4 border-white"
+                  >
+                    <Camera size={18} />
+                  </button>
+                  <input type="file" ref={fileInputRef} onChange={handleImageUpload} className="hidden" accept="image/*" />
                 </div>
 
-                <div className="relative mb-10 group/avatar">
-                    <div className="relative w-40 h-40 mx-auto bg-zinc-50 rounded-[4rem] overflow-hidden border-8 border-white shadow-2xl transition-transform duration-700 group-hover/avatar:scale-105">
-                        {image ? (
-                            <Image src={image} alt={name} fill className="object-cover" />
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center text-gray-200">
-                                <User size={80} strokeWidth={1} />
-                            </div>
-                        )}
-                        {uploading && (
-                            <div className="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center">
-                                <Loader2 className="text-primary animate-spin" size={32} />
-                            </div>
-                        )}
-                    </div>
-                    <button 
-                        onClick={() => fileInputRef.current?.click()}
-                        className="absolute bottom-2 right-1/4 w-12 h-12 bg-primary text-white rounded-2xl flex items-center justify-center shadow-xl hover:scale-110 active:scale-95 transition-all border-4 border-white"
-                    >
-                        <Camera size={20} />
-                    </button>
-                    <input 
-                        type="file" 
-                        ref={fileInputRef} 
-                        onChange={handleImageUpload} 
-                        className="hidden" 
-                        accept="image/*" 
-                    />
+                <div className="text-center space-y-1">
+                  <h2 className="text-xl font-bold text-gray-900 tracking-tight">{name || "Explorer"}</h2>
+                  <div className="flex items-center justify-center gap-1.5 py-1 px-3 bg-primary/5 rounded-full inline-flex">
+                    <BadgeCheck size={14} className="text-primary" />
+                    <span className="text-[10px] font-bold text-primary uppercase tracking-wider">{session?.user?.role || "Member"}</span>
+                  </div>
+                  <p className="text-sm font-medium text-gray-400 pt-3 flex items-center justify-center gap-2">
+                    <Mail size={14} />
+                    {session?.user?.email}
+                  </p>
                 </div>
 
-                <div className="text-center space-y-2">
-                    <h2 className="text-2xl font-black text-foreground tracking-tighter">{name || "Explorer"}</h2>
-                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-primary">{session?.user?.role || "USER"}</p>
-                    <p className="text-sm font-medium text-gray-400 mt-4 flex items-center justify-center gap-2">
-                        <Mail size={14} />
-                        {session?.user?.email}
-                    </p>
+                <div className="w-full mt-10 pt-8 border-t border-gray-50 grid grid-cols-2 gap-3">
+                  <div className="bg-gray-50/50 p-4 rounded-2xl border border-gray-100 text-center">
+                    <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1">Status</p>
+                    <p className="text-xs font-bold text-green-600">Verified</p>
+                  </div>
+                  <div className="bg-gray-50/50 p-4 rounded-2xl border border-gray-100 text-center">
+                    <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest mb-1">Network</p>
+                    <p className="text-xs font-bold text-gray-700 uppercase">Global</p>
+                  </div>
                 </div>
-
-                <div className="mt-12 pt-10 border-t border-gray-50 grid grid-cols-2 gap-4">
-                    <div className="bg-[#F8FAFC] p-4 rounded-2xl text-center border border-white">
-                        <p className="text-[8px] font-black uppercase tracking-widest text-gray-400 mb-1">Status</p>
-                        <p className="text-[10px] font-black text-primary uppercase">Active</p>
-                    </div>
-                    <div className="bg-[#F8FAFC] p-4 rounded-2xl text-center border border-white">
-                        <p className="text-[8px] font-black uppercase tracking-widest text-gray-400 mb-1">Verified</p>
-                        <p className="text-[10px] font-black text-foreground uppercase tracking-widest">Global</p>
-                    </div>
-                </div>
-             </div>
+              </div>
+            </div>
           </div>
 
-          {/* Settings Manifest */}
-          <div className="lg:col-span-8 flex flex-col gap-12">
-            {/* Profile Information Card */}
-            <motion.div 
-               initial={{ opacity: 0, x: 20 }}
-               animate={{ opacity: 1, x: 0 }}
-               className="bg-white p-12 rounded-[3.5rem] shadow-2xl shadow-gray-100 border border-white relative overflow-hidden"
-            >
-                <div className="flex items-center gap-4 mb-10">
-                    <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary border border-primary/5">
-                        <User size={24} />
-                    </div>
-                    <h3 className="text-2xl font-black text-foreground tracking-tighter">Identity Core</h3>
+          {/* Main Settings Forms */}
+          <div className="lg:col-span-8 space-y-8">
+            
+            {/* Identity Card */}
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
+              <div className="px-10 py-8 border-b border-gray-50 flex items-center gap-4">
+                <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
+                  <User size={20} />
                 </div>
-
-                <form onSubmit={handleProfileUpdate} className="space-y-10">
-                    <div className="group">
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-4 ml-2">Public Name</label>
-                        <input 
-                            type="text" 
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                            placeholder="Quantum User"
-                            className="w-full bg-[#F8FAFC] border border-white rounded-[2.5rem] p-8 focus:bg-white focus:ring-8 focus:ring-primary/5 transition-all outline-none font-bold text-lg tracking-tight"
-                        />
-                    </div>
-                    <button 
-                        type="submit" 
-                        disabled={loading}
-                        className="bg-foreground text-white px-10 py-5 rounded-[2rem] font-black text-[10px] uppercase tracking-[0.3em] shadow-xl hover:bg-primary transition-all duration-500 flex items-center gap-4 active:scale-95 disabled:opacity-50"
-                    >
-                        {loading && <Loader2 className="animate-spin" size={16} />}
-                        <Save size={16} />
-                        Synthesize Identity
-                    </button>
+                <h3 className="text-lg font-bold text-gray-900 tracking-tight">Identity Details</h3>
+              </div>
+              
+              <div className="p-10">
+                <form onSubmit={handleProfileUpdate} className="space-y-6">
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Full Name</label>
+                    <input 
+                      type="text" 
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                      placeholder="e.g. Alex Quantum"
+                      className="w-full bg-gray-50 border border-transparent rounded-2xl px-6 py-4 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all outline-none font-medium text-gray-900"
+                    />
+                  </div>
+                  <button 
+                    type="submit" 
+                    disabled={loading}
+                    className="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-2xl font-bold text-sm shadow-lg shadow-primary/20 transition-all flex items-center gap-2 active:scale-95 disabled:opacity-50"
+                  >
+                    {loading ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
+                    Save Changes
+                  </button>
                 </form>
+              </div>
             </motion.div>
 
-            {/* Security Manifest Card */}
-            <motion.div 
-               initial={{ opacity: 0, x: 20 }}
-               animate={{ opacity: 1, x: 0 }}
-               transition={{ delay: 0.1 }}
-               className="bg-white p-12 rounded-[3.5rem] shadow-2xl shadow-gray-100 border border-white"
-            >
-                <div className="flex items-center gap-4 mb-10">
-                    <div className="w-12 h-12 bg-zinc-50 rounded-2xl flex items-center justify-center text-foreground border border-zinc-100">
-                        <ShieldCheck size={24} />
-                    </div>
-                    <h3 className="text-2xl font-black text-foreground tracking-tighter">Security Protocols</h3>
+            {/* Security Card */}
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
+              <div className="px-10 py-8 border-b border-gray-50 flex items-center gap-4">
+                <div className="w-10 h-10 bg-zinc-100 rounded-xl flex items-center justify-center text-zinc-900">
+                  <ShieldCheck size={20} />
                 </div>
-
+                <h3 className="text-lg font-bold text-gray-900 tracking-tight">Security & Password</h3>
+              </div>
+              
+              <div className="p-10">
                 <form onSubmit={handlePasswordUpdate} className="space-y-8">
-                    <div>
-                        <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-4 ml-2">Current Authorization Code</label>
-                        <div className="relative group/input">
-                            <Lock className="absolute left-8 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within/input:text-primary transition-colors" size={20} />
-                            <input 
-                                type="password" 
-                                value={currentPassword}
-                                onChange={(e) => setCurrentPassword(e.target.value)}
-                                required
-                                className="w-full bg-[#F8FAFC] border border-white rounded-[2.5rem] py-8 pl-18 pr-8 focus:bg-white focus:ring-8 focus:ring-primary/5 transition-all outline-none font-bold text-lg tracking-widest"
-                                placeholder="••••••••"
-                            />
-                        </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Current Password</label>
+                    <div className="relative group">
+                      <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-primary transition-colors" size={18} />
+                      <input 
+                        type="password" 
+                        value={currentPassword}
+                        onChange={(e) => setCurrentPassword(e.target.value)}
+                        required
+                        placeholder="••••••••••••"
+                        className="w-full bg-gray-50 border border-transparent rounded-2xl py-4 pl-14 pr-6 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all outline-none font-medium"
+                      />
                     </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div>
-                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-4 ml-2">New Protocol</label>
-                            <input 
-                                type="password" 
-                                value={newPassword}
-                                onChange={(e) => setNewPassword(e.target.value)}
-                                required
-                                className="w-full bg-[#F8FAFC] border border-white rounded-[2.5rem] p-8 focus:bg-white focus:ring-8 focus:ring-primary/5 transition-all outline-none font-bold text-lg tracking-widest"
-                                placeholder="••••••••"
-                            />
-                        </div>
-                        <div>
-                            <label className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 block mb-4 ml-2">Final Verification</label>
-                            <input 
-                                type="password" 
-                                value={confirmPassword}
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                required
-                                className="w-full bg-[#F8FAFC] border border-white rounded-[2.5rem] p-8 focus:bg-white focus:ring-8 focus:ring-primary/5 transition-all outline-none font-bold text-lg tracking-widest"
-                                placeholder="••••••••"
-                            />
-                        </div>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">New Password</label>
+                      <input 
+                        type="password" 
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        required
+                        placeholder="Min. 8 characters"
+                        className="w-full bg-gray-50 border border-transparent rounded-2xl px-6 py-4 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all outline-none font-medium"
+                      />
                     </div>
-
-                    <button 
-                        type="submit" 
-                        disabled={loading}
-                        className="bg-zinc-900 text-white px-10 py-5 rounded-[2rem] font-black text-[10px] uppercase tracking-[0.3em] shadow-xl hover:bg-primary transition-all duration-500 flex items-center gap-4 active:scale-95 disabled:opacity-50"
-                    >
-                        {loading && <Loader2 className="animate-spin" size={16} />}
-                        <Lock size={16} />
-                        Update Security
-                    </button>
+                    <div className="space-y-2">
+                      <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Confirm New Password</label>
+                      <input 
+                        type="password" 
+                        value={confirmPassword}
+                        onChange={(e) => setConfirmPassword(e.target.value)}
+                        required
+                        placeholder="Repeat password"
+                        className="w-full bg-gray-50 border border-transparent rounded-2xl px-6 py-4 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all outline-none font-medium"
+                      />
+                    </div>
+                  </div>
+                  
+                  <button 
+                    type="submit" 
+                    disabled={loading}
+                    className="bg-zinc-900 hover:bg-black text-white px-8 py-4 rounded-2xl font-bold text-sm shadow-xl transition-all flex items-center gap-2 active:scale-95 disabled:opacity-50"
+                  >
+                    {loading ? <Loader2 className="animate-spin" size={18} /> : <Lock size={18} />}
+                    Update Security
+                  </button>
                 </form>
+              </div>
             </motion.div>
+
           </div>
         </div>
       </div>
