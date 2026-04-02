@@ -166,50 +166,53 @@ export default function ProductDetails() {
           <span>Back to Collection</span>
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-start">
             {/* Left Column: Media Gallery */}
-            <div className="lg:col-span-7">
-                <div className="sticky top-12 space-y-8">
+            <div className="w-full">
+                <div className="sticky top-12 space-y-6">
                     <motion.div 
                         layoutId={`product-img-${product._id}`}
-                        className="relative aspect-square w-full bg-zinc-50 rounded-[4rem] overflow-hidden group shadow-2xl shadow-gray-200/50 border border-white"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                        className="relative aspect-square w-full bg-zinc-50 rounded-3xl overflow-hidden group shadow-xl shadow-gray-200/40 border border-white"
                     >
                         <AnimatePresence mode="wait">
                             <motion.div
                                 key={activeImage}
-                                initial={{ opacity: 0, scale: 0.95 }}
+                                initial={{ opacity: 0, scale: 0.98 }}
                                 animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 1.05 }}
-                                transition={{ duration: 0.5 }}
-                                className="absolute inset-0 p-16 md:p-24"
+                                exit={{ opacity: 0, scale: 1.02 }}
+                                transition={{ duration: 0.4, ease: "easeInOut" }}
+                                className="absolute inset-0 p-12 md:p-16"
                             >
                                 <Image
                                     src={activeImage || product.image || "/placeholder.png"}
                                     alt={product.name}
                                     fill
-                                    className="object-contain"
+                                    className="object-contain hover:scale-110 transition-transform duration-700 ease-out"
                                     priority
                                 />
                             </motion.div>
                         </AnimatePresence>
                         
                         {/* Interactive floating badge */}
-                        <div className="absolute bottom-8 left-8">
-                             <div className="bg-white/80 backdrop-blur-xl px-6 py-3 rounded-2xl shadow-xl border border-white/50 flex items-center gap-3">
-                                 <Sparkles size={16} className="text-primary animate-pulse" />
-                                 <span className="text-[10px] font-black uppercase tracking-widest text-foreground">Premium Build</span>
+                        <div className="absolute top-6 left-6">
+                             <div className="bg-white/70 backdrop-blur-md px-4 py-2 rounded-xl shadow-lg border border-white/50 flex items-center gap-2">
+                                 <Sparkles size={14} className="text-primary animate-pulse" />
+                                 <span className="text-[9px] font-black uppercase tracking-widest text-foreground">Premium Series</span>
                              </div>
                         </div>
                     </motion.div>
 
                     {product.images && product.images.length > 1 && (
-                        <div className="flex gap-6 overflow-x-auto pb-4 no-scrollbar">
+                        <div className="flex gap-4 overflow-x-auto pb-4 no-scrollbar">
                             {product.images.map((img: string, idx: number) => (
                                 <button
                                     key={idx}
                                     onClick={() => setActiveImage(img)}
-                                    className={`relative w-24 h-24 rounded-3xl overflow-hidden border-4 transition-all duration-500 flex-shrink-0 ${
-                                        activeImage === img ? "border-primary scale-105 shadow-2xl shadow-primary/20" : "border-transparent opacity-40 hover:opacity-100 hover:scale-110"
+                                    className={`relative w-20 h-20 rounded-2xl overflow-hidden border-2 transition-all duration-300 flex-shrink-0 ${
+                                        activeImage === img ? "border-primary scale-105 shadow-lg shadow-primary/10" : "border-transparent opacity-60 hover:opacity-100"
                                     }`}
                                 >
                                     <Image src={img} alt={`${product.name} ${idx + 1}`} fill className="object-cover" />
@@ -221,90 +224,143 @@ export default function ProductDetails() {
             </div>
 
             {/* Right Column: Product Intelligence */}
-            <div className="lg:col-span-5 flex flex-col pt-4">
-                <div className="flex flex-wrap items-center gap-3 mb-8">
-                    <span className="bg-primary/10 text-primary px-5 py-2 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em] border border-primary/5">
+            <motion.div 
+                initial="hidden"
+                animate="visible"
+                variants={{
+                    hidden: { opacity: 0 },
+                    visible: {
+                        opacity: 1,
+                        transition: {
+                            staggerChildren: 0.1
+                        }
+                    }
+                }}
+                className="flex flex-col pt-2"
+            >
+                <motion.div 
+                    variants={{
+                        hidden: { opacity: 0, y: 10 },
+                        visible: { opacity: 1, y: 0 }
+                    }}
+                    className="flex flex-wrap items-center gap-2 mb-6"
+                >
+                    <span className="bg-primary/5 text-primary px-4 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest border border-primary/10">
                         {product.category}
                     </span>
                     {product.brand && (
-                        <span className="bg-zinc-100 text-gray-500 px-5 py-2 rounded-2xl text-[10px] font-black uppercase tracking-[0.2em]">
+                        <span className="bg-zinc-50 text-gray-400 px-4 py-1.5 rounded-lg text-[9px] font-black uppercase tracking-widest border border-zinc-100">
                             {product.brand}
                         </span>
                     )}
-                </div>
+                </motion.div>
 
-                <h1 className="text-5xl md:text-6xl font-black text-foreground mb-6 leading-[1.1] tracking-tighter">
+                <motion.h1 
+                    variants={{
+                        hidden: { opacity: 0, y: 10 },
+                        visible: { opacity: 1, y: 0 }
+                    }}
+                    className="text-4xl md:text-5xl font-black text-foreground mb-4 leading-tight tracking-tight"
+                >
                    {product.name}
-                </h1>
+                </motion.h1>
 
-                <div className="flex items-center gap-6 mb-10 pb-10 border-b border-gray-100">
-                    <div className="flex items-center gap-2.5">
+                <motion.div 
+                    variants={{
+                        hidden: { opacity: 0, y: 10 },
+                        visible: { opacity: 1, y: 0 }
+                    }}
+                    className="flex items-center gap-4 mb-8 pb-8 border-b border-gray-100/60"
+                >
+                    <div className="flex items-center gap-2">
                         <div className="flex text-yellow-400">
                             {[1, 2, 3, 4, 5].map((s) => (
-                                <Star key={s} size={18} fill={product.avgRating >= s ? "currentColor" : "none"} className={product.avgRating >= s ? "" : "text-gray-200"} />
+                                <Star key={s} size={14} fill={product.avgRating >= s ? "currentColor" : "none"} className={product.avgRating >= s ? "" : "text-gray-200"} />
                             ))}
                         </div>
-                        <span className="text-lg font-black text-foreground">{product.avgRating?.toFixed(1) || "5.0"}</span>
+                        <span className="text-sm font-black text-foreground">{product.avgRating?.toFixed(1) || "5.0"}</span>
                     </div>
-                    <div className="h-4 w-px bg-gray-200" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+                    <div className="h-3 w-px bg-gray-200" />
+                    <span className="text-[9px] font-black uppercase tracking-widest text-gray-400">
                         {product.numReviews || 0} Verifications
                     </span>
-                </div>
+                </motion.div>
 
-                <p className="text-lg text-gray-500 leading-relaxed font-medium mb-12">
+                <motion.p 
+                    variants={{
+                        hidden: { opacity: 0, y: 10 },
+                        visible: { opacity: 1, y: 0 }
+                    }}
+                    className="text-base text-gray-500 leading-relaxed font-medium mb-10 max-w-xl"
+                >
                    {product.description || "Synthesizing cutting-edge technology with high-end aesthetic performance."}
-                </p>
+                </motion.p>
 
-                <div className="flex items-baseline gap-2 mb-12">
-                    <span className="text-xs font-black uppercase text-gray-400 tracking-widest">$</span>
-                    <span className="text-6xl font-black text-foreground tracking-tighter">
+                <motion.div 
+                    variants={{
+                        hidden: { opacity: 0, y: 10 },
+                        visible: { opacity: 1, y: 0 }
+                    }}
+                    className="flex items-baseline gap-2 mb-10"
+                >
+                    <span className="text-[10px] font-black uppercase text-gray-400 tracking-widest">$</span>
+                    <span className="text-4xl md:text-5xl font-black text-foreground tracking-tighter">
                         {product.price ? product.price.toLocaleString() : "0"}
                     </span>
-                    <span className="text-xs font-black uppercase text-gray-400 tracking-widest ml-2">USD</span>
-                </div>
+                    <span className="text-[10px] font-black uppercase text-gray-400 tracking-widest ml-2">USD</span>
+                </motion.div>
 
-                <div className="space-y-6 mb-12">
-                    <div className="grid grid-cols-2 gap-4">
-                        <div className="p-6 bg-zinc-50 rounded-[2.5rem] border border-white hover:bg-white hover:shadow-2xl transition-all duration-500 group">
-                             <ShieldCheck className="text-primary mb-4 group-hover:scale-110 transition-transform" size={28} />
-                             <h4 className="text-xs font-black uppercase tracking-widest text-foreground mb-1">Authentic</h4>
-                             <p className="text-[10px] font-bold text-gray-400">Original Components</p>
-                        </div>
-                        <div className="p-6 bg-zinc-50 rounded-[2.5rem] border border-white hover:bg-white hover:shadow-2xl transition-all duration-500 group">
-                             <Truck className="text-primary mb-4 group-hover:scale-110 transition-transform" size={28} />
-                             <h4 className="text-xs font-black uppercase tracking-widest text-foreground mb-1">Global</h4>
-                             <p className="text-[10px] font-bold text-gray-400">Express Deployment</p>
-                        </div>
+                <motion.div 
+                    variants={{
+                        hidden: { opacity: 0, y: 10 },
+                        visible: { opacity: 1, y: 0 }
+                    }}
+                    className="grid grid-cols-2 gap-4 mb-10"
+                >
+                    <div className="p-5 bg-zinc-50/50 rounded-2xl border border-white hover:bg-white hover:shadow-xl transition-all duration-300 group">
+                         <ShieldCheck className="text-primary mb-3 group-hover:scale-110 transition-transform" size={24} />
+                         <h4 className="text-[10px] font-black uppercase tracking-widest text-foreground mb-1">Authentic</h4>
+                         <p className="text-[9px] font-bold text-gray-400">Original Components</p>
                     </div>
-                </div>
+                    <div className="p-5 bg-zinc-50/50 rounded-2xl border border-white hover:bg-white hover:shadow-xl transition-all duration-300 group">
+                         <Truck className="text-primary mb-3 group-hover:scale-110 transition-transform" size={24} />
+                         <h4 className="text-[10px] font-black uppercase tracking-widest text-foreground mb-1">Global</h4>
+                         <p className="text-[9px] font-bold text-gray-400">Express Deployment</p>
+                    </div>
+                </motion.div>
 
-                <div className="flex gap-4 mt-auto">
+                <motion.div 
+                    variants={{
+                        hidden: { opacity: 0, y: 10 },
+                        visible: { opacity: 1, y: 0 }
+                    }}
+                    className="flex gap-4 mt-auto"
+                >
                     <button 
                         onClick={() => {
                             dispatch(addToCart(product));
                             toast.success("Identity synthesized in cart!");
                         }}
-                        className="flex-[4] bg-foreground text-white py-6 rounded-[3rem] font-black text-xs uppercase tracking-[0.3em] flex items-center justify-center gap-4 hover:bg-primary transition-all duration-500 shadow-2xl hover:shadow-primary/30"
+                        className="flex-[4] bg-foreground text-white py-5 rounded-2xl font-black text-[10px] uppercase tracking-[0.25em] flex items-center justify-center gap-3 hover:bg-primary transition-all duration-300 shadow-xl hover:shadow-primary/20 active:scale-95"
                     >
-                        <ShoppingCart size={20} />
+                        <ShoppingCart size={18} />
                         Order Now
                     </button>
                     <button 
                         onClick={handleToggleWishlist}
-                        className={`flex-[1] rounded-[3rem] flex items-center justify-center transition-all duration-500 border-2 ${
-                            isInWishlist ? "bg-red-500 border-red-500 text-white shadow-xl shadow-red-200" : "bg-white border-zinc-100 text-gray-300 hover:text-red-500 hover:border-red-100"
+                        className={`flex-[1] rounded-2xl flex items-center justify-center transition-all duration-300 border-2 ${
+                            isInWishlist ? "bg-red-500 border-red-500 text-white shadow-lg" : "bg-white border-zinc-100 text-gray-300 hover:text-red-500 hover:border-red-100"
                         }`}
                     >
-                        <Heart size={24} fill={isInWishlist ? "currentColor" : "none"} />
+                        <Heart size={20} fill={isInWishlist ? "currentColor" : "none"} />
                     </button>
-                </div>
-            </div>
+                </motion.div>
+            </motion.div>
         </div>
 
         {/* Dynamic Context Tabs */}
         <div className="mt-32">
-             <div className="flex justify-center border-b border-gray-100 mb-16 overflow-x-auto no-scrollbar gap-12">
+             <div className="flex justify-center border-b border-gray-100/60 mb-12 overflow-x-auto no-scrollbar gap-8 md:gap-12">
                 {[
                     { id: "description", label: "Overview", icon: FileText },
                     { id: "specs", label: "Intelligence", icon: ListTodo },
@@ -313,16 +369,16 @@ export default function ProductDetails() {
                     <button
                         key={tab.id}
                         onClick={() => setActiveTab(tab.id as any)}
-                        className={`relative py-8 text-[11px] font-black uppercase tracking-[0.3em] transition-all whitespace-nowrap flex items-center gap-3 ${
+                        className={`relative py-6 text-[10px] font-black uppercase tracking-widest transition-all whitespace-nowrap flex items-center gap-2.5 ${
                             activeTab === tab.id ? "text-primary" : "text-gray-400 hover:text-gray-600"
                         }`}
                     >
-                        <tab.icon size={16} />
+                        <tab.icon size={14} />
                         {tab.label}
                         {activeTab === tab.id && (
                             <motion.div 
                                 layoutId="activeTab"
-                                className="absolute bottom-0 left-0 right-0 h-1 bg-primary rounded-full"
+                                className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary rounded-full"
                             />
                         )}
                     </button>
@@ -337,20 +393,45 @@ export default function ProductDetails() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
-                            className="space-y-12"
+                            className="space-y-16"
                         >
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-24 items-center">
-                                <div>
-                                    <h3 className="text-4xl font-black text-foreground mb-8 tracking-tighter leading-tight">Crafting the future of performance.</h3>
-                                    <p className="text-gray-500 text-lg leading-[2] font-medium">
+                            <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+                                <div className="lg:col-span-7 space-y-8">
+                                    <h3 className="text-3xl font-black text-foreground tracking-tight leading-tight">Mastering the intersection of design & performance.</h3>
+                                    <p className="text-gray-500 text-base leading-relaxed font-medium">
                                         {product.description}
                                     </p>
+                                    
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6">
+                                        {[
+                                            { title: "Performance", desc: "Optimized for extreme efficiency", icon: Sparkles },
+                                            { title: "Build Quality", desc: "Premium aerospace-grade materials", icon: ShieldCheck },
+                                            { title: "Innovation", desc: "Cutting-edge internal architecture", icon: ListTodo },
+                                            { title: "Reliability", desc: "Extensively verified transmissions", icon: Clock }
+                                        ].map((item, i) => (
+                                            <div key={i} className="flex gap-4 p-4 rounded-2xl bg-zinc-50/50 border border-white hover:bg-white hover:shadow-lg transition-all group">
+                                                <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-primary shadow-sm group-hover:scale-110 transition-transform">
+                                                    <item.icon size={18} />
+                                                </div>
+                                                <div>
+                                                    <h4 className="text-[11px] font-black uppercase tracking-widest text-foreground">{item.title}</h4>
+                                                    <p className="text-[9px] font-bold text-gray-400 uppercase tracking-tight">{item.desc}</p>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
                                 </div>
-                                <div className="relative aspect-[4/3] bg-zinc-50 rounded-[4rem] overflow-hidden p-12 flex items-center justify-center border border-white">
-                                    <MessageSquare size={120} className="text-zinc-100 absolute -bottom-10 -right-10" />
-                                    <div className="text-center relative z-10">
-                                        <Clock className="mx-auto mb-6 text-primary" size={40} />
-                                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Time-Tested Architecture</p>
+                                <div className="lg:col-span-5">
+                                    <div className="relative aspect-square bg-zinc-50 rounded-3xl overflow-hidden p-12 flex items-center justify-center border border-white group">
+                                        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                        <MessageSquare size={120} className="text-zinc-100 absolute -bottom-10 -right-10 rotate-12" />
+                                        <div className="text-center relative z-10">
+                                            <div className="w-20 h-20 rounded-[2rem] bg-white border border-zinc-100 shadow-xl flex items-center justify-center mx-auto mb-6 group-hover:-translate-y-2 transition-transform duration-500">
+                                                <Clock className="text-primary" size={32} />
+                                            </div>
+                                            <p className="text-[10px] font-black uppercase tracking-widest text-foreground mb-1">Time-Tested</p>
+                                            <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">Global Standard Architecture</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -365,17 +446,28 @@ export default function ProductDetails() {
                             exit={{ opacity: 0, y: -20 }}
                         >
                             {product.specifications ? (
-                                <div className="bg-zinc-50 rounded-[4rem] p-16 md:p-24 border border-white relative overflow-hidden group">
-                                    <div className="absolute top-0 right-0 p-12 opacity-5 group-hover:opacity-10 transition-opacity">
-                                        <ListTodo size={200} />
-                                    </div>
-                                    <p className="text-gray-600 leading-[2.2] whitespace-pre-line font-medium text-xl italic relative z-10 tracking-tight">
-                                        {product.specifications}
-                                    </p>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {product.specifications.split("\n").filter((s: string) => s.trim().length > 0).map((spec: string, i: number) => {
+                                        const [label, ...value] = spec.includes(":") ? spec.split(":") : [spec, ""];
+                                        return (
+                                            <div key={i} className="flex items-center justify-between p-6 bg-zinc-50/50 rounded-2xl border border-white hover:bg-white hover:shadow-xl transition-all group">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="w-8 h-8 rounded-lg bg-zinc-100 flex items-center justify-center text-gray-400 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
+                                                        <ChevronRight size={14} />
+                                                    </div>
+                                                    <span className="text-[10px] font-black uppercase tracking-widest text-gray-400 group-hover:text-foreground transition-colors">{label}</span>
+                                                </div>
+                                                <span className="text-[10px] font-black uppercase tracking-widest text-foreground text-right max-w-[50%] truncate">{value.join(":").trim() || "Verified"}</span>
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             ) : (
-                                <div className="py-32 text-center">
-                                    <p className="text-gray-300 font-black uppercase tracking-[0.4em] text-xs">No intelligence data defined for this sequence.</p>
+                                <div className="py-32 text-center bg-zinc-50/50 rounded-3xl border-2 border-dashed border-white">
+                                    <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-zinc-50">
+                                        <ListTodo size={24} className="text-gray-200" />
+                                    </div>
+                                    <p className="text-gray-300 font-black uppercase tracking-widest text-[10px]">No intelligence data defined for this sequence.</p>
                                 </div>
                             )}
                         </motion.div>
@@ -387,85 +479,96 @@ export default function ProductDetails() {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
-                            className="grid grid-cols-1 lg:grid-cols-12 gap-20"
+                            className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20"
                         >
                             {/* Review Stats & Form */}
-                            <div className="lg:col-span-5 space-y-12">
+                            <div className="lg:col-span-5 space-y-10">
                                 {/* Rating Summary */}
-                                <div className="bg-zinc-50 p-12 rounded-[4rem] border border-white shadow-xl shadow-gray-100/50">
-                                    <div className="text-center mb-10">
-                                        <h2 className="text-7xl font-black text-foreground tracking-tighter mb-2">{product.avgRating?.toFixed(1) || "5.0"}</h2>
-                                        <div className="flex justify-center text-yellow-400 mb-4">
-                                            {[1, 2, 3, 4, 5].map((s) => (
-                                                <Star key={s} size={24} fill={product.avgRating >= s ? "currentColor" : "none"} className={product.avgRating >= s ? "" : "text-gray-200"} />
-                                            ))}
+                                <div className="bg-zinc-50/50 p-8 rounded-3xl border border-white shadow-xl shadow-gray-100/20">
+                                    <div className="flex items-center justify-between mb-8">
+                                        <div>
+                                            <h2 className="text-5xl font-black text-foreground tracking-tighter mb-1">{product.avgRating?.toFixed(1) || "5.0"}</h2>
+                                            <p className="text-[9px] font-black uppercase tracking-widest text-gray-400">Global Rating</p>
                                         </div>
-                                        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400">Global Satisfaction</p>
+                                        <div className="text-right">
+                                            <div className="flex text-yellow-400 mb-1 justify-end">
+                                                {[1, 2, 3, 4, 5].map((s) => (
+                                                    <Star key={s} size={14} fill={product.avgRating >= s ? "currentColor" : "none"} className={product.avgRating >= s ? "" : "text-gray-100"} />
+                                                ))}
+                                            </div>
+                                            <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{product.numReviews || 0} Verifications</p>
+                                        </div>
                                     </div>
                                     
-                                    <div className="space-y-4">
+                                    <div className="space-y-3">
                                         {reviewStats?.map((stat, i) => (
-                                            <div key={i} className="flex items-center gap-4">
-                                                <span className="text-[10px] font-black text-gray-400 w-4">{5 - i}</span>
-                                                <div className="flex-1 h-2 bg-white rounded-full overflow-hidden border border-gray-100">
+                                            <div key={i} className="flex items-center gap-4 group">
+                                                <span className="text-[9px] font-black text-gray-400 w-3">{5 - i}</span>
+                                                <div className="flex-1 h-1.5 bg-white rounded-full overflow-hidden border border-gray-100/50 relative">
                                                     <motion.div 
                                                         initial={{ width: 0 }}
                                                         animate={{ width: `${stat.percentage}%` }}
                                                         transition={{ duration: 1, delay: i * 0.1 }}
-                                                        className="h-full bg-primary" 
+                                                        className="h-full bg-primary relative z-10" 
                                                     />
                                                 </div>
-                                                <span className="text-[10px] font-bold text-gray-500 w-8">{stat.percentage.toFixed(0)}%</span>
+                                                <span className="text-[9px] font-bold text-gray-400 w-6 group-hover:text-primary transition-colors">{stat.percentage.toFixed(0)}%</span>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
 
                                 {/* Form Section */}
-                                <div className="relative p-12 bg-white rounded-[4rem] border border-zinc-100 shadow-2xl shadow-gray-100/50">
-                                    <h3 className="text-2xl font-black text-foreground mb-10 tracking-tighter">Contributor Feedback</h3>
+                                <div className="relative p-8 bg-white rounded-3xl border border-zinc-100 shadow-2xl shadow-gray-100/40">
+                                    <div className="flex items-center gap-3 mb-8">
+                                        <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center text-primary">
+                                            <MessageSquare size={18} />
+                                        </div>
+                                        <h3 className="text-lg font-black text-foreground tracking-tight">Post Analysis</h3>
+                                    </div>
+                                    
                                     {session ? (
-                                        <form onSubmit={handleReviewSubmit} className="space-y-10">
+                                        <form onSubmit={handleReviewSubmit} className="space-y-6">
                                             <div>
-                                                <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 block mb-6">Experience Rating</label>
-                                                <div className="flex gap-3">
+                                                <label className="text-[9px] font-black uppercase tracking-widest text-gray-400 block mb-3">Rating Scale</label>
+                                                <div className="flex gap-2">
                                                     {[1, 2, 3, 4, 5].map((s) => (
                                                         <button
                                                             key={s}
                                                             type="button"
                                                             onClick={() => setRating(s)}
-                                                            className={`w-14 h-14 rounded-3xl flex items-center justify-center transition-all duration-500 ${
-                                                                rating >= s ? "bg-primary text-white shadow-xl shadow-primary/20 scale-110" : "bg-zinc-50 text-gray-300 border border-white hover:bg-white"
+                                                            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 ${
+                                                                rating >= s ? "bg-primary text-white shadow-lg shadow-primary/20 scale-105" : "bg-zinc-50 text-gray-300 hover:bg-white border border-transparent hover:border-zinc-100"
                                                             }`}
                                                         >
-                                                            <Star size={20} fill={rating >= s ? "currentColor" : "none"} />
+                                                            <Star size={16} fill={rating >= s ? "currentColor" : "none"} />
                                                         </button>
                                                     ))}
                                                 </div>
                                             </div>
                                             <div>
-                                                <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 block mb-6">Subjective Analysis</label>
+                                                <label className="text-[9px] font-black uppercase tracking-widest text-gray-400 block mb-3">Narrative Transcription</label>
                                                 <textarea
                                                     required
-                                                    rows={5}
+                                                    rows={4}
                                                     value={comment}
                                                     onChange={(e) => setComment(e.target.value)}
-                                                    className="w-full bg-zinc-50 border border-white rounded-[2.5rem] p-8 focus:ring-8 focus:ring-primary/5 focus:bg-white transition-all text-sm font-medium outline-none"
-                                                    placeholder="Synthesize your thoughts here..."
+                                                    className="w-full bg-zinc-50/50 border border-zinc-100 rounded-2xl p-6 focus:ring-4 focus:ring-primary/5 focus:bg-white focus:border-primary/20 transition-all text-xs font-medium outline-none resize-none"
+                                                    placeholder="Synthesize your experience here..."
                                                 />
                                             </div>
                                             <button
                                                 type="submit"
                                                 disabled={submittingReview}
-                                                className="w-full bg-foreground text-white py-6 rounded-[2.5rem] font-black text-xs uppercase tracking-[0.3em] shadow-2xl hover:bg-primary transition-all duration-500 disabled:opacity-50 active:scale-95"
+                                                className="w-full bg-foreground text-white py-4 rounded-xl font-black text-[9px] uppercase tracking-widest shadow-xl hover:bg-primary transition-all duration-300 disabled:opacity-50 active:scale-95"
                                             >
-                                                {submittingReview ? "Processing Data..." : "Submit Review"}
+                                                {submittingReview ? "Processing..." : "Submit Review"}
                                             </button>
                                         </form>
                                     ) : (
-                                        <div className="py-12 text-center">
-                                            <p className="text-gray-400 mb-8 font-bold text-sm tracking-tight">Identity verification required for validation.</p>
-                                            <Link href="/login" className="inline-block px-10 py-4 bg-zinc-900 text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-primary transition-all shadow-xl">
+                                        <div className="py-8 text-center bg-zinc-50/50 rounded-2xl border border-dashed border-zinc-200">
+                                            <p className="text-[10px] text-gray-400 mb-6 font-bold uppercase tracking-tight">Identity Verification Required</p>
+                                            <Link href="/login" className="inline-block px-8 py-3 bg-zinc-900 text-white rounded-xl text-[9px] font-black uppercase tracking-widest hover:bg-primary transition-all shadow-lg active:scale-95">
                                                 Initiate Sign In
                                             </Link>
                                         </div>
@@ -475,58 +578,56 @@ export default function ProductDetails() {
 
                             {/* Feed Section */}
                             <div className="lg:col-span-7">
-                                <div className="space-y-10">
-                                    <div className="flex items-center justify-between mb-12">
-                                        <h3 className="text-3xl font-black text-foreground tracking-tighter">Verified Transmissions</h3>
-                                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">{product.reviews?.length || 0} Entries</span>
+                                <div className="space-y-6">
+                                    <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-100/60">
+                                        <h3 className="text-xl font-black text-foreground tracking-tight">Verified Transmissions</h3>
+                                        <span className="text-[9px] font-black uppercase tracking-widest text-primary bg-primary/5 px-3 py-1 rounded-full">{product.reviews?.length || 0} Entries</span>
                                     </div>
                                     
                                     {product.reviews && product.reviews.length > 0 ? (
                                         product.reviews.map((rev: any, idx: number) => (
                                             <motion.div 
                                                 layout
-                                                initial={{ opacity: 0, x: 20 }}
-                                                animate={{ opacity: 1, x: 0 }}
+                                                initial={{ opacity: 0, scale: 0.98 }}
+                                                animate={{ opacity: 1, scale: 1 }}
                                                 transition={{ delay: idx * 0.1 }}
                                                 key={idx} 
-                                                className="p-10 bg-white rounded-[3.5rem] border border-zinc-100 shadow-sm hover:shadow-2xl hover:shadow-gray-100 transition-all duration-700 relative group overflow-hidden"
+                                                className="p-6 bg-white rounded-2xl border border-zinc-100 shadow-sm hover:shadow-xl hover:shadow-gray-100/30 transition-all duration-500 relative group"
                                             >
-                                                <div className="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-5 transition-opacity">
-                                                    <Sparkles size={80} />
-                                                </div>
-                                                <div className="flex items-center justify-between mb-8">
-                                                    <div className="flex items-center gap-5">
-                                                        <div className="w-16 h-16 bg-gradient-to-br from-primary/20 to-primary/5 rounded-[2rem] flex items-center justify-center text-primary font-black text-2xl shadow-inner group-hover:rotate-6 transition-transform">
+                                                <div className="flex items-start justify-between mb-6">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="w-12 h-12 bg-gradient-to-br from-primary/10 to-primary/5 rounded-xl flex items-center justify-center text-primary font-black text-lg shadow-inner group-hover:rotate-3 transition-transform">
                                                             {rev.name.charAt(0)}
                                                         </div>
                                                         <div>
-                                                            <h4 className="text-lg font-black text-foreground mb-1">{rev.name}</h4>
-                                                            <div className="flex items-center gap-3">
-                                                                <span className="text-[9px] font-black uppercase tracking-widest text-primary bg-primary/5 px-3 py-1 rounded-full">Explorer</span>
-                                                                <span className="text-[9px] text-gray-300 font-bold uppercase tracking-widest">{formatDate(rev.createdAt)}</span>
+                                                            <h4 className="text-sm font-black text-foreground mb-0.5">{rev.name}</h4>
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="text-[8px] font-black uppercase tracking-widest text-primary">Explorer</span>
+                                                                <div className="w-1 h-1 rounded-full bg-gray-200" />
+                                                                <span className="text-[8px] text-gray-300 font-bold uppercase tracking-widest">{formatDate(rev.createdAt)}</span>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div className="flex text-yellow-400 gap-0.5">
                                                         {Array.from({ length: 5 }).map((_, i) => (
-                                                            <Star key={i} size={16} fill={i < rev.rating ? "currentColor" : "none"} className={i < rev.rating ? "" : "text-gray-100"} />
+                                                            <Star key={i} size={12} fill={i < rev.rating ? "currentColor" : "none"} className={i < rev.rating ? "" : "text-gray-100"} />
                                                         ))}
                                                     </div>
                                                 </div>
-                                                <div className="p-8 bg-zinc-50 border border-white rounded-[2.5rem] relative">
-                                                    <MessageSquare size={20} className="absolute -top-3 -left-3 text-primary opacity-20" />
-                                                    <p className="text-gray-600 font-medium leading-[1.8] text-lg tracking-tight">
+                                                <div className="p-5 bg-zinc-50/50 border border-white rounded-xl relative group-hover:bg-white transition-colors duration-500">
+                                                    <MessageSquare size={14} className="absolute -top-1.5 -left-1.5 text-primary opacity-20" />
+                                                    <p className="text-gray-500 font-medium leading-relaxed text-xs tracking-tight">
                                                         {rev.comment}
                                                     </p>
                                                 </div>
                                             </motion.div>
                                         ))
                                     ) : (
-                                        <div className="py-40 text-center bg-zinc-50 rounded-[5rem] border-4 border-dashed border-white shadow-inner">
-                                            <div className="w-24 h-24 bg-white rounded-[3rem] flex items-center justify-center mx-auto mb-10 shadow-xl border border-white">
-                                                <MessageSquare size={40} className="text-gray-100" />
+                                        <div className="py-32 text-center bg-zinc-50/50 rounded-3xl border-2 border-dashed border-white">
+                                            <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-sm border border-zinc-50">
+                                                <MessageSquare size={24} className="text-gray-200" />
                                             </div>
-                                            <p className="text-gray-300 font-black uppercase tracking-[0.4em] text-xs">Be the first to synthesize feedback.</p>
+                                            <p className="text-gray-300 font-black uppercase tracking-widest text-[9px]">Be the first to synthesize feedback.</p>
                                         </div>
                                     )}
                                 </div>
