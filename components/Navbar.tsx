@@ -109,7 +109,7 @@ const Navbar = () => {
                 <ProfileDropdown user={session.user} />
             ) : (
                 <Link href="/login" className="flex items-center gap-2 pl-2 pr-6 py-2.5 bg-primary text-white rounded-[18px] font-black text-xs hover:bg-primary-dark transition-all shadow-xl shadow-primary/20 transform hover:-translate-y-1 active:translate-y-0 group">
-                    <div className="w-7 h-7 bg-white/20 rounded-xl flex items-center justify-center">
+                    <div className="w-7 h-7 bg-white/20 rounded-xl flex items-center justify-center cursor-pointer">
                         <User size={16} />
                     </div>
                     <span>Sign In</span>
