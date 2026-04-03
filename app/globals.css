@@ -54,4 +54,35 @@ body {
   .text-glow-primary {
     text-shadow: 0 0 20px rgba(34, 197, 94, 0.3);
   }
+
+  .no-scrollbar {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    &::-webkit-scrollbar {
+      display: none; /* Chrome, Safari and Opera */
+    }
+  }
+
+  /* Marquee Animation */
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .marquee-container {
+    overflow: hidden;
+    white-space: nowrap;
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  }
+
+  .marquee-content {
+    display: flex;
+    gap: 1rem;
+    width: max-content;
+    animation: marquee 40s linear infinite;
+  }
+
+  .marquee-content:hover {
+    animation-play-state: paused;
+  }
 }
