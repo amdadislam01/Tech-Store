@@ -17,6 +17,7 @@ import ProductCatalog from "@/components/Sections/ProductCatalog";
 export default function HomePageClient({ initialProducts }: { initialProducts: any[] }) {
   const router = useRouter();
   const [products, setProducts] = useState(initialProducts);
+  const [categories, setCategories] = useState(["All"]);
   const [loading, setLoading] = useState(false);
   const [category, setCategory] = useState("All");
   const [search, setSearch] = useState("");
@@ -25,6 +26,16 @@ export default function HomePageClient({ initialProducts }: { initialProducts: a
   const handleSearch = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && search.trim()) {
       router.push(`/products?search=${encodeURIComponent(search)}`);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch("/api/categories");
+      const data = await res.json();
+      if (Array.isArray(data)) setCategories(data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
     }
   };
 
@@ -45,6 +56,10 @@ export default function HomePageClient({ initialProducts }: { initialProducts: a
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -78,6 +93,7 @@ export default function HomePageClient({ initialProducts }: { initialProducts: a
           <CategoryGrid 
             category={category} 
             setCategory={setCategory} 
+            categories={categories}
           />
         </motion.div>
 
