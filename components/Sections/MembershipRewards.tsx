@@ -11,18 +11,18 @@ export default function MembershipRewards() {
                 <div>
                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-[10px] font-black uppercase tracking-widest mb-6">
                         <Sparkles size={14} className="text-yellow-400" />
-                        <span>Membership Exclusive</span>
+                        <span>The TechStore Club</span>
                     </div>
-                    <h2 className="text-5xl font-black tracking-tighter leading-none mb-8">Join the Inner <br /> <span className="text-primary">Innovation Circle</span></h2>
-                    <p className="text-gray-400 font-medium text-lg mb-12 max-w-md">Unlock early access to flagship drops, 15% anniversary rewards, and invite-only tech events across the globe.</p>
+                    <h2 className="text-5xl font-black tracking-tighter leading-none mb-8">Get Perks Just For <br /> <span className="text-primary">Being You.</span></h2>
+                    <p className="text-gray-400 font-medium text-lg mb-12 max-w-md">Join our community to get 15% off on your birthday, early access to new drops, and invites to our exclusive tech meetups.</p>
                     <div className="flex flex-wrap gap-4">
-                        <button className="px-10 py-5 bg-white text-gray-900 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-primary hover:text-white transition-all shadow-lg">Become a Member</button>
-                        <button className="px-10 py-5 bg-white/5 border border-white/10 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-white/10 transition-all">Learn Rewards</button>
+                        <button className="px-10 py-5 bg-white text-gray-900 rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-primary hover:text-white transition-all shadow-lg">Join the Club</button>
+                        <button className="px-10 py-5 bg-white/5 border border-white/10 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-white/10 transition-all">Member Benefits</button>
                     </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                     {[
-                        { label: "Members", value: "125k+" },
+                        { label: "Our Members", value: "125k+" },
                         { label: "Tech Events", value: "12/mo" },
                         { label: "Points Earned", value: "2.4M" },
                         { label: "Partner Brands", value: "48+" }
