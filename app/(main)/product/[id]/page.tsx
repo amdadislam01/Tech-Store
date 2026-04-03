@@ -336,14 +336,14 @@ export default function ProductDetails() {
                             dispatch(addToCart(product));
                             toast.success("Identity synthesized in cart!");
                         }}
-                        className="flex-[4] bg-foreground text-white py-5 rounded-2xl font-black text-[10px] uppercase tracking-[0.25em] flex items-center justify-center gap-3 hover:bg-primary transition-all duration-300 shadow-xl hover:shadow-primary/20 active:scale-95"
+                        className="flex-[4] bg-foreground text-white py-5 rounded-2xl font-black text-[10px] uppercase tracking-[0.25em] flex items-center justify-center gap-3 hover:bg-primary transition-all duration-300 shadow-xl hover:shadow-primary/20 active:scale-95 cursor-pointer"
                     >
                         <ShoppingCart size={18} />
                         Order Now
                     </button>
                     <button 
                         onClick={handleToggleWishlist}
-                        className={`flex-[1] rounded-2xl flex items-center justify-center transition-all duration-300 border-2 ${
+                        className={`flex-[1] rounded-2xl flex items-center justify-center transition-all duration-300 border-2 cursor-pointer ${
                             isInWishlist ? "bg-red-500 border-red-500 text-white shadow-lg" : "bg-white border-zinc-100 text-gray-300 hover:text-red-500 hover:border-red-100"
                         }`}
                     >
