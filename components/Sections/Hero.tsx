@@ -45,7 +45,7 @@ export default function Hero({ search, setSearch, handleSearch }: HeroProps) {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
               </span>
-              <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-600">Edition 2026 is Live</span>
+              <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-600">The 2026 Collection is Here</span>
             </motion.div>
 
             {/* Main Headline */}
@@ -53,9 +53,9 @@ export default function Hero({ search, setSearch, handleSearch }: HeroProps) {
               variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
               className="text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-slate-950 mb-8 leading-[0.95]"
             >
-              Elevate Your <br /> 
+              Tech That Works <br /> 
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-600 to-indigo-600 italic font-serif font-medium">
-                Digital Craft.
+                The Way You Do.
               </span>
             </motion.h1>
 
@@ -63,7 +63,7 @@ export default function Hero({ search, setSearch, handleSearch }: HeroProps) {
               variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
               className="text-lg md:text-xl text-slate-600 max-w-xl mb-10 leading-relaxed font-normal mx-auto lg:mx-0"
             >
-              Experience the intersection of high-end engineering and minimalist soul. Designed for those who build the future.
+              We curate the world&apos;s best gear for students, creators, and professionals who need tools they can trust to get the job done.
             </motion.p>
 
             {/* CTA & Search Box */}
@@ -75,7 +75,7 @@ export default function Hero({ search, setSearch, handleSearch }: HeroProps) {
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
                 <input 
                   type="text" 
-                  placeholder="What are you looking for?" 
+                  placeholder="Find your next essential..." 
                   className="w-full pl-12 pr-4 py-4 rounded-xl bg-transparent focus:outline-none text-slate-900 font-medium"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
@@ -83,7 +83,7 @@ export default function Hero({ search, setSearch, handleSearch }: HeroProps) {
                 />
               </div>
               <button className="w-full sm:w-auto px-8 py-4 bg-slate-950 text-white font-bold rounded-[18px] hover:bg-primary transition-colors flex items-center justify-center gap-2 group">
-                Explore Now
+                Browse the Collection
                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </button>
             </motion.div>
@@ -95,11 +95,11 @@ export default function Hero({ search, setSearch, handleSearch }: HeroProps) {
             >
               <div className="flex items-center gap-2">
                 <ShieldCheck size={20} />
-                <span className="text-sm font-semibold uppercase tracking-wider">Secure Payment</span>
+                <span className="text-sm font-semibold uppercase tracking-wider">Safe &amp; Secure Payments</span>
               </div>
               <div className="flex items-center gap-2">
                 <Zap size={20} />
-                <span className="text-sm font-semibold uppercase tracking-wider">Fast Delivery</span>
+                <span className="text-sm font-semibold uppercase tracking-wider">Speedy Doorstep Delivery</span>
               </div>
             </motion.div>
           </motion.div>
