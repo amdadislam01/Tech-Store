@@ -7,13 +7,14 @@ import { ProductSkeleton } from "@/components/Skeleton";
 import { Search, Filter, LayoutGrid, List, SlidersHorizontal, Sparkles, TrendingUp, Zap } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const categories = ["All", "Smartphones", "Laptops", "Accessories", "Tablets", "Audio"];
+// Dynamic categories fetched from API
 
 function ProductsContent() {
   const searchParams = useSearchParams();
   const initialSearch = searchParams.get("search") || "";
   
   const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState(["All"]);
   const [loading, setLoading] = useState(true);
   const [category, setCategory] = useState("All");
   const [search, setSearch] = useState(initialSearch);
@@ -22,6 +23,16 @@ function ProductsContent() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
+
+  const fetchCategories = async () => {
+    try {
+      const res = await fetch("/api/categories");
+      const data = await res.json();
+      if (Array.isArray(data)) setCategories(data);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -37,6 +48,10 @@ function ProductsContent() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
     setPage(1); // Ensure navigation starts at page one when applying new filters
