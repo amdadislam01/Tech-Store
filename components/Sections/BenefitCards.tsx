@@ -7,9 +7,9 @@ export default function BenefitCards() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {[
-            { title: "Ultra Logistics", desc: "Global fulfillment within 24-48 hours.", icon: ShoppingBag, color: "blue" },
-            { title: "Iron Warranty", desc: "12-month zero-question replacement.", icon: ShieldCheck, color: "green" },
-            { title: "Expert Support", desc: "24/7 dedicated engineering assistance.", icon: MessageCircle, color: "purple" }
+            { title: "Fast. Reliable. Global.", desc: "We ship your gear within 48 hours, wherever you are in the world.", icon: ShoppingBag, color: "blue" },
+            { title: "We've Got Your Back", desc: "Enjoy a full year of hassle-free replacements. No questions asked.", icon: ShieldCheck, color: "green" },
+            { title: "Here to Help, 24/7", desc: "Got a question? Our tech experts are ready to help you anytime, day or night.", icon: MessageCircle, color: "purple" }
         ].map((feature, i) => (
             <motion.div
                 key={i}
