@@ -12,28 +12,38 @@
 
 ## Key Features & Functionalities
 
-###  Premium UI/UX
+### 🎨 Premium UI/UX & Design Philosophy
 - **Glassmorphism Design**: Modern, translucent interfaces that feel light and premium.
 - **Fluid Animations**: Smooth transitions and interactive elements powered by **Framer Motion**.
 - **Responsive Layout**: Optimized for every device, from ultra-wide monitors to mobile screens.
 - **Lucide Iconography**: Clean and consistent visual language across the entire platform.
 
-###  Advanced Shopping Experience
+### 🛍️ Core Shopping Experience
 - **Dynamic Category Management**: Real-time category synchronization directly from the product database.
 - **Advanced Filtering & Search**: Instant filtering by category, search terms, and pricing.
 - **High-Fidelity Product Details**: Immersive product pages with interactive media galleries and detailed technical specifications.
 - **Verified Review System**: Robust rating and review mechanism with user identity verification.
 - **Cart & Wishlist Logic**: Persistent state management for a seamless "save for later" and checkout flow.
 
-###  Comprehensive Administrative Suite
-- **Inventory Health Monitoring**: Real-time tracking of stock levels and automated catalog integrity checks.
-- **Sales Visualization**: Interactive charts and data points for monitoring business performance.
-- **Order Lifecycle Management**: Advanced filtering, status tracking, and management for customer orders.
+### 💳 Integrated Payment Ecosystem
+- **Stripe Integration**: Secure and seamless credit/debit card processing.
+- **Manual Payment System (MFS)**: Support for local gateways (bKash, Nagad, Rocket) with a **Strict Transaction ID Verification** workflow.
+- **Dynamic Payment UI**: Context-aware payment screens that adapt based on the selected gateway.
 
-### Security & Infrastructure
-- **Secure Authentication**: Protected routes and user sessions powered by **NextAuth.js**.
-- **Optimized Performance**: Server-side rendering (SSR) and efficient API routes for lightning-fast interactions.
-- **Database Scalability**: Flexible data modeling with **Mongoose** and **MongoDB**.
+### 🛡️ Smart Access & Advanced Security
+- **Guest Access Management**: Integrated AI search quotas with a 3-free-search limit for guests.
+- **Secure Authentication**: Protected routes and multi-layered user sessions powered by **NextAuth.js**.
+- **Server-Side Route Protection**: Enhanced security for sensitive transactional pages like Cart and Checkout.
+
+### 🛠️ Comprehensive Administrative Suite
+- **Inventory Health Monitoring**: Real-time tracking of stock levels and automated catalog integrity checks.
+- **Sales & Performance Metrics**: Data points for monitoring overall business performance and revenue.
+- **Order Lifecycle Management**: Advanced filtering, status tracking, and end-to-end management for customer orders.
+
+### 🚀 Performance & Infrastructure
+- **Next.js 16 (App Router)**: Utilizing React Server Components and SSR for lightning-fast interactions.
+- **Database Scalability**: Flexible and robust data modeling with **Mongoose** and **MongoDB**.
+- **Edge-Ready Architecture**: Built for high availability and low-latency performance.
 
 ---
 
@@ -41,12 +51,13 @@
 
 We are constantly evolving the platform. Here are the features currently in development:
 
-- [ ] **Payment Gateway Integration**: Seamless checkout with SSLCommerz, Stripe, or PayPal.
+- [x] **Payment Gateway Integration**: Seamless checkout with Stripe and local MFS (bKash/Nagad/Rocket).
 - [ ] **AI-Powered Recommendations**: Personalized product suggestions based on user browsing history and preferences.
-- [ ] **Real-time Notifications**: Instant order status updates and promotional alerts via webhooks.
-- [ ] **Multi-Vendor Ecosystem**: Expanding the platform to support independent sellers and shops.
-- [ ] **Advanced SEO Suite**: Deep metadata optimization and schema markup for maximum search visibility.
+- [ ] **Real-time Order Tracking**: Interactive dashboard for users to track their order status in real-time.
+- [ ] **Multi-language Support**: Deep localization supporting both **English** and **Bengali (BN)**.
+- [ ] **Advanced Analytics Dashboard**: Enhanced sales visualization and business intelligence for administrators.
 - [ ] **Progressive Web App (PWA)**: Enabling offline access and home screen installation for mobile users.
+- [ ] **Inventory Low-Stock Alerts**: Automated email/push notifications for administrators.
 
 ---
 
@@ -59,6 +70,7 @@ We are constantly evolving the platform. Here are the features currently in deve
 | **Frontend** | React 19, Tailwind CSS 4 |
 | **State Management** | Redux Toolkit |
 | **Database** | MongoDB with Mongoose |
+| **Payments** | Stripe, Manual Payment (MFS) |
 | **Animations** | Framer Motion |
 | **Icons** | Lucide React |
 | **Authentication** | NextAuth.js |
@@ -107,8 +119,18 @@ Tech-Store/
 3. **Environment Setup:**
    Create a `.env` file in the root directory and add your configurations:
    ```env
+   # Database & Auth
    MONGODB_URI=your_mongodb_connection_string
    NEXTAUTH_SECRET=your_secret_key
+   NEXTAUTH_URL=http://localhost:3000
+
+   # Payment Gateway (Stripe)
+   STRIPE_SECRET_KEY=your_stripe_secret_key
+   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=your_stripe_publishable_key
+   STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
+
+   # Image Hosting (ImgBB)
+   NEXT_PUBLIC_IMGBB_API_KEY=your_imgbb_api_key
    ```
 
 4. **Run the development server:**
