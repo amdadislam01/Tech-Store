@@ -9,14 +9,49 @@ import { CreditCard, Truck, CheckCircle2, ArrowLeft, ShieldCheck, Zap } from "lu
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
+import { useEffect } from "react";
+import { Globe } from "lucide-react";
 
 export default function CheckoutPage() {
   const { items } = useSelector((state: RootState) => state.cart);
-  const [formData, setFormData] = useState({ name: "", address: "", phone: "" });
+  const [formData, setFormData] = useState({ 
+    name: "", 
+    phone: "", 
+    city: "", 
+    area: "", 
+    address: "", 
+    landmark: "",
+    addressType: "Home"
+  });
   const [loading, setLoading] = useState(false);
+  const [settingsLoading, setSettingsLoading] = useState(true);
+  const [activeMethods, setActiveMethods] = useState<string[]>(["cod"]);
+  const [selectedMethod, setSelectedMethod] = useState("cod");
   const [orderId, setOrderId] = useState<string | null>(null);
   const router = useRouter();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    fetch("/api/settings")
+      .then(res => res.json())
+      .then(data => {
+        if (data.activePaymentMethods?.length > 0) {
+          setActiveMethods(data.activePaymentMethods);
+          setSelectedMethod(data.activePaymentMethods[0]);
+        }
+        setSettingsLoading(false);
+      })
+      .catch(() => setSettingsLoading(false));
+  }, []);
+
+  const PAYMENT_METHODS: any = {
+    cod: { label: "Cash on Delivery", description: "Pay upon arrival", icon: <Truck size={22} /> },
+    bkash: { label: "bKash", description: "Fast & Secure Payment", icon: <span className="font-black text-sm">bKash</span> },
+    nagad: { label: "Nagad", description: "Seamless Mobile Payment", icon: <span className="font-black text-sm">Nagad</span> },
+    rocket: { label: "Rocket", description: "Direct Bank Transfer", icon: <span className="font-black text-sm">Rocket</span> },
+    sslcommerz: { label: "SSLCommerz", description: "Pay with Cards/NetBanking", icon: <Globe size={22} /> },
+    stripe: { label: "Stripe", description: "International Card Payment", icon: <CreditCard size={22} /> },
+  };
 
   const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
   const shipping = items.length > 0 ? 10 : 0;
@@ -40,6 +75,8 @@ export default function CheckoutPage() {
           })),
           totalPrice: total,
           shippingInfo: formData,
+          paymentMethod: selectedMethod,
+          paymentStatus: "Pending"
         }),
       });
 
@@ -49,7 +86,7 @@ export default function CheckoutPage() {
         dispatch(clearCart());
         toast.success("Order placed successfully!");
       } else {
-        toast.error("Failed to place order");
+        toast.error(data.error || data.message || "Failed to place order");
       }
     } catch (error) {
       toast.error("An error occurred");
@@ -131,41 +168,99 @@ export default function CheckoutPage() {
                 </div>
                 <span>Shipping Details</span>
             </h2>
-            <form className="space-y-8" onSubmit={handleSubmit}>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <form className="space-y-6" onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Recipient Name</label>
+                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Full Name (আপনার পূর্ণ নাম)</label>
                     <input
                     type="text"
                     required
-                    className="w-full px-6 py-4 bg-gray-50 rounded-[20px] border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground placeholder:text-gray-300"
+                    className="w-full px-6 py-4 bg-gray-50 rounded-[20px] border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground placeholder:text-gray-300 shadow-sm"
                     placeholder="e.g. Alexander Pierce"
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     />
                 </div>
                 <div className="space-y-2">
-                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Phone Contact</label>
+                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Phone Number (মোবাইল নম্বর)</label>
                     <input
                     type="tel"
                     required
-                    className="w-full px-6 py-4 bg-gray-50 rounded-[20px] border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground placeholder:text-gray-300"
-                    placeholder="e.g. +1 555 000 0000"
+                    className="w-full px-6 py-4 bg-gray-50 rounded-[20px] border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground placeholder:text-gray-300 shadow-sm"
+                    placeholder="e.g. 01712345678"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                     />
                 </div>
               </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">City / Region (শহর / বিভাগ)</label>
+                    <input
+                    type="text"
+                    required
+                    className="w-full px-6 py-4 bg-gray-50 rounded-[20px] border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground placeholder:text-gray-300 shadow-sm"
+                    placeholder="e.g. Dhaka"
+                    value={formData.city}
+                    onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                    />
+                </div>
+                <div className="space-y-2">
+                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Area / Sub-district (এলাকা / থানা)</label>
+                    <input
+                    type="text"
+                    required
+                    className="w-full px-6 py-4 bg-gray-50 rounded-[20px] border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground placeholder:text-gray-300 shadow-sm"
+                    placeholder="e.g. Dhanmondi"
+                    value={formData.area}
+                    onChange={(e) => setFormData({ ...formData, area: e.target.value })}
+                    />
+                </div>
+              </div>
+
               <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Delivery Address</label>
-                <textarea
+                <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">House / Street / Building (বাসা / রাস্তা / বিল্ডিং)</label>
+                <input
+                  type="text"
                   required
-                  rows={3}
-                  className="w-full px-6 py-4 bg-gray-50 rounded-[24px] border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground placeholder:text-gray-300"
-                  placeholder="Street name, house number, apartment, city, and country..."
+                  className="w-full px-6 py-4 bg-gray-50 rounded-[20px] border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground placeholder:text-gray-300 shadow-sm"
+                  placeholder="e.g. House 12, Road 4, Sector 7"
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                 />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Landmark (নিকটস্থ পরিচিত স্থান - optional)</label>
+                    <input
+                    type="text"
+                    className="w-full px-6 py-4 bg-gray-50 rounded-[20px] border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground placeholder:text-gray-300 shadow-sm"
+                    placeholder="e.g. Beside City Hospital"
+                    value={formData.landmark}
+                    onChange={(e) => setFormData({ ...formData, landmark: e.target.value })}
+                    />
+                </div>
+                <div className="space-y-2">
+                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Address Type (ঠিকানার ধরন)</label>
+                    <div className="flex gap-4">
+                        {["Home", "Office"].map((type) => (
+                            <button
+                                key={type}
+                                type="button"
+                                onClick={() => setFormData({ ...formData, addressType: type })}
+                                className={`flex-1 py-4 rounded-[20px] font-bold text-sm transition-all border-2 ${
+                                    formData.addressType === type 
+                                        ? "bg-primary text-white border-primary shadow-lg shadow-primary/20" 
+                                        : "bg-gray-50 text-gray-500 border-transparent hover:border-gray-200"
+                                }`}
+                            >
+                                {type}
+                            </button>
+                        ))}
+                    </div>
+                </div>
               </div>
 
               <div className="pt-10">
@@ -175,21 +270,47 @@ export default function CheckoutPage() {
                     </div>
                     <span>Payment Method</span>
                 </h2>
-                <div className="relative group cursor-pointer">
-                    <div className="p-6 border-2 border-primary bg-primary/5 rounded-[24px] flex items-center justify-between shadow-lg shadow-primary/5 group-hover:bg-primary/10 transition-colors">
-                        <div className="flex items-center gap-4">
-                            <div className="p-3 bg-white rounded-xl shadow-sm text-primary">
-                                <Zap size={22} fill="currentColor" />
-                            </div>
-                            <div>
-                                <span className="block font-black text-foreground">Cash on Delivery</span>
-                                <span className="text-xs text-primary font-bold uppercase tracking-widest">Pay upon arrival</span>
-                            </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {settingsLoading ? (
+                        <div className="col-span-2 py-10 flex justify-center">
+                            <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
                         </div>
-                        <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center border-4 border-white shadow-md">
-                            <div className="w-2 h-2 bg-white rounded-full"></div>
-                        </div>
-                    </div>
+                    ) : (
+                        activeMethods.map((methodKey) => {
+                            const method = PAYMENT_METHODS[methodKey];
+                            if (!method) return null;
+                            const isSelected = selectedMethod === methodKey;
+                            
+                            return (
+                                <div 
+                                    key={methodKey}
+                                    onClick={() => setSelectedMethod(methodKey)}
+                                    className={`relative group cursor-pointer p-6 border-2 rounded-[24px] transition-all flex items-center justify-between ${
+                                        isSelected 
+                                            ? "border-primary bg-primary/5 shadow-lg shadow-primary/5" 
+                                            : "border-gray-50 bg-gray-50 hover:border-gray-200"
+                                    }`}
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div className={`p-3 rounded-xl shadow-sm ${isSelected ? "bg-white text-primary" : "bg-gray-100 text-gray-400"}`}>
+                                            {method.icon}
+                                        </div>
+                                        <div>
+                                            <span className={`block font-black ${isSelected ? "text-foreground" : "text-gray-500"}`}>{method.label}</span>
+                                            <span className={`text-[10px] font-bold uppercase tracking-widest ${isSelected ? "text-primary" : "text-gray-400"}`}>
+                                                {method.description}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className={`w-6 h-6 rounded-full flex items-center justify-center border-2 transition-all ${
+                                        isSelected ? "bg-primary border-white shadow-md" : "bg-white border-gray-100"
+                                    }`}>
+                                        {isSelected && <div className="w-1.5 h-1.5 bg-white rounded-full"></div>}
+                                    </div>
+                                </div>
+                            );
+                        })
+                    )}
                 </div>
 
                 <div className="mt-12">
