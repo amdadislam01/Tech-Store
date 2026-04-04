@@ -7,7 +7,7 @@ const SettingsSchema = new mongoose.Schema(
     siteDescription: { type: String, default: "Modern E-commerce Platform" },
     activePaymentMethods: {
       type: [String],
-      enum: ["cod", "stripe", "sslcommerz"],
+      enum: ["cod", "stripe", "sslcommerz", "bkash", "nagad", "rocket"],
       default: ["cod"],
     },
     contactEmail: { type: String, default: "support@techstore.com" },
