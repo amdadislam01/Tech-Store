@@ -8,6 +8,11 @@ export default withAuth(
 
     const path = req.nextUrl.pathname;
 
+    // Allow access to /cart and /checkout if authenticated
+    if (path.startsWith("/cart") || path.startsWith("/checkout")) {
+        return NextResponse.next();
+    }
+
     const roleAccess: Record<string, string[]> = {
       "super-admin": ["/dashboard", "/dashboard/users", "/dashboard/settings", "/dashboard/payments", "/dashboard/products", "/dashboard/orders", "/dashboard/profile"],
       "admin": ["/dashboard", "/dashboard/users", "/dashboard/products", "/dashboard/orders", "/dashboard/profile"],
@@ -34,5 +39,5 @@ export default withAuth(
 );
 
 export const config = {
-  matcher: ["/dashboard/:path*"]
+  matcher: ["/dashboard/:path*", "/cart/:path*", "/checkout/:path*"]
 };
