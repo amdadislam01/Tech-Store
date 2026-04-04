@@ -17,7 +17,7 @@ export default function BenefitCards() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.1 }}
                 viewport={{ once: true }}
-                className="p-10 rounded-[40px] bg-white border border-gray-100 shadow-sm hover:shadow-xl transition-all group"
+                className="p-10 rounded-[40px] bg-white border border-gray-100 shadow-sm hover:shadow-xl transition-all group cursor-pointer"
             >
                 <div className={`w-16 h-16 rounded-3xl bg-${feature.color}-50 text-${feature.color}-500 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform`}>
                     <feature.icon size={32} />
