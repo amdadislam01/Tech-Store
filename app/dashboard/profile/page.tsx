@@ -133,13 +133,13 @@ export default function ProfileSettings() {
   return (
     <div className="bg-[#F9FAFB] min-h-screen pb-20">
       {/* Subtle Top Header */}
-      <div className="bg-white/70 backdrop-blur-lg sticky top-0 z-30 border-b border-gray-100 mb-8">
-        <div className="container-custom max-w-6xl py-5 flex items-center justify-between">
-          <Link href="/dashboard" className="flex items-center gap-2 text-gray-500 hover:text-primary transition-all font-semibold text-sm group">
-            <ArrowLeft size={18} className="group-hover:-translate-x-1 transition-transform" />
-            <span>Back to Dashboard</span>
+      <div className="bg-white/70 backdrop-blur-lg sticky top-0 z-30 border-b border-gray-100 mb-6 sm:mb-8">
+        <div className="container-custom max-w-6xl py-4 sm:py-5 flex items-center justify-between px-4 sm:px-6">
+          <Link href="/dashboard" className="flex items-center gap-2 text-gray-400 hover:text-primary transition-all font-bold text-[10px] sm:text-sm group">
+            <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+            <span>Dashboard</span>
           </Link>
-          <div className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em]">Account Settings</div>
+          <div className="text-[9px] sm:text-[10px] font-black text-gray-400 uppercase tracking-[0.15em] sm:tracking-[0.2em]">Account Protocols</div>
         </div>
       </div>
 
@@ -147,8 +147,8 @@ export default function ProfileSettings() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
           {/* Sidebar Profile Card */}
-          <div className="lg:col-span-4">
-            <div className="bg-white rounded-[2.5rem] p-8 shadow-sm border border-gray-100 sticky top-24 overflow-hidden">
+          <div className="lg:col-span-4 px-4 sm:px-0">
+            <div className="bg-white rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 shadow-sm border border-gray-100 sticky top-24 overflow-hidden">
               <div className="absolute top-[-10%] right-[-10%] text-primary/5 rotate-12">
                 <Sparkles size={160} />
               </div>
@@ -205,34 +205,34 @@ export default function ProfileSettings() {
           </div>
 
           {/* Main Settings Forms */}
-          <div className="lg:col-span-8 space-y-8">
+          <div className="lg:col-span-8 space-y-6 sm:space-y-8 px-4 sm:px-0">
             
             {/* Identity Card */}
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
-              <div className="px-10 py-8 border-b border-gray-50 flex items-center gap-4">
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-[2rem] sm:rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
+              <div className="px-6 sm:px-10 py-6 sm:py-8 border-b border-gray-50 flex items-center gap-4">
                 <div className="w-10 h-10 bg-primary/10 rounded-xl flex items-center justify-center text-primary">
                   <User size={20} />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 tracking-tight">Identity Details</h3>
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 tracking-tight">Identity Details</h3>
               </div>
               
-              <div className="p-10">
+              <div className="p-6 sm:p-10">
                 <form onSubmit={handleProfileUpdate} className="space-y-6">
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Full Name</label>
+                    <label className="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Full Name</label>
                     <input 
                       type="text" 
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       required
                       placeholder="e.g. Alex Quantum"
-                      className="w-full bg-gray-50 border border-transparent rounded-2xl px-6 py-4 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all outline-none font-medium text-gray-900"
+                      className="w-full bg-gray-50 border border-transparent rounded-[20px] px-6 py-3.5 sm:py-4 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all outline-none font-medium text-gray-900 text-sm"
                     />
                   </div>
                   <button 
                     type="submit" 
                     disabled={loading}
-                    className="bg-primary hover:bg-primary/90 text-white px-8 py-4 rounded-2xl font-bold text-sm shadow-lg shadow-primary/20 transition-all flex items-center gap-2 active:scale-95 disabled:opacity-50"
+                    className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-white px-8 py-3.5 sm:py-4 rounded-[20px] font-bold text-sm shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
                   >
                     {loading ? <Loader2 className="animate-spin" size={18} /> : <Save size={18} />}
                     Save Changes
@@ -242,18 +242,18 @@ export default function ProfileSettings() {
             </motion.div>
 
             {/* Security Card */}
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
-              <div className="px-10 py-8 border-b border-gray-50 flex items-center gap-4">
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="bg-white rounded-[2rem] sm:rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
+              <div className="px-6 sm:px-10 py-6 sm:py-8 border-b border-gray-50 flex items-center gap-4">
                 <div className="w-10 h-10 bg-zinc-100 rounded-xl flex items-center justify-center text-zinc-900">
                   <ShieldCheck size={20} />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 tracking-tight">Security & Password</h3>
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 tracking-tight">Security & Password</h3>
               </div>
               
-              <div className="p-10">
+              <div className="p-6 sm:p-10">
                 <form onSubmit={handlePasswordUpdate} className="space-y-8">
                   <div className="space-y-2">
-                    <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Current Password</label>
+                    <label className="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Current Password</label>
                     <div className="relative group">
                       <Lock className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-300 group-focus-within:text-primary transition-colors" size={18} />
                       <input 
@@ -262,32 +262,32 @@ export default function ProfileSettings() {
                         onChange={(e) => setCurrentPassword(e.target.value)}
                         required
                         placeholder="••••••••••••"
-                        className="w-full bg-gray-50 border border-transparent rounded-2xl py-4 pl-14 pr-6 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all outline-none font-medium"
+                        className="w-full bg-gray-50 border border-transparent rounded-[20px] py-3.5 sm:py-4 pl-14 pr-6 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all outline-none font-medium text-sm"
                       />
                     </div>
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">New Password</label>
+                      <label className="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">New Password</label>
                       <input 
                         type="password" 
                         value={newPassword}
                         onChange={(e) => setNewPassword(e.target.value)}
                         required
                         placeholder="Min. 8 characters"
-                        className="w-full bg-gray-50 border border-transparent rounded-2xl px-6 py-4 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all outline-none font-medium"
+                        className="w-full bg-gray-50 border border-transparent rounded-[20px] px-6 py-3.5 sm:py-4 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all outline-none font-medium text-sm"
                       />
                     </div>
                     <div className="space-y-2">
-                      <label className="text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Confirm New Password</label>
+                      <label className="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-widest ml-1">Confirm New Password</label>
                       <input 
                         type="password" 
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         required
                         placeholder="Repeat password"
-                        className="w-full bg-gray-50 border border-transparent rounded-2xl px-6 py-4 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all outline-none font-medium"
+                        className="w-full bg-gray-50 border border-transparent rounded-[20px] px-6 py-3.5 sm:py-4 focus:bg-white focus:ring-4 focus:ring-primary/5 focus:border-primary/20 transition-all outline-none font-medium text-sm"
                       />
                     </div>
                   </div>
@@ -295,7 +295,7 @@ export default function ProfileSettings() {
                   <button 
                     type="submit" 
                     disabled={loading}
-                    className="bg-zinc-900 hover:bg-black text-white px-8 py-4 rounded-2xl font-bold text-sm shadow-xl transition-all flex items-center gap-2 active:scale-95 disabled:opacity-50"
+                    className="w-full sm:w-auto bg-zinc-900 hover:bg-black text-white px-8 py-3.5 sm:py-4 rounded-[20px] font-bold text-sm shadow-xl transition-all flex items-center justify-center gap-2 active:scale-95 disabled:opacity-50"
                   >
                     {loading ? <Loader2 className="animate-spin" size={18} /> : <Lock size={18} />}
                     Update Security
