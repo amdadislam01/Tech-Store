@@ -72,18 +72,18 @@ export default function PaymentsPage() {
 
   return (
     <div className="max-w-4xl space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-black text-foreground tracking-tight">Payment Gateways</h1>
-          <p className="text-gray-500 mt-1 font-medium">Toggle and configure secure payment options for your store.</p>
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+        <div className="space-y-1">
+          <h1 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight">Payment Gateways</h1>
+          <p className="text-gray-500 text-sm font-medium">Toggle and configure secure payment options for your store.</p>
         </div>
-        <div className="px-5 py-2.5 bg-green-50 rounded-2xl border border-green-100 flex items-center gap-2 text-xs font-black uppercase tracking-widest text-green-600">
+        <div className="px-4 py-2 bg-green-50 rounded-2xl border border-green-100 flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-green-600 w-fit">
             <CheckCircle2 size={16} />
             <span>Secure 256-bit SSL</span>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         {paymentGateways.map((gateway, idx) => {
           const isActive = settings.activePaymentMethods.includes(gateway.id);
           const isProcessing = updating === gateway.id;
@@ -94,7 +94,7 @@ export default function PaymentsPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: idx * 0.1 }}
-              className={`bg-white p-8 rounded-[40px] border transition-all duration-500 flex flex-col justify-between h-full group ${
+              className={`bg-white p-6 sm:p-8 rounded-[32px] sm:rounded-[40px] border transition-all duration-500 flex flex-col justify-between h-full group ${
                 isActive ? "border-primary/50 shadow-xl shadow-primary/5" : "border-gray-100 hover:border-gray-200"
               }`}
             >
@@ -138,7 +138,7 @@ export default function PaymentsPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
-        className="bg-primary/5 border border-primary/10 rounded-[32px] p-8 mt-12 flex flex-col md:flex-row items-center gap-6"
+        className="bg-primary/5 border border-primary/10 rounded-[2rem] p-6 sm:p-8 mt-12 flex flex-col md:flex-row items-center gap-6"
       >
         <div className="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center text-primary shrink-0">
             <Zap size={28} fill="currentColor" />
