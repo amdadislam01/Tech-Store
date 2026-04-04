@@ -26,6 +26,7 @@ export async function POST(req: Request) {
       },
       paymentMethod: paymentMethod || "cod",
       paymentStatus: paymentStatus || "Pending",
+      status: (paymentMethod === "cod" || !paymentMethod) ? "Pending" : "Awaiting Payment",
       user: session?.user?.id || null, // Optional for guest
     });
 
