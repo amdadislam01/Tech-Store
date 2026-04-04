@@ -312,12 +312,12 @@ export default function ProductDetails() {
                     }}
                     className="grid grid-cols-2 gap-4 mb-10"
                 >
-                    <div className="p-5 bg-zinc-50/50 rounded-2xl border border-white hover:bg-white hover:shadow-xl transition-all duration-300 group">
+                    <div className="p-5 bg-zinc-50/50 rounded-2xl border border-white hover:bg-white hover:shadow-xl transition-all duration-300 group cursor-pointer">
                          <ShieldCheck className="text-primary mb-3 group-hover:scale-110 transition-transform" size={24} />
                          <h4 className="text-[10px] font-black uppercase tracking-widest text-foreground mb-1">Authentic</h4>
                          <p className="text-[9px] font-bold text-gray-400">Original Components</p>
                     </div>
-                    <div className="p-5 bg-zinc-50/50 rounded-2xl border border-white hover:bg-white hover:shadow-xl transition-all duration-300 group">
+                    <div className="p-5 bg-zinc-50/50 rounded-2xl border border-white hover:bg-white hover:shadow-xl transition-all duration-300 group cursor-pointer">
                          <Truck className="text-primary mb-3 group-hover:scale-110 transition-transform" size={24} />
                          <h4 className="text-[10px] font-black uppercase tracking-widest text-foreground mb-1">Global</h4>
                          <p className="text-[9px] font-bold text-gray-400">Express Deployment</p>
@@ -403,7 +403,7 @@ export default function ProductDetails() {
                                             { title: "Innovation", desc: "Cutting-edge internal architecture", icon: ListTodo },
                                             { title: "Reliability", desc: "Extensively verified transmissions", icon: Clock }
                                         ].map((item, i) => (
-                                            <div key={i} className="flex gap-4 p-4 rounded-2xl bg-zinc-50/50 border border-white hover:bg-white hover:shadow-lg transition-all group">
+                                            <div key={i} className="flex gap-4 p-4 rounded-2xl bg-zinc-50/50 border border-white hover:bg-white hover:shadow-lg transition-all group cursor-pointer">
                                                 <div className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-primary shadow-sm group-hover:scale-110 transition-transform">
                                                     <item.icon size={18} />
                                                 </div>
@@ -444,7 +444,7 @@ export default function ProductDetails() {
                                     {product.specifications.split("\n").filter((s: string) => s.trim().length > 0).map((spec: string, i: number) => {
                                         const [label, ...value] = spec.includes(":") ? spec.split(":") : [spec, ""];
                                         return (
-                                            <div key={i} className="flex items-center justify-between p-6 bg-zinc-50/50 rounded-2xl border border-white hover:bg-white hover:shadow-xl transition-all group">
+                                            <div key={i} className="flex items-center justify-between p-6 bg-zinc-50/50 rounded-2xl border border-white hover:bg-white hover:shadow-xl transition-all group cursor-pointer">
                                                 <div className="flex items-center gap-4">
                                                     <div className="w-8 h-8 rounded-lg bg-zinc-100 flex items-center justify-center text-gray-400 group-hover:bg-primary/10 group-hover:text-primary transition-colors">
                                                         <ChevronRight size={14} />
@@ -582,7 +582,7 @@ export default function ProductDetails() {
                                                 animate={{ opacity: 1, scale: 1 }}
                                                 transition={{ delay: idx * 0.1 }}
                                                 key={idx} 
-                                                className="p-6 bg-white rounded-2xl border border-zinc-100 shadow-sm hover:shadow-xl hover:shadow-gray-100/30 transition-all duration-500 relative group"
+                                                className="p-6 bg-white rounded-2xl border border-zinc-100 shadow-sm hover:shadow-xl hover:shadow-gray-100/30 transition-all duration-500 relative group cursor-pointer"
                                             >
                                                 <div className="flex items-start justify-between mb-6">
                                                     <div className="flex items-center gap-4">
