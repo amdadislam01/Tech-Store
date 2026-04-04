@@ -12,12 +12,12 @@ import {
   Clock,
   CheckCircle,
   Copy,
-  ReceiptText
+  ReceiptText,
+  ShieldCheck
 } from "lucide-react";
-import OrderActions from "./OrderActions";
-import OrderFilters from "./OrderFilters";
 import Link from "next/link";
-import Image from "next/image";
+import OrdersList from "./OrdersList";
+import OrderFilters from "./OrderFilters";
 
 interface Props {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -60,7 +60,8 @@ export default async function OrdersPage({ searchParams }: Props) {
 
   const orders = await Order.find(filterQuery)
     .sort({ createdAt: -1 })
-    .populate("user", "name email image");
+    .populate("user", "name email image")
+    .lean();
 
   const getInitials = (name: string) => {
     return name
@@ -144,83 +145,7 @@ export default async function OrdersPage({ searchParams }: Props) {
                 <th className="px-8 py-6 text-[10px] uppercase font-black text-gray-400 tracking-[0.25em] text-right">Pipeline Status</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-50/50">
-              {orders.map((order, idx) => (
-                <tr key={order._id} className="group hover:bg-gray-50/30 transition-all">
-                  <td className="px-8 py-6">
-                    <div className="space-y-2">
-                        <div className="flex items-center gap-2">
-                            <span className="p-1 px-2 bg-zinc-100 rounded-lg font-mono text-[10px] font-bold text-zinc-500 uppercase">#{order._id.toString().slice(-8)}</span>
-                            <button className="text-gray-300 hover:text-primary transition-colors focus:outline-none">
-                                <Copy size={12} />
-                            </button>
-                        </div>
-                        <div className="flex items-center gap-2 text-xs font-bold text-gray-400 group-hover:text-gray-600 transition-colors">
-                            <Calendar size={14} className="text-primary/40" />
-                            <span>{new Date(order.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</span>
-                        </div>
-                    </div>
-                  </td>
-                  
-                  <td className="px-8 py-6 text-left">
-                    <div className="flex items-center gap-4">
-                        <div className={`relative w-12 h-12 rounded-2xl flex items-center justify-center font-black text-sm shadow-sm border border-white shrink-0 overflow-hidden ${avatarColors[idx % avatarColors.length]}`}>
-                            {order.user?.image ? (
-                                <Image src={order.user.image} alt={order.user?.name || "Customer"} fill className="object-cover" />
-                            ) : (
-                                <span>{getInitials(order.shippingInfo?.name || order.user?.name || "Client")}</span>
-                            )}
-                        </div>
-                        <div className="min-w-0">
-                            <p className="font-black text-foreground text-sm tracking-tight truncate group-hover:text-primary transition-colors">
-                                {order.shippingInfo?.name || order.user?.name || "Customer"}
-                            </p>
-                            <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider truncate">
-                                {order.shippingInfo?.city && order.shippingInfo?.area 
-                                    ? `${order.shippingInfo.city}, ${order.shippingInfo.area}` 
-                                    : order.user?.email || "Guest Purchase"}
-                            </p>
-                        </div>
-                    </div>
-                  </td>
-                  
-                  <td className="px-8 py-6">
-                    <div className="space-y-1.5">
-                        <p className="text-lg font-black text-foreground tracking-tight">
-                            ${(order.totalAmount || order.totalPrice).toLocaleString()}
-                        </p>
-                        <span className={`inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.1em] px-2 py-1 rounded-lg border ${
-                            order.paymentStatus === "Paid" ? "text-green-600 bg-green-50 border-green-100" : 
-                            order.paymentStatus === "Failed" ? "text-red-600 bg-red-50 border-red-100" :
-                            "text-primary bg-primary/5 border-primary/10"
-                        }`}>
-                            {order.paymentStatus === "Paid" ? <CheckCircle size={10} /> : <Clock size={10} />}
-                            {order.paymentMethod?.toUpperCase() || "COD"} • {order.paymentStatus || "Pending"}
-                        </span>
-                    </div>
-                  </td>
-                  
-                  <td className="px-8 py-6">
-                    <div className="flex items-center justify-end gap-4">
-                        {isAdmin ? (
-                            <OrderActions orderId={order._id.toString()} currentStatus={order.status.toLowerCase()} />
-                        ) : (
-                            <div className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border transition-all ${
-                                order.status.toLowerCase() === "delivered" ? "bg-green-50 text-green-600 border-green-100 shadow-sm shadow-green-100" :
-                                order.status.toLowerCase() === "cancelled" ? "bg-red-50 text-red-600 border-red-100 shadow-sm shadow-red-100" :
-                                "bg-orange-50 text-orange-600 border-orange-100 shadow-sm shadow-orange-100"
-                            }`}>
-                                {order.status}
-                            </div>
-                        )}
-                        <button className="w-10 h-10 flex items-center justify-center bg-white rounded-xl text-gray-300 hover:text-primary hover:shadow-lg hover:border-primary/20 transition-all border border-gray-100 shadow-sm group/btn">
-                            <Eye size={18} className="group-hover/btn:scale-110 transition-transform" />
-                        </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+            <OrdersList orders={orders} isAdmin={isAdmin} avatarColors={avatarColors} />
           </table>
 
           {orders.length === 0 && (
