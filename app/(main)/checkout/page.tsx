@@ -82,9 +82,14 @@ export default function CheckoutPage() {
 
       const data = await res.json();
       if (res.ok) {
-        setOrderId(data._id);
         dispatch(clearCart());
         toast.success("Order placed successfully!");
+        
+        if (selectedMethod !== "cod") {
+            router.push(`/checkout/payment/${data._id}`);
+        } else {
+            setOrderId(data._id);
+        }
       } else {
         toast.error(data.error || data.message || "Failed to place order");
       }
