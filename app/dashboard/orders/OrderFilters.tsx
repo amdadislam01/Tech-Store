@@ -65,8 +65,8 @@ export default function OrderFilters() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 bg-gray-50/30 p-8 border-b border-gray-50">
-      <div className="flex items-center gap-4 w-full lg:w-auto">
+    <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 bg-gray-50/30 p-6 sm:p-8 border-b border-gray-50">
+      <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto">
         <div className="relative group w-full lg:w-96">
           <Search
             className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-primary transition-colors"
@@ -77,7 +77,7 @@ export default function OrderFilters() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search Order ID, Client, or Email..."
-            className="w-full pl-12 pr-6 py-3.5 bg-white rounded-2xl border border-gray-100 focus:border-primary/30 focus:ring-8 focus:ring-primary/5 transition-all text-sm font-bold placeholder:text-gray-300 shadow-sm outline-none"
+            className="w-full pl-11 sm:pl-12 pr-6 py-3 bg-white rounded-2xl border border-gray-100 focus:border-primary/30 focus:ring-8 focus:ring-primary/5 transition-all text-sm font-bold placeholder:text-gray-300 shadow-sm outline-none"
           />
           {searchTerm && (
             <button
@@ -89,15 +89,15 @@ export default function OrderFilters() {
           )}
         </div>
 
-        <div className="relative shrink-0">
+        <div className="relative shrink-0 w-full sm:w-auto">
           <button
             onClick={() => setShowFilters(!showFilters)}
-            className={`p-3.5 bg-white text-gray-500 rounded-2xl hover:bg-primary hover:text-white transition-all border border-gray-100 shadow-sm group flex items-center gap-2 ${
+            className={`w-full sm:w-auto p-3 bg-white text-gray-500 rounded-2xl hover:bg-primary hover:text-white transition-all border border-gray-100 shadow-sm group flex items-center justify-center sm:justify-start gap-2 ${
                 currentStatus !== "all" ? "ring-2 ring-primary border-transparent" : ""
             }`}
           >
             <Filter size={18} className="group-hover:scale-110 transition-transform" />
-            <span className={`text-xs font-bold ${currentStatus !== "all" ? "flex" : "hidden md:flex"}`}>
+            <span className={`text-xs font-bold ${currentStatus !== "all" ? "flex" : "hidden sm:flex"}`}>
               {statusOptions.find((s) => s.id === currentStatus)?.label || "Filter"}
             </span>
             <ChevronDown size={14} className={`transition-transform duration-300 ${showFilters ? "rotate-180" : ""}`} />
