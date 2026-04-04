@@ -83,29 +83,31 @@ export default async function OrdersPage({ searchParams }: Props) {
   return (
     <div className="space-y-10 pb-20 animate-in fade-in slide-in-from-bottom-4 duration-1000">
       {/* Header Section */}
-      <div className="relative overflow-hidden p-8 md:p-12 bg-white rounded-[3rem] border border-gray-100 shadow-sm group">
+      <div className="relative overflow-hidden p-6 sm:p-8 md:p-12 bg-white rounded-[2rem] sm:rounded-[3rem] border border-gray-100 shadow-sm group">
         <div className="absolute top-0 right-0 p-8 opacity-5 group-hover:opacity-10 transition-opacity">
             <TrendingUp size={160} className="rotate-12" />
         </div>
         <div className="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div className="space-y-2">
+          <div className="space-y-4">
             <div className="inline-flex items-center gap-2 px-3 py-1 bg-primary/5 rounded-full border border-primary/10">
                 <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary">Live Tracking Active</span>
+                <span className="text-[10px] font-black uppercase tracking-[0.15em] text-primary">Live Tracking Active</span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-black text-foreground tracking-tight">
-              {isAdmin ? "Order Management" : "Purchase History"}
-            </h1>
-            <p className="text-gray-500 font-medium max-w-xl leading-relaxed">
-              {isAdmin 
-                ? "Oversee platform orders, track logistics, and manage fulfillment status in real-time." 
-                : "Track your technology purchases and view your order history in one place."}
-            </p>
+            <div className="space-y-1">
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-black text-foreground tracking-tight">
+                {isAdmin ? "Order Management" : "Purchase History"}
+              </h1>
+              <p className="text-gray-500 font-medium text-sm sm:text-base max-w-xl leading-relaxed">
+                {isAdmin 
+                  ? "Oversee platform orders, track logistics, and manage fulfillment status in real-time." 
+                  : "Track your technology purchases and view your order history in one place."}
+              </p>
+            </div>
           </div>
           
           {!isAdmin && (
-            <Link href="/" className="px-8 py-4 bg-primary text-white font-bold rounded-2xl shadow-xl shadow-primary/20 hover:bg-primary-dark transition-all transform active:scale-95 flex items-center gap-3">
-                <span>Shop More</span>
+            <Link href="/" className="px-6 py-3 sm:px-8 sm:py-4 bg-primary text-white font-bold rounded-2xl shadow-xl shadow-primary/20 hover:bg-primary-dark transition-all transform active:scale-95 flex items-center gap-3 w-fit">
+                <span className="text-sm sm:text-base">Shop More</span>
                 <ArrowRight size={20} />
             </Link>
           )}
@@ -113,17 +115,17 @@ export default async function OrdersPage({ searchParams }: Props) {
       </div>
 
       {/* Main Container */}
-      <div className="bg-white rounded-[3rem] border border-gray-100 shadow-premium overflow-hidden min-h-[60vh] flex flex-col">
+      <div className="bg-white rounded-[2rem] sm:rounded-[3rem] border border-gray-100 shadow-premium overflow-hidden min-h-[60vh] flex flex-col">
         {/* Toolbar (Client Filter Component) */}
         <OrderFilters />
 
         {/* List Analytics Summary (Mini) */}
-        <div className="px-8 py-4 bg-gray-50/20 border-b border-gray-50 flex items-center justify-between">
+        <div className="px-6 sm:px-8 py-4 bg-gray-50/20 border-b border-gray-50 flex items-center justify-between">
             <div className="flex items-center gap-2">
                 <ReceiptText size={14} className="text-gray-400" />
-                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">{orders.length} Results Found</span>
+                <span className="text-[10px] sm:text-xs font-bold text-gray-400 uppercase tracking-widest">{orders.length} Results Found</span>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="hidden sm:flex items-center gap-4">
                 <div className="flex -space-x-2">
                     {[0,1,2].map((_, i) => (
                         <div key={i} className={`w-8 h-8 rounded-lg border-2 border-white ${avatarColors[i]} flex items-center justify-center text-[8px] font-black shadow-sm`}>
@@ -139,10 +141,10 @@ export default async function OrdersPage({ searchParams }: Props) {
           <table className="w-full border-collapse">
             <thead>
               <tr className="border-b border-gray-50">
-                <th className="px-8 py-6 text-[10px] uppercase font-black text-gray-400 tracking-[0.25em] text-left whitespace-nowrap">Order ID & Date</th>
-                <th className="px-8 py-6 text-[10px] uppercase font-black text-gray-400 tracking-[0.25em] text-left">Customer</th>
-                <th className="px-8 py-6 text-[10px] uppercase font-black text-gray-400 tracking-[0.25em] text-left">Transaction</th>
-                <th className="px-8 py-6 text-[10px] uppercase font-black text-gray-400 tracking-[0.25em] text-right">Pipeline Status</th>
+                <th className="px-6 sm:px-8 py-6 text-[10px] uppercase font-black text-gray-400 tracking-[0.2em] text-left whitespace-nowrap">Order Info</th>
+                <th className="px-6 sm:px-8 py-6 text-[10px] uppercase font-black text-gray-400 tracking-[0.2em] text-left">Customer</th>
+                <th className="px-6 sm:px-8 py-6 text-[10px] uppercase font-black text-gray-400 tracking-[0.2em] text-left">Economic Value</th>
+                <th className="px-6 sm:px-8 py-6 text-[10px] uppercase font-black text-gray-400 tracking-[0.2em] text-right">Pipeline Status</th>
               </tr>
             </thead>
             <OrdersList orders={orders} isAdmin={isAdmin} avatarColors={avatarColors} />
