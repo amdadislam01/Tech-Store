@@ -2,7 +2,7 @@ import mongoose, { Schema, model, models } from "mongoose";
 
 const OrderSchema = new Schema(
   {
-    user: { type: Schema.Types.ObjectId, ref: "User", required: false }, // Optional for guest checkout? User prompt said "user info", but usually it's linked to a user.
+    user: { type: Schema.Types.ObjectId, ref: "User", required: false },
     items: [
       {
         product: { type: Schema.Types.ObjectId, ref: "Product", required: true },
@@ -23,7 +23,7 @@ const OrderSchema = new Schema(
     },
     status: { 
       type: String, 
-      enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"], 
+      enum: ["Pending", "Awaiting Payment", "Processing", "Shipped", "Delivered", "Cancelled", "On Hold"], 
       default: "Pending" 
     },
     paymentMethod: { type: String, required: true },
@@ -32,10 +32,15 @@ const OrderSchema = new Schema(
       enum: ["Pending", "Paid", "Failed"], 
       default: "Pending" 
     },
+    transactionId: { type: String },
   },
   { timestamps: true }
 );
 
-const Order = models.Order || model("Order", OrderSchema);
+if (mongoose.models && mongoose.models.Order) {
+  delete (mongoose as any).models.Order;
+}
+
+const Order = mongoose.models.Order || mongoose.model("Order", OrderSchema);
 
 export default Order;
