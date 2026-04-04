@@ -14,12 +14,22 @@ const OrderSchema = new Schema(
     totalPrice: { type: Number, required: true },
     shippingInfo: {
       name: { type: String, required: true },
-      address: { type: String, required: true },
       phone: { type: String, required: true },
+      city: { type: String, required: true },
+      area: { type: String, required: true },
+      address: { type: String, required: true },
+      landmark: { type: String },
+      addressType: { type: String, enum: ["Home", "Office"], default: "Home" },
     },
     status: { 
       type: String, 
       enum: ["Pending", "Processing", "Shipped", "Delivered", "Cancelled"], 
+      default: "Pending" 
+    },
+    paymentMethod: { type: String, required: true },
+    paymentStatus: { 
+      type: String, 
+      enum: ["Pending", "Paid", "Failed"], 
       default: "Pending" 
     },
   },
