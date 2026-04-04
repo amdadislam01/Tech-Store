@@ -176,7 +176,9 @@ export default async function OrdersPage({ searchParams }: Props) {
                                 {order.shippingInfo?.name || order.user?.name || "Customer"}
                             </p>
                             <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider truncate">
-                                {order.user?.email || "Guest Purchase"}
+                                {order.shippingInfo?.city && order.shippingInfo?.area 
+                                    ? `${order.shippingInfo.city}, ${order.shippingInfo.area}` 
+                                    : order.user?.email || "Guest Purchase"}
                             </p>
                         </div>
                     </div>
@@ -187,9 +189,13 @@ export default async function OrdersPage({ searchParams }: Props) {
                         <p className="text-lg font-black text-foreground tracking-tight">
                             ${(order.totalAmount || order.totalPrice).toLocaleString()}
                         </p>
-                        <span className="inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.1em] text-primary bg-primary/5 px-2 py-1 rounded-lg border border-primary/10">
-                            <CheckCircle size={10} />
-                            Payment Verified
+                        <span className={`inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.1em] px-2 py-1 rounded-lg border ${
+                            order.paymentStatus === "Paid" ? "text-green-600 bg-green-50 border-green-100" : 
+                            order.paymentStatus === "Failed" ? "text-red-600 bg-red-50 border-red-100" :
+                            "text-primary bg-primary/5 border-primary/10"
+                        }`}>
+                            {order.paymentStatus === "Paid" ? <CheckCircle size={10} /> : <Clock size={10} />}
+                            {order.paymentMethod?.toUpperCase() || "COD"} • {order.paymentStatus || "Pending"}
                         </span>
                     </div>
                   </td>
