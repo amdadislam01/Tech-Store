@@ -7,6 +7,8 @@ import {
   Truck, 
   Package,
   Loader2,
+  ShieldCheck,
+  Clock,
   ChevronDown
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -16,22 +18,31 @@ import { useRouter } from "next/navigation";
 interface OrderActionsProps {
   orderId: string;
   currentStatus: string;
+  paymentMethod?: string;
+  transactionId?: string;
 }
 
 const statusWorkflow = [
-    { id: "pending", label: "Pending Approval", icon: Package, color: "text-orange-500", bg: "bg-orange-50" },
-    { id: "processing", label: "Processing", icon: Loader2, color: "text-blue-500", bg: "bg-blue-50" },
-    { id: "shipped", label: "Out for Delivery", icon: Truck, color: "text-purple-500", bg: "bg-purple-50" },
-    { id: "delivered", label: "Completed", icon: CheckCircle2, color: "text-green-500", bg: "bg-green-50" },
-    { id: "cancelled", label: "Cancelled", icon: XCircle, color: "text-red-500", bg: "bg-red-50" },
+    { id: "Awaiting Payment", label: "Awaiting Payment", icon: Clock, color: "text-red-500", bg: "bg-red-50" },
+    { id: "Pending", label: "Awaiting Review", icon: Package, color: "text-orange-500", bg: "bg-orange-50" },
+    { id: "Processing", label: "Confirmed / Processing", icon: Loader2, color: "text-blue-500", bg: "bg-blue-50" },
+    { id: "Shipped", label: "Out for Delivery", icon: Truck, color: "text-purple-500", bg: "bg-purple-50" },
+    { id: "Delivered", label: "Completed", icon: CheckCircle2, color: "text-green-500", bg: "bg-green-50" },
+    { id: "Cancelled", label: "Cancelled", icon: XCircle, color: "text-red-500", bg: "bg-red-50" },
+    { id: "On Hold", label: "On Hold", icon: ShieldCheck, color: "text-gray-500", bg: "bg-gray-50" },
 ];
 
-export default function OrderActions({ orderId, currentStatus }: OrderActionsProps) {
+export default function OrderActions({ orderId, currentStatus, paymentMethod, transactionId }: OrderActionsProps) {
   const [isUpdating, setIsUpdating] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const router = useRouter();
 
   const handleStatusUpdate = async (newStatus: string) => {
+    if (newStatus === "Processing" && paymentMethod !== "cod" && !transactionId) {
+        toast.error("Cannot confirm order without Transaction ID!");
+        return;
+    }
+    
     if (newStatus === currentStatus) return;
     setIsUpdating(true);
     setShowMenu(false);
