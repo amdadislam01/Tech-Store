@@ -23,7 +23,7 @@ export default function SettingsPage() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    fetch("/api/admin/settings")
+    fetch("/api/admin/settings", { cache: "no-store" })
       .then((res) => res.json())
       .then((data) => {
         setSettings(data);
@@ -217,6 +217,49 @@ export default function SettingsPage() {
                 </button>
               );
             })}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6 border-t border-gray-50">
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">bKash Number</label>
+              <input
+                type="text"
+                value={settings.bkashNumber || ""}
+                onChange={(e) => setSettings({ ...settings, bkashNumber: e.target.value })}
+                className="w-full px-5 py-3 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground"
+                placeholder="017XXXXXXXX"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Nagad Number</label>
+              <input
+                type="text"
+                value={settings.nagadNumber || ""}
+                onChange={(e) => setSettings({ ...settings, nagadNumber: e.target.value })}
+                className="w-full px-5 py-3 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground"
+                placeholder="017XXXXXXXX"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Rocket Number</label>
+              <input
+                type="text"
+                value={settings.rocketNumber || ""}
+                onChange={(e) => setSettings({ ...settings, rocketNumber: e.target.value })}
+                className="w-full px-5 py-3 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground"
+                placeholder="017XXXXXXXX"
+              />
+            </div>
+            <div className="space-y-2 md:col-span-2">
+              <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Payment Instructions</label>
+              <textarea
+                rows={2}
+                value={settings.paymentInstructions || ""}
+                onChange={(e) => setSettings({ ...settings, paymentInstructions: e.target.value })}
+                className="w-full px-5 py-3 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground"
+                placeholder="Instructions for manual payment..."
+              />
+            </div>
           </div>
         </motion.div>
 
