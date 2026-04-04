@@ -15,6 +15,9 @@ const SettingsSchema = new mongoose.Schema(
     bkashNumber: { type: String, default: "" },
     nagadNumber: { type: String, default: "" },
     rocketNumber: { type: String, default: "" },
+    stripePublishableKey: { type: String, default: "" },
+    stripeSecretKey: { type: String, default: "" },
+    stripeWebhookSecret: { type: String, default: "" },
     paymentInstructions: { type: String, default: "Please make manual payment and provider transaction ID." },
   },
   { timestamps: true }
