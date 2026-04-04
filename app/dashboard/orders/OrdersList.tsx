@@ -49,7 +49,7 @@ export default function OrdersList({ orders, isAdmin, avatarColors }: OrdersList
       <tbody className="divide-y divide-gray-50/50">
         {orders.map((order, idx) => (
           <tr key={order._id} className="group hover:bg-gray-50/30 transition-all">
-            <td className="px-8 py-6">
+            <td className="px-4 sm:px-8 py-4 sm:py-6">
               <div className="space-y-2">
                   <div className="flex items-center gap-2">
                       <span className="p-1 px-2 bg-zinc-100 rounded-lg font-mono text-[10px] font-bold text-zinc-500 uppercase">#{order._id.toString().slice(-8)}</span>
@@ -70,9 +70,9 @@ export default function OrdersList({ orders, isAdmin, avatarColors }: OrdersList
               </div>
             </td>
             
-            <td className="px-8 py-6 text-left">
+            <td className="px-4 sm:px-8 py-4 sm:py-6 text-left">
               <div className="flex items-center gap-4">
-                  <div className={`relative w-12 h-12 rounded-2xl flex items-center justify-center font-black text-sm shadow-sm border border-white shrink-0 overflow-hidden ${avatarColors[idx % avatarColors.length]}`}>
+                  <div className={`relative w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center font-black text-xs sm:text-sm shadow-sm border border-white shrink-0 overflow-hidden ${avatarColors[idx % avatarColors.length]}`}>
                       {order.user?.image ? (
                           <Image src={order.user.image} alt={order.user?.name || "Customer"} fill className="object-cover" />
                       ) : (
@@ -92,9 +92,9 @@ export default function OrdersList({ orders, isAdmin, avatarColors }: OrdersList
               </div>
             </td>
             
-            <td className="px-8 py-6">
+            <td className="px-4 sm:px-8 py-4 sm:py-6">
               <div className="space-y-1.5">
-                  <p className="text-lg font-black text-foreground tracking-tight">
+                  <p className="text-base sm:text-lg font-black text-foreground tracking-tight">
                       ${(order.totalAmount || order.totalPrice).toLocaleString()}
                   </p>
                   <span className={`inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.1em] px-2 py-1 rounded-lg border ${
