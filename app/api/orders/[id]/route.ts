@@ -1,60 +1,69 @@
 import { NextResponse } from "next/server";
-import { getServerSession } from "next-auth";
+import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import connectDB from "@/lib/db";
 import Order from "@/models/Order";
 
-export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
-    const { id } = await params;
-    const session = await getServerSession(authOptions);
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
     await connectDB();
+    const { id } = await params;
     const order = await Order.findById(id).populate("user", "name email");
 
     if (!order) {
-      return NextResponse.json({ error: "Order not found" }, { status: 404 });
-    }
-
-    // Role check: Admin/Manager can see all, user only their own
-    const isAdmin = ["super-admin", "admin", "manager"].includes(session.user.role as string);
-    if (!isAdmin && order.user?._id.toString() !== session.user.id) {
-       return NextResponse.json({ error: "Access denied" }, { status: 403 });
+      return NextResponse.json({ message: "Order not found" }, { status: 404 });
     }
 
     return NextResponse.json(order);
   } catch (error) {
-    return NextResponse.json({ error: "Error fetching order" }, { status: 500 });
+    return NextResponse.json({ message: "Error fetching order" }, { status: 500 });
   }
 }
 
-export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function PATCH(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
-    const { id } = await params;
-    const session = await getServerSession(authOptions);
-    const allowedRoles = ["super-admin", "admin", "manager"];
-    if (!session || !allowedRoles.includes(session.user.role as string)) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-    }
-
-    const { status } = await req.json();
     await connectDB();
-    
-    const updatedOrder = await Order.findByIdAndUpdate(
-      id,
-      { status },
-      { new: true }
-    );
+    const { id } = await params;
+    const body = await req.json();
+    const { transactionId, status, paymentStatus } = body;
 
-    if (!updatedOrder) {
-      return NextResponse.json({ error: "Order not found" }, { status: 404 });
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
+
+    const order = await Order.findById(id);
+    if (!order) {
+      return NextResponse.json({ message: "Order not found" }, { status: 404 });
+    }
+
+    // Security check: only admin can change status/paymentStatus
+    // User can only update transactionId for their own order
+    const isAdmin = ["super-admin", "admin", "manager"].includes(session.user.role as string);
+    const isOwner = order.user?.toString() === session.user.id || !order.user; // Allow guest for now if session exists? Usually users are logged in if they have a session.
+
+    if (!isAdmin && !isOwner) {
+      return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+    }
+
+    const updateData: any = {};
+    if (transactionId !== undefined) updateData.transactionId = transactionId;
+    
+    if (isAdmin) {
+        if (status) updateData.status = status;
+        if (paymentStatus) updateData.paymentStatus = paymentStatus;
+    }
+
+    const updatedOrder = await Order.findByIdAndUpdate(id, updateData, { new: true });
 
     return NextResponse.json(updatedOrder);
   } catch (error) {
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json({ message: "Error updating order" }, { status: 500 });
   }
 }
