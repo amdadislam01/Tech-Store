@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import { NextResponse } from "next/server";
 import connectDB from "@/lib/db";
 import Settings from "@/models/Settings";
@@ -11,7 +12,11 @@ export async function GET() {
       activePaymentMethods: 1,
       siteDescription: 1,
       contactEmail: 1,
-      footerText: 1
+      footerText: 1,
+      bkashNumber: 1,
+      nagadNumber: 1,
+      rocketNumber: 1,
+      paymentInstructions: 1,
     });
 
     if (!settings) {
