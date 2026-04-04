@@ -64,10 +64,10 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="max-w-4xl space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-1000">
-      <div>
-        <h1 className="text-3xl font-black text-foreground tracking-tight">Site Settings</h1>
-        <p className="text-gray-500 mt-1 font-medium">Configure global platform identity and behavior.</p>
+    <div className="max-w-4xl mx-auto space-y-8 px-4 sm:px-0 animate-in fade-in slide-in-from-bottom-4 duration-1000">
+      <div className="space-y-1">
+        <h1 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight">Site Settings</h1>
+        <p className="text-gray-500 text-sm font-medium">Configure global platform identity and behavior.</p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
@@ -76,7 +76,7 @@ export default function SettingsPage() {
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm space-y-6"
+            className="bg-white p-6 sm:p-8 rounded-[2rem] border border-gray-100 shadow-sm space-y-6"
           >
             <h2 className="text-xl font-black flex items-center gap-3 text-primary">
               <Globe size={22} />
@@ -149,7 +149,7 @@ export default function SettingsPage() {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm space-y-6"
+          className="bg-white p-6 sm:p-8 rounded-[2.5rem] border border-gray-100 shadow-sm space-y-6"
         >
           <h2 className="text-xl font-black flex items-center gap-3 text-primary">
             <Layout size={22} />
@@ -170,7 +170,7 @@ export default function SettingsPage() {
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm space-y-8"
+          className="bg-white p-6 sm:p-8 rounded-[2.5rem] border border-gray-100 shadow-sm space-y-8"
         >
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-black flex items-center gap-3 text-primary">
@@ -268,7 +268,7 @@ export default function SettingsPage() {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             disabled={saving}
-            className="flex items-center gap-3 px-10 py-4 bg-primary text-white rounded-[20px] font-black shadow-xl shadow-primary/20 hover:bg-primary-dark transition-all disabled:opacity-50"
+            className="flex items-center justify-center gap-3 w-full sm:w-auto px-10 py-4 bg-primary text-white rounded-[20px] font-black shadow-xl shadow-primary/20 hover:bg-primary-dark transition-all disabled:opacity-50"
           >
             {saving ? <Loader2 className="animate-spin" size={20} /> : <Save size={20} />}
             {saving ? "Deploying Changes..." : "Save Global Settings"}
