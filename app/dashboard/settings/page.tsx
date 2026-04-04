@@ -8,7 +8,11 @@ import {
   Mail, 
   Info,
   Loader2,
-  Image as ImageIcon
+  Image as ImageIcon,
+  CheckCircle2,
+  XCircle,
+  Truck,
+  CreditCard
 } from "lucide-react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
@@ -159,6 +163,60 @@ export default function SettingsPage() {
               onChange={(e) => setSettings({ ...settings, siteDescription: e.target.value })}
               className="w-full px-5 py-3 bg-gray-50 rounded-[24px] border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground no-scrollbar"
             />
+          </div>
+        </motion.div>
+        
+        {/* Payment Gateways Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm space-y-8"
+        >
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-black flex items-center gap-3 text-primary">
+              <CreditCard size={22} />
+              Payment Gateways
+            </h2>
+            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Select active methods</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[
+              { id: "cod", label: "Cash on Delivery", icon: <Truck size={20} /> },
+              { id: "bkash", label: "bKash", icon: <span className="font-black text-xs">bK</span> },
+              { id: "nagad", label: "Nagad", icon: <span className="font-black text-xs">N</span> },
+              { id: "rocket", label: "Rocket", icon: <span className="font-black text-xs">R</span> },
+              { id: "sslcommerz", label: "SSLCommerz", icon: <Globe size={20} /> },
+              { id: "stripe", label: "Stripe", icon: <CreditCard size={20} /> },
+            ].map((method) => {
+              const isActive = settings.activePaymentMethods?.includes(method.id);
+              return (
+                <button
+                  key={method.id}
+                  type="button"
+                  onClick={() => {
+                    const currentMethods = settings.activePaymentMethods || [];
+                    const newMethods = isActive
+                      ? currentMethods.filter((m: string) => m !== method.id)
+                      : [...currentMethods, method.id];
+                    setSettings({ ...settings, activePaymentMethods: newMethods });
+                  }}
+                  className={`flex items-center justify-between p-4 rounded-2xl border-2 transition-all ${
+                    isActive 
+                      ? "border-primary bg-primary/5 text-primary" 
+                      : "border-gray-50 bg-gray-50 text-gray-400 hover:border-gray-200"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={`p-2 rounded-xl ${isActive ? "bg-white shadow-sm" : "bg-gray-100"}`}>
+                      {method.icon}
+                    </div>
+                    <span className="font-bold text-sm tracking-tight">{method.label}</span>
+                  </div>
+                  {isActive ? <CheckCircle2 size={18} /> : <XCircle size={18} className="opacity-20" />}
+                </button>
+              );
+            })}
           </div>
         </motion.div>
 
