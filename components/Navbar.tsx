@@ -44,7 +44,7 @@ const Navbar = () => {
           <div className="w-10 h-10 bg-primary rounded-2xl flex items-center justify-center text-white shadow-xl shadow-primary/20 group-hover:rotate-12 transition-transform duration-500">
             <Store size={22} />
           </div>
-          <span className="hidden sm:block tracking-tighter">Tech<span className="text-foreground">Store</span></span>
+          <span className="text-xl sm:text-2xl tracking-tighter">Tech<span className="text-foreground">Store</span></span>
         </Link>
 
         <div className="hidden lg:flex items-center gap-8">
