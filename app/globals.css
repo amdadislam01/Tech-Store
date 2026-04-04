@@ -35,6 +35,15 @@ body {
   font-family: var(--font-sans);
 }
 
+@layer base {
+  button, 
+  a, 
+  [role="button"], 
+  .cursor-pointer {
+    cursor: pointer !important;
+  }
+}
+
 @layer components {
   .container-custom {
     @apply w-11/12 mx-auto;
