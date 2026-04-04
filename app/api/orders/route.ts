@@ -9,9 +9,23 @@ export async function POST(req: Request) {
     await connectDB();
     const session = await getServerSession(authOptions);
     const body = await req.json();
+    const { items, totalPrice, shippingInfo, paymentMethod, paymentStatus } = body;
+    const { name, phone, city, area, address, landmark, addressType } = shippingInfo;
 
     const order = await Order.create({
-      ...body,
+      items,
+      totalPrice,
+      shippingInfo: {
+        name,
+        phone,
+        city,
+        area,
+        address,
+        landmark,
+        addressType,
+      },
+      paymentMethod: paymentMethod || "cod",
+      paymentStatus: paymentStatus || "Pending",
       user: session?.user?.id || null, // Optional for guest
     });
 
