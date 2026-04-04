@@ -260,6 +260,53 @@ export default function SettingsPage() {
                 placeholder="Instructions for manual payment..."
               />
             </div>
+            
+            {/* Stripe Specific Settings */}
+            {settings.activePaymentMethods?.includes('stripe') && (
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-8 pt-8 border-t border-dashed border-gray-100"
+              >
+                <div className="md:col-span-2">
+                    <h3 className="text-sm font-black uppercase tracking-widest text-primary flex items-center gap-2">
+                        <CreditCard size={16} />
+                        Stripe Configuration
+                    </h3>
+                </div>
+                <div className="space-y-2">
+                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Publishable Key</label>
+                    <input
+                        type="password"
+                        value={settings.stripePublishableKey || ""}
+                        onChange={(e) => setSettings({ ...settings, stripePublishableKey: e.target.value })}
+                        className="w-full px-5 py-3 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground"
+                        placeholder="pk_test_..."
+                    />
+                </div>
+                <div className="space-y-2">
+                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Secret Key</label>
+                    <input
+                        type="password"
+                        value={settings.stripeSecretKey || ""}
+                        onChange={(e) => setSettings({ ...settings, stripeSecretKey: e.target.value })}
+                        className="w-full px-5 py-3 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground"
+                        placeholder="sk_test_..."
+                    />
+                </div>
+                <div className="space-y-2 md:col-span-2">
+                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Webhook Secret (Optional for local)</label>
+                    <input
+                        type="password"
+                        value={settings.stripeWebhookSecret || ""}
+                        onChange={(e) => setSettings({ ...settings, stripeWebhookSecret: e.target.value })}
+                        className="w-full px-5 py-3 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground"
+                        placeholder="whsec_..."
+                    />
+                    <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest ml-1">Needed for automated order status updates.</p>
+                </div>
+              </motion.div>
+            )}
           </div>
         </motion.div>
 
