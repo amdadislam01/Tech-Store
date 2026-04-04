@@ -121,9 +121,9 @@ export default function CommunityPulse() {
               key={item.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+               viewport={{ once: true }}
               transition={{ delay: idx * 0.1, type: "spring" }}
-              className={`relative overflow-hidden rounded-[3.5rem] border border-gray-100/50 shadow-2xl group ${item.size}`}
+              className={`relative overflow-hidden rounded-[3.5rem] border border-gray-100/50 shadow-2xl group cursor-pointer ${item.size}`}
             >
               {item.type === "image" ? (
                 <>
