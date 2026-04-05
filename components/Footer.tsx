@@ -94,11 +94,11 @@ export default function Footer() {
 
         {/* Footer Bottom */}
         <div className="flex flex-col md:flex-row items-center justify-between pt-10 border-t border-white/5 text-[10px] font-bold uppercase tracking-widest gap-4">
-          <p>© 2024 Techstore Innovation Lab. All rights rights reserved.</p>
+          <p>© 2026 Techstore Innovation Lab. All rights reserved.</p>
           <div className="flex items-center gap-8 text-white/40">
-            <Link href="#" className="hover:text-white transition-colors">Privacy Privacy</Link>
-            <Link href="#" className="hover:text-white transition-colors">Terms of Service</Link>
-            <Link href="#" className="hover:text-white transition-colors">Cookie Policy</Link>
+            <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
+            <Link href="/cookies" className="hover:text-white transition-colors">Cookie Policy</Link>
           </div>
         </div>
       </div>
