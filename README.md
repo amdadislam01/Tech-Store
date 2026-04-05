@@ -81,19 +81,81 @@ We are constantly evolving the platform. Here are the features currently in deve
 
 ```text
 Tech-Store/
-├── app/                  # Next.js App Router routes
-│   ├── (main)/           # User-facing pages (Home, Products, ID)
-│   ├── api/              # Backend API endpoints
-│   └── dashboard/        # Administrative dashboards
-├── components/           # Reusable UI components
-│   └── Sections/         # Modular page sections (Hero, Features, etc.)
-├── lib/                  # Shared utilities and DB configuration
-├── models/               # Mongoose database schemas
-├── public/               # Static assets and images
-├── redux/                # Global state management (Slices & Store)
-├── types/                # Component and Model type definitions
-└── globals.css           # Core design system and Tailwind themes
+├── app/                        # Next.js App Router (Core Application)
+│   ├── (main)/                 # Main User-Facing Routes (Home, Products, ID)
+│   │   ├── cart/               # Shopping Cart & Management
+│   │   ├── checkout/           # Secure Checkout & Payment Flow
+│   │   ├── product/            # Immersive Product Detail Pages
+│   │   ├── products/           # Advanced Product Listing & Filtering
+│   │   ├── login/              # User Authentication (Sign In)
+│   │   └── register/           # User Authentication (Sign Up)
+│   ├── api/                    # Backend API Route Handlers (Server-Side)
+│   │   ├── auth/               # Authentication Logic & Registration
+│   │   ├── products/           # Inventory Management API
+│   │   ├── orders/             # Order Lifecycle & Status Management
+│   │   ├── payment/            # Stripe Integration (Intent Creation)
+│   │   └── webhook/            # Payment Gateway Webhooks (Stripe)
+│   ├── dashboard/              # Comprehensive Administrative Panel
+│   ├── layout.tsx              # Root Layout & Provider Initialization
+│   └── globals.css             # Global Styles & Tailwind Design Tokens
+├── components/                 # Reusable React UI Components
+│   ├── Sections/               # Modular Page Blocks (Hero, Features, Catalog)
+│   ├── Checkout/               # Payment-Specific UI (Stripe/MFS Forms)
+│   ├── dashboard/              # Admin-Specific UI Components
+│   ├── Navbar.tsx             # Dynamic Navigation System
+│   └── Footer.tsx             # Information-Rich Site Footer
+├── lib/                        # Infrastructure & Utility Layer
+│   └── db.ts                   # Robust Mongoose Connection Logic
+├── models/                     # Data Architecture (Mongoose Models)
+│   ├── Product.ts             # Product Catalog Schema
+│   ├── Order.ts               # Transaction & Logistics Schema
+│   ├── User.ts                # Secure User Profile Schema
+│   └── Settings.ts            # Global Site Configuration Schema
+├── public/                     # Static Optimized Assets
+│   └── images/                 # Optimized UI Icons & Graphics
+├── redux/                      # Global Reactive State Management
+│   ├── slices/                 # Feature-Specific State Logic (Cart, Auth, UI)
+│   └── store.ts                # Centralized Redux Store Configuration
+├── types/                      # Comprehensive TypeScript Interfaces
+└── next.config.js              # Advanced Framework Configuration
 ```
+
+---
+
+## 🌐 API Endpoints
+
+The Tech-Store provides a robust backend API powered by Next.js Route Handlers.
+
+### **Authentication**
+- `POST /api/auth/register` - Create a new user account.
+- `POST /api/auth/login` - Authenticate users with credentials (handled via NextAuth).
+
+### **User Profile**
+- `PUT /api/user/profile` - Update user profile information (name, image, password). (Requires authentication).
+
+### **Products**
+- `GET /api/products` - Fetch a paginated list of products. Supports `category`, `search`, `page`, and `limit` query parameters.
+- `POST /api/products` - Create a new product. (Restricted to **Admin/Manager**).
+- `GET /api/products/{id}` - Retrieve detailed information for a specific product.
+- `PATCH /api/products/{id}` - Update existing product details. (Restricted to **Admin/Manager**).
+- `DELETE /api/products/{id}` - Permanently remove a product. (Restricted to **Super Admin/Admin**).
+
+### **Reviews**
+- `POST /api/products/{id}/reviews` - Submit a customer review (rating and comment) for a specific product. (Requires authentication).
+
+### **Orders**
+- `GET /api/orders` - List all orders (Admin/Manager) or specific orders for the authenticated user.
+- `POST /api/orders` - Create a new order (Supports guest and authenticated checkouts).
+- `GET /api/orders/{id}` - Fetch detailed information for a specific order.
+- `PATCH /api/orders/{id}` - Update order status or transaction details. (Admin restricted for status changes).
+
+### **Categories & Settings**
+- `GET /api/categories` - Fetch a unique list of all product categories.
+- `GET /api/settings` - Retrieve global application settings (e.g., Contact info, MFS numbers).
+
+### **Payment Gateways**
+- `POST /api/payment/create-intent` - Generate a Stripe Payment Intent for secure card transactions.
+- `POST /api/webhook/stripe` - Handle asynchronous payment events from Stripe.
 
 ---
 
