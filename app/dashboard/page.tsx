@@ -6,8 +6,10 @@ import {
   DollarSign, 
   Package, 
   Clock,
-  TrendingUp
+  TrendingUp,
+  Sparkles
 } from "lucide-react";
+import Link from "next/link";
 import SalesChart from "./SalesChart";
 import InventoryHealth from "./InventoryHealth";
 import UserDashboardStats from "./UserDashboardStats";
@@ -151,11 +153,10 @@ export default async function DashboardPage({ searchParams }: Props) {
     }
   }
 
-  // Recent Activity Feed
-  const recentOrders = await Order.find()
-    .sort({ createdAt: -1 })
-    .limit(5)
-    .populate("user", "name email");
+  // Recent Activity Feed (Filtered by role)
+  const recentOrders = isAdmin 
+    ? await Order.find().sort({ createdAt: -1 }).limit(5).populate("user", "name email")
+    : await Order.find({ user: session.user.id }).sort({ createdAt: -1 }).limit(3);
 
   return (
     <div className="space-y-8 animate-in fade-in duration-700">
@@ -181,7 +182,7 @@ export default async function DashboardPage({ searchParams }: Props) {
                   <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:shadow-lg ${stat.bgColor} ${stat.textColor}`}>
                       <stat.icon size={20} className="sm:w-6 sm:h-6" />
                   </div>
-                  <span className={`text-[9px] sm:text-[10px] font-black px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg tracking-widest uppercase ${stat.badgeColor}`}>
+                  <span className={`text-[9px] sm:text-[10px] font-black px-2.5 py-0.5 sm:px-2.5 sm:py-1 rounded-lg tracking-widest uppercase ${stat.badgeColor}`}>
                       {stat.change}
                   </span>
                </div>
@@ -191,7 +192,78 @@ export default async function DashboardPage({ searchParams }: Props) {
           ))}
         </div>
       ) : (
-        <UserDashboardStats myOrdersCount={myOrdersCount} />
+        <div className="space-y-8">
+            <UserDashboardStats myOrdersCount={myOrdersCount} />
+            
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Recent Orders for User */}
+                <div className="lg:col-span-2 bg-white p-6 sm:p-8 rounded-[2.5rem] border border-gray-100 shadow-sm flex flex-col min-h-[400px]">
+                    <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-50">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                                <ShoppingBag size={20} />
+                            </div>
+                            <h3 className="text-lg font-black text-foreground tracking-tight">Recent Purchases</h3>
+                        </div>
+                        <Link href="/dashboard/orders" className="text-[10px] font-black uppercase tracking-widest text-primary hover:underline">View All History</Link>
+                    </div>
+
+                    {recentOrders.length > 0 ? (
+                        <div className="space-y-4">
+                            {recentOrders.map((order) => (
+                                <div key={order._id} className="flex items-center justify-between p-4 rounded-2xl bg-gray-50/50 border border-gray-100/50 group hover:bg-white hover:shadow-md transition-all">
+                                    <div className="flex items-center gap-4">
+                                        <div className="text-xs font-black text-gray-400">#{order._id.toString().slice(-6).toUpperCase()}</div>
+                                        <div>
+                                            <p className="text-sm font-black text-foreground tracking-tight">Order #{order._id.toString().slice(-8).toUpperCase()}</p>
+                                            <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">{new Date(order.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
+                                        </div>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-sm font-black text-primary tracking-tight">${order.totalPrice.toLocaleString()}</p>
+                                        <span className={`text-[8px] px-2 py-0.5 rounded-full font-black uppercase tracking-widest bg-emerald-100 text-emerald-600`}>{order.status || "Processed"}</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <div className="flex-grow flex flex-col items-center justify-center py-10 opacity-40">
+                             <ShoppingBag size={40} className="text-gray-300 mb-4" />
+                             <p className="text-sm font-bold uppercase tracking-widest text-gray-400">No orders yet</p>
+                        </div>
+                    )}
+                </div>
+
+                {/* Membership / Rewards Card */}
+                <div className="bg-zinc-900 p-8 sm:p-10 rounded-[2.5rem] border border-white/10 shadow-2xl flex flex-col justify-between relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 p-10 text-white/5 group-hover:rotate-12 transition-transform duration-1000">
+                        <Sparkles size={120} />
+                    </div>
+                    <div className="relative z-10 space-y-6">
+                        <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-primary border border-white/10">
+                            <Sparkles size={24} />
+                        </div>
+                        <div className="space-y-2">
+                            <h3 className="text-2xl font-black text-white tracking-tight">Elite Member</h3>
+                            <p className="text-white/50 text-sm font-medium leading-relaxed">Unlock premium support and exclusive digital ecosystem benefits.</p>
+                        </div>
+                        
+                        <div className="py-6 border-y border-white/5 space-y-4">
+                            <div className="flex justify-between items-end">
+                                <span className="text-[10px] font-black uppercase tracking-widest text-white/40">Rewards Balance</span>
+                                <span className="text-xl font-black text-white">250 <span className="text-[10px] text-primary">PTS</span></span>
+                            </div>
+                            <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+                                <div className="w-[45%] h-full bg-primary shadow-[0_0_10px_rgba(255,54,120,0.5)]" />
+                            </div>
+                            <p className="text-[9px] font-bold text-white/30 uppercase tracking-widest">50 points until next tier unlock</p>
+                        </div>
+                    </div>
+                    
+                    <button className="relative z-10 w-full py-4 mt-8 bg-white text-black rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-primary hover:text-white transition-all active:scale-95">Rewards Hub</button>
+                </div>
+            </div>
+        </div>
       )}
 
       {isAdmin && (
