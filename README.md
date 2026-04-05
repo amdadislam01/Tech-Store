@@ -35,6 +35,11 @@
 - **Secure Authentication**: Protected routes and multi-layered user sessions powered by **NextAuth.js**.
 - **Server-Side Route Protection**: Enhanced security for sensitive transactional pages like Cart and Checkout.
 
+### ⚖️ Legal & Compliance Infrastructure
+- **Professional Legal Documentation**: High-fidelity, dedicated pages for **Privacy Policy**, **Terms of Service**, and **Cookie Policy**.
+- **Interactive Experience**: Implementation of sticky tables of contents and polished typography for maximum readability.
+- **Global Compliance Ready**: Standardized language and structure following modern data protection best practices.
+
 ### 🛠️ Comprehensive Administrative Suite
 - **Inventory Health Monitoring**: Real-time tracking of stock levels and automated catalog integrity checks.
 - **Sales & Performance Metrics**: Data points for monitoring overall business performance and revenue.
@@ -88,7 +93,10 @@ Tech-Store/
 │   │   ├── product/            # Immersive Product Detail Pages
 │   │   ├── products/           # Advanced Product Listing & Filtering
 │   │   ├── login/              # User Authentication (Sign In)
-│   │   └── register/           # User Authentication (Sign Up)
+│   │   ├── register/           # User Authentication (Sign Up)
+│   │   ├── privacy/            # Professional Privacy Policy
+│   │   ├── terms/              # Terms of Service Documentation
+│   │   └── cookies/            # Cookie Policy & Compliance
 │   ├── api/                    # Backend API Route Handlers (Server-Side)
 │   │   ├── auth/               # Authentication Logic & Registration
 │   │   ├── products/           # Inventory Management API
