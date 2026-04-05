@@ -354,7 +354,7 @@ export default function ProductDetails() {
         </div>
 
         <div className="mt-32">
-             <div className="flex justify-center border-b border-gray-100/60 mb-12 overflow-x-auto no-scrollbar gap-10 md:gap-16">
+             <div className="flex justify-start md:justify-center border-b border-gray-100/60 mb-12 overflow-x-auto no-scrollbar gap-10 md:gap-16 px-4 md:px-0">
                 {[
                     { id: "description", label: "Overview", icon: FileText },
                     { id: "specs", label: "Intelligence", icon: ListTodo },
