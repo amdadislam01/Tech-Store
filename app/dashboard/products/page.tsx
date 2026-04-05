@@ -37,7 +37,7 @@ export default async function ProductsPage() {
             className="px-5 py-3.5 sm:px-6 sm:py-3 bg-primary text-white font-black text-[10px] sm:text-sm uppercase tracking-widest rounded-2xl shadow-xl shadow-primary/20 hover:bg-primary-dark transition-all transform active:scale-[0.98] flex items-center justify-center gap-2 w-full md:w-auto"
         >
            <Plus size={20} />
-           <span>List New Product</span>
+           <span>Added New Product</span>
         </Link>
       </div>
 
