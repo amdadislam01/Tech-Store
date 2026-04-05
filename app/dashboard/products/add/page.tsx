@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { 
   Plus, 
   Trash2, 
@@ -41,6 +41,23 @@ export default function AddProductPage() {
   const [isUploading, setIsUploading] = useState(false);
   const [newCategory, setNewCategory] = useState("");
   const [isAddingNewCategory, setIsAddingNewCategory] = useState(false);
+  const [categories, setCategories] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const res = await fetch("/api/categories");
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          // Filter out "All" as it's for the main products page filters
+          setCategories(data.filter(cat => cat !== "All"));
+        }
+      } catch (error) {
+        console.error("Failed to fetch categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -132,97 +149,107 @@ export default function AddProductPage() {
   };
 
   return (
-    <div className="max-w-4xl space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-1000 pb-10">
-      <div className="flex items-center justify-between">
+    <div className="max-w-6xl mx-auto space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-700 pb-20 px-4 sm:px-6">
+      {/* Professional Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4">
         <div className="space-y-1">
-          <Link href="/dashboard/products" className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-primary hover:gap-3 transition-all mb-2">
-            <ChevronLeft size={14} />
+          <Link href="/dashboard/products" className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-gray-400 hover:text-primary transition-colors mb-1">
+            <ChevronLeft size={12} />
             Back to Inventory
           </Link>
-          <h1 className="text-3xl font-black text-foreground tracking-tight">Expand Collection</h1>
-          <p className="text-gray-500 font-medium">Add a new premium item to your store catalog.</p>
+          <h1 className="text-2xl sm:text-3xl font-black text-foreground tracking-tight">Add Product</h1>
         </div>
+        
+        {/* Mobile-hidden Publish Button for quick access */}
+        <button
+            onClick={(e) => handleSubmit(e as any)}
+            disabled={loading}
+            className="hidden sm:flex px-8 py-3 bg-primary text-white rounded-2xl font-bold text-xs uppercase tracking-wider shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all active:scale-95 items-center gap-2"
+        >
+            {loading ? <Loader2 className="animate-spin" size={16} /> : <Plus size={16} />}
+            {loading ? "Publishing..." : "Publish Product"}
+        </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="md:col-span-2 space-y-8">
+      <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
+        {/* Left Column: Core Data */}
+        <div className="lg:col-span-2 space-y-6">
             <motion.div 
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm space-y-6"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 shadow-sm space-y-8"
             >
-                <div className="flex items-center gap-3 text-primary mb-2">
-                    <Package size={22} />
-                    <h2 className="text-xl font-black">Core Details</h2>
+                <div className="flex items-center gap-3 text-primary border-b border-gray-50 pb-4">
+                    <Package size={20} />
+                    <h2 className="text-lg font-bold tracking-tight">Product Information</h2>
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Product Name</label>
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">Product Name</label>
                         <input
                             required
                             type="text"
                             value={formData.name}
                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            className="w-full px-5 py-4 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground"
-                            placeholder="e.g. iPhone 15 Pro Max"
+                            className="w-full px-4 py-3.5 bg-gray-50 rounded-xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-sm font-semibold text-foreground outline-none"
+                            placeholder="e.g. MacBook Pro 14"
                         />
                     </div>
                     <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Brand / Manufacturer</label>
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">Brand</label>
                         <input
                             required
                             type="text"
                             value={formData.brand}
                             onChange={(e) => setFormData({ ...formData, brand: e.target.value })}
-                            className="w-full px-5 py-4 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground"
+                            className="w-full px-4 py-3.5 bg-gray-50 rounded-xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-sm font-semibold text-foreground outline-none"
                             placeholder="e.g. Apple"
                         />
                     </div>
                 </div>
 
-                <div className="space-y-4">
-                    <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Detailed Description</label>
-                        <textarea
-                            required
-                            rows={4}
-                            value={formData.description}
-                            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                            className="w-full px-5 py-4 bg-gray-50 rounded-[28px] border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground no-scrollbar"
-                            placeholder="Describe the unique features of this product..."
-                        />
-                    </div>
+                <div className="space-y-2">
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">Description</label>
+                    <textarea
+                        required
+                        rows={5}
+                        value={formData.description}
+                        onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                        className="w-full px-4 py-3.5 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-sm font-semibold text-foreground outline-none resize-none no-scrollbar"
+                        placeholder="Detailed product overview..."
+                    />
                 </div>
             </motion.div>
 
             <motion.div 
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm space-y-6"
+                className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 shadow-sm space-y-6"
             >
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3 text-primary mb-2">
-                        <ImageIcon size={22} />
-                        <h2 className="text-xl font-black">Visual Assets</h2>
+                <div className="flex items-center justify-between border-b border-gray-50 pb-4">
+                    <div className="flex items-center gap-3 text-primary">
+                        <ImageIcon size={20} />
+                        <h2 className="text-lg font-bold tracking-tight">Media Assets</h2>
                     </div>
-                    <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">{images.length}/5 Images</span>
+                    <span className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">{images.length} / 5</span>
                 </div>
 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
                     {images.map((url, index) => (
-                        <div key={index} className="relative aspect-square rounded-2xl overflow-hidden border-2 border-gray-100 group">
-                            <img src={url} alt={`Product ${index + 1}`} className="w-full h-full object-cover" />
+                        <div key={index} className="relative aspect-square rounded-xl overflow-hidden border border-gray-100 group shadow-sm bg-gray-50">
+                            <img src={url} alt="Product preview" className="w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity" />
                             <button
                                 type="button"
                                 onClick={() => removeImage(index)}
-                                className="absolute top-2 right-2 p-1.5 bg-white/90 backdrop-blur-sm text-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-all hover:bg-red-500 hover:text-white"
+                                className="absolute top-2 right-2 p-1.5 bg-white text-red-500 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-all hover:scale-110 active:scale-95"
                             >
-                                <X size={14} />
+                                <Trash2 size={12} />
                             </button>
                             {index === 0 && (
-                                <div className="absolute bottom-0 inset-x-0 bg-primary/80 backdrop-blur-sm py-1 text-[8px] font-black uppercase text-white text-center tracking-widest">
+                                <div className="absolute bottom-0 inset-x-0 bg-primary py-0.5 text-[8px] font-bold uppercase text-white text-center tracking-widest">
                                     Primary
                                 </div>
                             )}
@@ -230,7 +257,7 @@ export default function AddProductPage() {
                     ))}
                     
                     {images.length < 5 && (
-                        <label className={`aspect-square rounded-2xl border-2 border-dashed border-gray-200 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-gray-50 hover:border-primary transition-all ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
+                        <label className={`aspect-square rounded-xl border-2 border-dashed border-gray-100 flex flex-col items-center justify-center gap-2 cursor-pointer hover:bg-gray-50 hover:border-primary/30 transition-all group ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}>
                             <input
                                 type="file"
                                 accept="image/*"
@@ -240,114 +267,113 @@ export default function AddProductPage() {
                                 className="hidden"
                             />
                             {isUploading ? (
-                                <Loader2 size={24} className="text-primary animate-spin" />
+                                <Loader2 size={20} className="text-primary animate-spin" />
                             ) : (
                                 <>
-                                    <UploadCloud size={24} className="text-gray-400" />
-                                    <span className="text-[9px] font-black uppercase text-gray-400 tracking-tighter">Add Photo</span>
+                                    <div className="w-8 h-8 rounded-full bg-gray-50 flex items-center justify-center group-hover:bg-primary/10 transition-colors">
+                                        <Plus size={16} className="text-gray-400 group-hover:text-primary" />
+                                    </div>
+                                    <span className="text-[8px] font-bold uppercase text-gray-400 tracking-widest">Upload</span>
                                 </>
                             )}
                         </label>
                     )}
                 </div>
-                <p className="text-[10px] text-gray-400 font-medium italic">High-quality square images (1:1) work best. The first image will be the primary thumbnail.</p>
             </motion.div>
 
             <motion.div 
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm space-y-6"
+                className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 shadow-sm space-y-6"
             >
-                <div className="flex items-center gap-3 text-primary mb-2">
-                    <Settings size={22} />
-                    <h2 className="text-xl font-black">Advanced Specs</h2>
+                <div className="flex items-center gap-3 text-primary border-b border-gray-50 pb-4">
+                    <Settings size={20} />
+                    <h2 className="text-lg font-bold tracking-tight">Specifications</h2>
                 </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Model Name / Number</label>
-                        <div className="relative">
-                            <FileText className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                            <input
-                                type="text"
-                                value={formData.modelName}
-                                onChange={(e) => setFormData({ ...formData, modelName: e.target.value })}
-                                className="w-full pl-12 pr-5 py-4 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground"
-                                placeholder="e.g. A2968"
-                            />
-                        </div>
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">Model Reference</label>
+                        <input
+                            type="text"
+                            value={formData.modelName}
+                            onChange={(e) => setFormData({ ...formData, modelName: e.target.value })}
+                            className="w-full px-4 py-3.5 bg-gray-50 rounded-xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-sm font-semibold text-foreground outline-none"
+                            placeholder="e.g. MKGP3LL/A"
+                        />
                     </div>
                     <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Warranty Period</label>
-                        <div className="relative">
-                            <ShieldCheck className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
-                            <input
-                                type="text"
-                                value={formData.warranty}
-                                onChange={(e) => setFormData({ ...formData, warranty: e.target.value })}
-                                className="w-full pl-12 pr-5 py-4 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground"
-                                placeholder="e.g. 1 Year Official"
-                            />
-                        </div>
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">Warranty</label>
+                        <input
+                            type="text"
+                            value={formData.warranty}
+                            onChange={(e) => setFormData({ ...formData, warranty: e.target.value })}
+                            className="w-full px-4 py-3.5 bg-gray-50 rounded-xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-sm font-semibold text-foreground outline-none"
+                            placeholder="e.g. 1-Year Limited"
+                        />
                     </div>
                 </div>
                 <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Technical Specifications</label>
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">Technical Details</label>
                     <textarea
-                        rows={3}
+                        rows={4}
                         value={formData.specifications}
                         onChange={(e) => setFormData({ ...formData, specifications: e.target.value })}
-                        className="w-full px-5 py-4 bg-gray-50 rounded-[28px] border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground no-scrollbar"
-                        placeholder="Key technical specs (CPU, RAM, Battery...)"
+                        className="w-full px-4 py-3.5 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-sm font-semibold text-foreground outline-none resize-none no-scrollbar"
+                        placeholder="Key specs (CPU, RAM, Storage...)"
                     />
                 </div>
             </motion.div>
         </div>
 
-        <div className="space-y-8">
+        {/* Right Column: Pricing & Inventory */}
+        <div className="space-y-6">
             <motion.div 
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm space-y-6"
+                className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 shadow-sm space-y-8"
             >
-                <div className="flex items-center gap-3 text-primary mb-2">
-                    <Tag size={22} />
-                    <h2 className="text-xl font-black">Economics</h2>
+                <div className="flex items-center gap-3 text-primary border-b border-gray-50 pb-4">
+                    <Tag size={20} />
+                    <h2 className="text-lg font-bold tracking-tight">Organization</h2>
                 </div>
-                <div className="space-y-4">
+                
+                <div className="space-y-6">
                     <div className="space-y-2">
-                        <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Base Price ($)</label>
+                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">Pricing ($)</label>
                         <div className="relative">
-                            <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                            <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
                             <input
                                 required
                                 type="number"
                                 value={formData.price}
                                 onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                                className="w-full pl-12 pr-5 py-4 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground"
+                                className="w-full pl-10 pr-4 py-3.5 bg-gray-50 rounded-xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-sm font-semibold text-foreground outline-none"
                                 placeholder="0.00"
                             />
                         </div>
                     </div>
-                    <div className="space-y-2">
-                        <div className="flex items-center justify-between ml-1">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Category</label>
+
+                    <div className="space-y-3">
+                        <div className="flex items-center justify-between px-1">
+                            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Category</label>
                             <button
                                 type="button"
                                 onClick={() => setIsAddingNewCategory(!isAddingNewCategory)}
-                                className="text-[10px] font-bold text-primary hover:underline transition-all"
+                                className="px-2.5 py-1 bg-gray-50 text-[9px] font-black uppercase text-gray-500 rounded-lg hover:bg-primary hover:text-white transition-all tracking-wider"
                             >
-                                {isAddingNewCategory ? "Choose Existing" : "+ New Category"}
+                                {isAddingNewCategory ? "Existing" : "New"}
                             </button>
                         </div>
+
                         {isAddingNewCategory ? (
                             <input
                                 required
                                 type="text"
                                 value={newCategory}
                                 onChange={(e) => setNewCategory(e.target.value)}
-                                className="w-full px-5 py-4 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground"
-                                placeholder="New category name..."
+                                className="w-full px-4 py-3.5 bg-gray-50 rounded-xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-sm font-semibold text-foreground outline-none"
+                                placeholder="Category name..."
                             />
                         ) : (
                             <div className="relative">
@@ -355,18 +381,22 @@ export default function AddProductPage() {
                                     required
                                     value={formData.category}
                                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                                    className="w-full px-5 py-4 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground appearance-none"
+                                    className="w-full px-4 py-3.5 bg-gray-50 rounded-xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-sm font-semibold text-foreground outline-none appearance-none cursor-pointer"
                                 >
                                     <option value="">Select category</option>
-                                    <option value="Electronics">Electronics</option>
-                                    <option value="Accessories">Accessories</option>
-                                    <option value="Wearables">Wearables</option>
-                                    <option value="Home Tech">Home Tech</option>
-                                    <option value="Smart Home">Smart Home</option>
-                                    <option value="Audio">Audio</option>
+                                    {categories.map((cat) => (
+                                        <option key={cat} value={cat}>{cat}</option>
+                                    ))}
+                                    {categories.length === 0 && (
+                                        <>
+                                            <option value="Electronics">Electronics</option>
+                                            <option value="Accessories">Accessories</option>
+                                            <option value="Wearables">Wearables</option>
+                                        </>
+                                    )}
                                 </select>
                                 <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                                    <Plus size={14} className="text-gray-400 rotate-45" />
+                                    <Plus size={12} className="text-gray-400 rotate-45" />
                                 </div>
                             </div>
                         )}
@@ -378,20 +408,20 @@ export default function AddProductPage() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 }}
-                className="bg-white p-8 rounded-[40px] border border-gray-100 shadow-sm space-y-6"
+                className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-100 shadow-sm space-y-6"
             >
-                <div className="flex items-center gap-3 text-primary mb-2">
-                    <Layers size={22} />
-                    <h2 className="text-xl font-black">Inventory</h2>
+                <div className="flex items-center gap-3 text-primary border-b border-gray-50 pb-4">
+                    <Layers size={20} />
+                    <h2 className="text-lg font-bold tracking-tight">Stock</h2>
                 </div>
                 <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Initial Stock</label>
+                    <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">Available Units</label>
                     <input
                         required
                         type="number"
                         value={formData.stock}
                         onChange={(e) => setFormData({ ...formData, stock: e.target.value })}
-                        className="w-full px-5 py-4 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground"
+                        className="w-full px-4 py-3.5 bg-gray-50 rounded-xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-sm font-semibold text-foreground outline-none"
                         placeholder="0"
                     />
                 </div>
@@ -400,10 +430,10 @@ export default function AddProductPage() {
             <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-5 bg-primary text-white rounded-3xl font-black text-sm uppercase tracking-[2px] shadow-2xl shadow-primary/30 hover:bg-primary-dark transition-all transform active:scale-95 flex items-center justify-center gap-3"
+                className="w-full py-5 bg-black text-white rounded-2xl font-bold text-xs uppercase tracking-[2px] shadow-xl hover:bg-gray-900 transition-all transform active:scale-[0.98] flex items-center justify-center gap-3 disabled:bg-gray-400"
             >
-                {loading ? <Loader2 className="animate-spin" size={20} /> : <Plus size={20} />}
-                {loading ? "Publishing..." : "Launch Product"}
+                {loading ? <Loader2 className="animate-spin" size={18} /> : <Plus size={18} />}
+                {loading ? "Processing..." : "Publish to Store"}
             </button>
         </div>
       </form>
