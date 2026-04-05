@@ -51,13 +51,13 @@ export default function ProductCatalog({
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="flex items-center justify-between mb-12"
+            className="flex flex-col md:flex-row md:items-center justify-between mb-12 gap-6 md:gap-0"
         >
             <div>
                 <h2 className="text-4xl font-black text-[#1E293B] tracking-tighter">Flagship <span className="text-primary italic">Catalog</span></h2>
                 <p className="text-gray-500 font-medium mt-1">Discover our hand-picked selection of high-performance tech.</p>
             </div>
-            <div className="flex items-center gap-6 text-gray-500 text-sm font-bold border-l border-gray-100 pl-8">
+            <div className="flex items-center gap-6 text-gray-500 text-sm font-bold md:border-l border-gray-100 md:pl-8">
                 <div className="flex items-center gap-2">
                     <Zap size={16} className="text-primary" />
                     <span>{(Array.isArray(products) ? products : []).slice(0, 4).length} Items</span>
