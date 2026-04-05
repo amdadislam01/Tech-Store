@@ -176,7 +176,7 @@ export default function CheckoutPage() {
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Full Name (আপনার পূর্ণ নাম)</label>
+                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Full Name</label>
                     <input
                     type="text"
                     required
@@ -187,7 +187,7 @@ export default function CheckoutPage() {
                     />
                 </div>
                 <div className="space-y-2">
-                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Phone Number (মোবাইল নম্বর)</label>
+                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Phone Number</label>
                     <input
                     type="tel"
                     required
@@ -201,7 +201,7 @@ export default function CheckoutPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">City / Region (শহর / বিভাগ)</label>
+                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">City / Region</label>
                     <input
                     type="text"
                     required
@@ -212,7 +212,7 @@ export default function CheckoutPage() {
                     />
                 </div>
                 <div className="space-y-2">
-                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Area / Sub-district (এলাকা / থানা)</label>
+                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Area / Sub-district</label>
                     <input
                     type="text"
                     required
@@ -225,7 +225,7 @@ export default function CheckoutPage() {
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">House / Street / Building (বাসা / রাস্তা / বিল্ডিং)</label>
+                <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">House / Street / Building</label>
                 <input
                   type="text"
                   required
@@ -238,7 +238,7 @@ export default function CheckoutPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Landmark (নিকটস্থ পরিচিত স্থান - optional)</label>
+                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Landmark</label>
                     <input
                     type="text"
                     className="w-full px-6 py-4 bg-gray-50 rounded-[20px] border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground placeholder:text-gray-300 shadow-sm"
@@ -248,7 +248,7 @@ export default function CheckoutPage() {
                     />
                 </div>
                 <div className="space-y-2">
-                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Address Type (ঠিকানার ধরন)</label>
+                    <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Address Type</label>
                     <div className="flex gap-4">
                         {["Home", "Office"].map((type) => (
                             <button

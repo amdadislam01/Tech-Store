@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { User, LogOut, LayoutDashboard, Settings, ChevronDown, Shield, UserCircle } from "lucide-react";
+import { User, LogOut, LayoutDashboard, ChevronDown, Shield, UserCircle } from "lucide-react";
 import { signOut } from "next-auth/react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -74,7 +74,7 @@ const ProfileDropdown = ({ user }: ProfileDropdownProps) => {
                 </div>
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 text-primary rounded-xl text-[9px] font-black uppercase tracking-[0.2em] border border-primary/10">
                     <Shield size={10} className="fill-primary/20" />
-                    {user.role} Authorization
+                    {user.role}
                 </div>
             </div>
 
@@ -97,8 +97,8 @@ const ProfileDropdown = ({ user }: ProfileDropdownProps) => {
                 className="flex items-center justify-between px-5 py-4 rounded-2xl text-gray-600 hover:bg-zinc-50 hover:text-primary transition-all group"
                 >
                     <div className="flex items-center gap-4">
-                        <Settings size={20} className="group-hover:rotate-45 transition-transform" />
-                        <span className="text-[11px] font-black uppercase tracking-widest leading-none">Account Config</span>
+                        <User size={20} className="group-hover:rotate-10 transition-transform" />
+                        <span className="text-[11px] font-black uppercase tracking-widest leading-none">Profile</span>
                     </div>
                     <ChevronDown size={14} className="-rotate-90 opacity-0 group-hover:opacity-100 transition-all" />
                 </Link>
