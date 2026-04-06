@@ -1,19 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { LogIn, Mail, Lock, ArrowRight, ShieldCheck, Quote } from "lucide-react";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
-export default function LoginPage() {
+function LoginContent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -29,7 +31,7 @@ export default function LoginPage() {
       toast.error(result.error);
     } else {
       toast.success("Logged in successfully!");
-      router.push("/");
+      router.push(callbackUrl);
       router.refresh();
     }
   };
@@ -163,5 +165,20 @@ export default function LoginPage() {
             </div>
         </motion.div>
     </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+        <div className="min-h-[90vh] w-full flex items-center justify-center bg-[#fafafa]">
+            <div className="animate-pulse flex flex-col items-center gap-4">
+                <div className="w-16 h-16 bg-primary/10 rounded-2xl" />
+                <div className="h-8 w-48 bg-slate-200 rounded-lg" />
+            </div>
+        </div>
+    }>
+      <LoginContent />
+    </Suspense>
   );
 }

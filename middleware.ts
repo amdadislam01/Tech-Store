@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 export default withAuth(
   function middleware(req) {
     const token = req.nextauth.token;
-    if (!token) return NextResponse.redirect(new URL("/login", req.url));
 
     const path = req.nextUrl.pathname;
 
@@ -20,6 +19,7 @@ export default withAuth(
       "user": ["/dashboard", "/dashboard/orders", "/dashboard/profile", "/dashboard"]
     };
 
+    if (!token) return NextResponse.next();
     const userRole = token.role as string;
     const allowedPaths = roleAccess[userRole] || [];
 
