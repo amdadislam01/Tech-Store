@@ -64,7 +64,7 @@ export default function ProductCatalog({
             <div className="flex items-center gap-6 text-gray-500 text-sm font-bold md:border-l border-gray-100 md:pl-8">
                 <div className="flex items-center gap-2">
                     <Zap size={16} className="text-primary" />
-                    <span>{(Array.isArray(products) ? products : []).slice(0, 5).length} Items</span>
+                    <span>{(Array.isArray(products) ? products : []).slice(0, limit).length} Items</span>
                 </div>
                 <div className="flex items-center gap-2">
                     <TrendingUp size={16} className="text-primary" />
