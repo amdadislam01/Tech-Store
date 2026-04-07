@@ -11,7 +11,6 @@ import BenefitCards from "@/components/Sections/BenefitCards";
 import InnovationSpotlight from "@/components/Sections/InnovationSpotlight";
 import MembershipRewards from "@/components/Sections/MembershipRewards";
 import TechInsights from "@/components/Sections/TechInsights";
-import CommunityPulse from "@/components/Sections/CommunityPulse";
 import ProductCatalog from "@/components/Sections/ProductCatalog";
 
 export default function HomePageClient({ 
@@ -156,15 +155,6 @@ export default function HomePageClient({
           transition={{ delay: 0.6 }}
         >
           <TechInsights />
-        </motion.div>
-        
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.7 }}
-        >
-          <CommunityPulse />
         </motion.div>
 
         {/* Structured SEO/Shop Description Section - Star Tech Style */}

@@ -7,7 +7,7 @@ import Image from "next/image";
 export default function TechInsights() {
   return (
     <section className="mb-32">
-        <div className="flex items-end justify-between mb-16">
+        <div className="flex items-end justify-between mb-6">
             <div>
                 <span className="text-[10px] font-black uppercase tracking-[0.2em] text-primary mb-4 block">The Journal</span>
                 <h2 className="text-4xl font-black text-gray-900 tracking-tighter">News You Can <span className="text-primary">Actually Use.</span></h2>
