@@ -117,7 +117,7 @@ export default function HomePageClient({
             setCategory={setCategory}
             setSearch={setSearch}
             columns={5}
-            limit={5}
+            limit={10}
           />
         </motion.div>
         
@@ -160,7 +160,7 @@ export default function HomePageClient({
         {/* Structured SEO/Shop Description Section - Star Tech Style */}
         <motion.div
            initial={{ opacity: 1 }}
-           className="mt-20 pt-16 border-t border-gray-200"
+           className="mt-10 pt-10 border-t border-gray-200"
         >
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 text-sm text-gray-600 leading-relaxed">
             <div className="space-y-4">
