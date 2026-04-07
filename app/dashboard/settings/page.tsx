@@ -12,7 +12,8 @@ import {
   CheckCircle2,
   XCircle,
   Truck,
-  CreditCard
+  CreditCard,
+  Zap
 } from "lucide-react";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";

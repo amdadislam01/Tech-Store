@@ -97,7 +97,7 @@ export default async function ProductsPage() {
                     </div>
                   </td>
                   <td className="px-4 sm:px-6 py-4">
-                    <span className="text-sm font-black text-foreground tracking-tight">${product.price.toLocaleString()}</span>
+                    <span className="text-sm font-black text-foreground tracking-tight">৳{product.price.toLocaleString()}</span>
                   </td>
                   <td className="px-4 sm:px-6 py-4">
                     <div className="flex flex-col items-center gap-1.5">

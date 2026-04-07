@@ -28,7 +28,7 @@ export default function InnovationSpotlight() {
                          <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Editor&apos;s Weekly Pick</span>
                     </div>
                     <h4 className="text-xl font-black text-gray-900 tracking-tighter">MacBook Pro M3</h4>
-                    <span className="text-primary font-black">$1,499.00</span>
+                    <span className="text-primary font-black">৳1,499.00</span>
                 </div>
             </motion.div>
             <div className="space-y-10">

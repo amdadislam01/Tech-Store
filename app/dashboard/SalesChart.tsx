@@ -82,7 +82,7 @@ export default function SalesChart({ chartData }: SalesChartProps) {
                 >
                   {/* Tooltip */}
                   <div className="absolute -top-12 left-1/2 -translate-x-1/2 bg-zinc-900 text-white text-[10px] font-black px-3 py-1.5 rounded-xl opacity-0 group-hover/bar:opacity-100 transition-all duration-300 z-10 whitespace-nowrap shadow-xl pointer-events-none transform group-hover/bar:-translate-y-1">
-                      ${item.value.toLocaleString()}
+                      ৳{item.value.toLocaleString()}
                   </div>
                   
                   {isLast && (

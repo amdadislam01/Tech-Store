@@ -132,7 +132,7 @@ export default function PaymentModal({ order, isOpen, onClose }: PaymentModalPro
                         <span className="text-[10px] text-primary font-black uppercase tracking-widest bg-primary/10 px-3 py-1 rounded-full">
                             Pay via {paymentMethod.toUpperCase()}
                         </span>
-                        <span className="text-xl font-black text-primary">${order.totalPrice.toFixed(2)}</span>
+                        <span className="text-xl font-black text-primary">৳{order.totalPrice.toFixed(2)}</span>
                     </div>
                     
                     <p className="text-gray-600 text-sm font-medium leading-relaxed mb-6">

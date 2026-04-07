@@ -15,7 +15,7 @@ const PRODUCTS = [
   {
     id: "macbook",
     name: "MacBook Pro M3 Max",
-    price: "$2,499.00",
+    price: "৳2,499.00",
     spec: "14-Core CPU | 30-Core GPU",
     details: "The ultimate creative powerhouse for developers and designers alike.",
     top: "62%", 
@@ -25,7 +25,7 @@ const PRODUCTS = [
   {
     id: "display",
     name: "UltraFine 5K Display",
-    price: "$1,299.00",
+    price: "৳1,299.00",
     spec: "5120 x 2880 Resolution",
     details: "Stunning color accuracy and pixel-perfect clarity for every project.",
     top: "35%", 
@@ -35,7 +35,7 @@ const PRODUCTS = [
   {
     id: "headphones",
     name: "Sonic Pro Wireless",
-    price: "$349.00",
+    price: "৳349.00",
     spec: "Active Noise Cancellation",
     details: "Immersive spatial audio with industry-leading battery life.",
     top: "70%", 
@@ -45,7 +45,7 @@ const PRODUCTS = [
   {
     id: "keyboard",
     name: "Tactile Mech Keyboard",
-    price: "$199.00",
+    price: "৳199.00",
     spec: "Hot-swappable | RGB",
     details: "Precision typing experience with custom mechanical switches.",
     top: "78%", 

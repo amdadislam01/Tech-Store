@@ -32,6 +32,7 @@ export default function EditProductPage() {
     name: "",
     description: "",
     price: "",
+    regularPrice: "",
     category: "",
     stock: "",
     brand: "",
@@ -55,6 +56,7 @@ export default function EditProductPage() {
             name: data.name,
             description: data.description,
             price: data.price.toString(),
+            regularPrice: data.regularPrice ? data.regularPrice.toString() : "",
             category: data.category,
             stock: data.stock.toString(),
             brand: data.brand || "",
@@ -147,6 +149,7 @@ export default function EditProductPage() {
            images: images,
            image: images[0], // Primary image
            price: parseFloat(formData.price),
+           regularPrice: formData.regularPrice ? parseFloat(formData.regularPrice) : undefined,
            stock: parseInt(formData.stock)
         }),
       });
@@ -219,6 +222,7 @@ export default function EditProductPage() {
                             />
                         </div>
                         <div className="space-y-2">
+                        <div className="space-y-2">
                             <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Brand / Manufacturer</label>
                             <input 
                                 type="text" 
@@ -229,6 +233,7 @@ export default function EditProductPage() {
                                 onChange={(e) => setFormData({...formData, brand: e.target.value})}
                             />
                         </div>
+                    </div>
                         <div className="space-y-2">
                             <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Contextual Description</label>
                             <textarea 
@@ -303,10 +308,10 @@ export default function EditProductPage() {
                         <h3 className="text-xs font-black uppercase tracking-widest">Economics & Classification</h3>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div className="space-y-2">
                             <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1 flex items-center gap-1">
-                                <DollarSign size={10} /> Market Price
+                                <span className="text-[10px]">৳</span> Special Price
                             </label>
                             <input 
                                 type="number" 
@@ -318,11 +323,23 @@ export default function EditProductPage() {
                             />
                         </div>
                         <div className="space-y-2">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Current Stock</label>
+                            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1 flex items-center gap-1">
+                                <span className="text-[10px]">৳</span> Regular Price
+                            </label>
+                            <input 
+                                type="number" 
+                                placeholder="0.00"
+                                className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-black text-foreground text-xl"
+                                value={formData.regularPrice}
+                                onChange={(e) => setFormData({...formData, regularPrice: e.target.value})}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400 ml-1">Stock</label>
                             <input 
                                 type="number" 
                                 required
-                                placeholder="Units"
+                                placeholder="0"
                                 className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-black text-foreground text-xl text-primary"
                                 value={formData.stock}
                                 onChange={(e) => setFormData({...formData, stock: e.target.value})}

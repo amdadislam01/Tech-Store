@@ -73,7 +73,7 @@ export default function CartPage() {
                   <div className="flex-grow text-center md:text-left">
                     <span className="text-[10px] bg-primary/10 text-primary px-3 py-1 rounded-lg font-black uppercase tracking-widest mb-2 inline-block italic">New Generation</span>
                     <h3 className="text-xl font-bold mb-1 group-hover:text-primary transition-colors">{item.name}</h3>
-                    <p className="text-primary font-black text-xl">${item.price}</p>
+                    <p className="text-primary font-black text-xl">৳{item.price}</p>
                   </div>
                   <div className="flex items-center gap-4 bg-[#F8FAFC] p-2 rounded-2xl border border-gray-100">
                     <motion.button 
@@ -119,16 +119,16 @@ export default function CartPage() {
               <div className="space-y-6 mb-10">
                 <div className="flex justify-between items-center text-gray-500 font-medium">
                   <span>Subtotal</span>
-                  <span className="text-foreground font-black">${subtotal.toFixed(2)}</span>
+                  <span className="text-foreground font-black">৳{subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between items-center text-gray-500 font-medium">
                   <span>Standard Shipping</span>
-                  <span className="text-foreground font-black">${shipping.toFixed(2)}</span>
+                  <span className="text-foreground font-black">৳{shipping.toFixed(2)}</span>
                 </div>
                 <div className="pt-8 border-t border-gray-100 flex justify-between items-end">
                   <div>
                     <span className="text-sm text-gray-400 font-black uppercase tracking-widest block mb-1">Total Amount</span>
-                    <span className="text-3xl font-black text-primary tracking-tighter">${total.toFixed(2)}</span>
+                    <span className="text-3xl font-black text-primary tracking-tighter">৳{total.toFixed(2)}</span>
                   </div>
                 </div>
               </div>

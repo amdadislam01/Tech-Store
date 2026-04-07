@@ -4,164 +4,183 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { Search, Globe, Award, Zap, ArrowRight, ShieldCheck } from "lucide-react";
 import { useRef } from "react";
+import Link from "next/link";
 
 interface HeroProps {
   search: string;
   setSearch: (val: string) => void;
   handleSearch: (e: React.KeyboardEvent) => void;
+  settings?: any;
 }
 
-export default function Hero({ search, setSearch, handleSearch }: HeroProps) {
+export default function Hero({ search, setSearch, handleSearch, settings }: HeroProps) {
   const containerRef = useRef(null);
   
-  return (
-    <section ref={containerRef} className="relative min-h-[90vh] flex items-center overflow-hidden bg-[#fafafa] pt-20 pb-12">
-      {/* Background Aesthetic Elements */}
-      <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[120px] animate-pulse" />
-      <div className="absolute bottom-[-5%] right-[-5%] w-[30%] h-[40%] bg-blue-200/20 rounded-full blur-[100px]" />
-      
-      {/* Subtle Grain Texture Overlay */}
-      <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+  // Default values for fallback
+  const heroBadge = settings?.heroBadge || "Hand-Picked Tech Just for You";
+  const headlinePrimary = settings?.heroHeadlinePrimary || "Stop Settling for";
+  const headlineSecondary = settings?.heroHeadlineSecondary || "Cheap Gear.";
+  const description = settings?.heroDescription || "Get the tech that actually works for you—from high-performance laptops to the headphones you'll never want to take off. We only stock the good stuff.";
+  const heroImage = settings?.heroImage || "https://i.ibb.co.com/svSnsb6F/tech-removebg-preview.png";
 
-      <div className="container-custom px-6 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+  return (
+    <section ref={containerRef} className="relative min-h-[90vh] lg:min-h-[85vh] flex items-center overflow-hidden bg-[#f0fdf4] pt-24 pb-12 lg:pt-32 lg:pb-20">
+      {/* ... abstract background decorations ... */}
+      <div className="absolute top-10 left-[-5%] w-48 h-48 lg:w-64 lg:h-64 bg-green-200/30 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute bottom-5 right-[-5%] w-64 h-64 lg:w-96 lg:h-96 bg-emerald-200/20 rounded-full blur-3xl" />
+      
+      {/* Animated SVG Patterns */}
+      <div className="absolute inset-0 opacity-[0.35] pointer-events-none hidden sm:block">
+        <svg className="absolute top-[10%] left-[5%] text-emerald-400" width="100" height="100" viewBox="0 0 100 100">
+          <circle cx="10" cy="10" r="2" fill="currentColor" />
+          <circle cx="30" cy="10" r="2" fill="currentColor" />
+          <circle cx="50" cy="10" r="2" fill="currentColor" />
+        </svg>
+        <motion.div 
+          animate={{ x: [0, 20, 0], y: [0, -10, 0] }}
+          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+          className="absolute top-[40%] right-[15%] text-emerald-500 opacity-20 hidden lg:block"
+        >
+          <svg width="200" height="100" viewBox="0 0 200 100" fill="none">
+            <path d="M0 50 Q50 0 100 50 T200 50" stroke="currentColor" strokeWidth="4" />
+          </svg>
+        </motion.div>
+      </div>
+ 
+      <div className="container-custom px-4 sm:px-6 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-12 items-center">
           
           {/* Left Content */}
           <motion.div 
             initial="hidden"
             animate="visible"
             variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: { opacity: 1, y: 0, transition: { staggerChildren: 0.2 } }
+              hidden: { opacity: 0, x: -30 },
+              visible: { opacity: 1, x: 0, transition: { staggerChildren: 0.15 } }
             }}
-            className="lg:col-span-7 text-center lg:text-left"
+            className="lg:col-span-12 xl:col-span-6 text-center lg:text-left"
           >
             {/* Badge */}
             <motion.div 
-              variants={{ hidden: { opacity: 0, x: -20 }, visible: { opacity: 1, x: 0 } }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm mb-6"
+              variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0 } }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/70 backdrop-blur-sm border border-emerald-100 shadow-sm mb-6"
             >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-              </span>
-              <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-600">The 2026 Collection is Here</span>
+              <span className="text-[11px] sm:text-[12px] font-bold uppercase tracking-[0.1em] text-emerald-700">{heroBadge}</span>
             </motion.div>
-
-            {/* Main Headline */}
+ 
+            {/* Dynamic Headline */}
             <motion.h1 
               variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-              className="text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight text-slate-950 mb-8 leading-[0.95]"
+              className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black tracking-tight text-slate-900 mb-6 leading-[1.1] px-2 sm:px-0"
             >
-              Tech That Works <br /> 
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-blue-600 to-indigo-600 italic font-serif font-medium">
-                The Way You Do.
+              {headlinePrimary} <br className="hidden sm:block" /> 
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-600 to-emerald-500">
+                {headlineSecondary}
               </span>
             </motion.h1>
-
+ 
             <motion.p 
               variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
-              className="text-lg md:text-xl text-slate-600 max-w-xl mb-10 leading-relaxed font-normal mx-auto lg:mx-0"
+              className="text-base sm:text-lg md:text-xl text-slate-700 max-w-xl mb-10 leading-relaxed font-medium mx-auto lg:mx-0 px-4 sm:px-0"
             >
-              We curate the world&apos;s best gear for students, creators, and professionals who need tools they can trust to get the job done.
+              {description}
             </motion.p>
-
+ 
             {/* CTA & Search Box */}
             <motion.div 
               variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0 } }}
-              className="flex flex-col sm:flex-row items-center gap-4 p-2 bg-white/80 backdrop-blur-xl border border-slate-200 rounded-[24px] shadow-xl shadow-slate-200/50 max-w-2xl"
+              className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 p-2 bg-white/90 backdrop-blur-xl border border-green-100 rounded-[28px] shadow-2xl shadow-green-200/30 max-w-2xl mx-auto lg:mx-0"
             >
               <div className="relative flex-1 w-full">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
+                <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                 <input 
                   type="text" 
-                  placeholder="Find your next essential..." 
-                  className="w-full pl-12 pr-4 py-4 rounded-xl bg-transparent focus:outline-none text-slate-900 font-medium"
+                  placeholder="Need something specific?" 
+                  className="w-full pl-12 pr-4 py-4 rounded-2xl bg-transparent focus:outline-none text-slate-900 font-bold text-sm sm:text-base"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   onKeyDown={handleSearch}
                 />
               </div>
-              <button className="w-full sm:w-auto px-8 py-4 bg-slate-950 text-white font-bold rounded-[18px] hover:bg-primary transition-colors flex items-center justify-center gap-2 group">
-                Browse the Collection
+              <Link href={'/products'} className="w-full sm:w-auto px-10 py-4 bg-primary shadow-lg shadow-green-200 text-white font-black rounded-[22px] hover:bg-primary-dark transition-all flex items-center justify-center gap-2 group text-sm sm:text-base mb-1 sm:mb-0">
+                Shop Now
                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-              </button>
+              </Link>
             </motion.div>
-
-            {/* Trust Markers */}
+ 
+            {/* Features summary */}
             <motion.div 
               variants={{ hidden: { opacity: 0 }, visible: { opacity: 1 } }}
-              className="mt-12 flex flex-wrap items-center justify-center lg:justify-start gap-8 opacity-60"
+              className="mt-10 flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-8"
             >
-              <div className="flex items-center gap-2">
-                <ShieldCheck size={20} />
-                <span className="text-sm font-semibold uppercase tracking-wider">Safe &amp; Secure Payments</span>
+              <div className="flex items-center gap-2 text-slate-600">
+                <div className="p-1.5 bg-green-100 rounded-full text-green-600">
+                  <ShieldCheck size={16} />
+                </div>
+                <span className="text-[12px] sm:text-sm font-bold">1 Year Warranty</span>
               </div>
-              <div className="flex items-center gap-2">
-                <Zap size={20} />
-                <span className="text-sm font-semibold uppercase tracking-wider">Speedy Doorstep Delivery</span>
+              <div className="flex items-center gap-2 text-slate-600">
+                <div className="p-1.5 bg-green-100 rounded-full text-green-600">
+                  <Zap size={16} />
+                </div>
+                <span className="text-[12px] sm:text-sm font-bold">Next-Day Delivery</span>
               </div>
             </motion.div>
           </motion.div>
-
-          {/* Right Showcase */}
+ 
+          {/* Right Illustrations */}
           <motion.div 
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:col-span-5 relative"
+            initial={{ opacity: 0, scale: 0.9, rotate: 5 }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:col-span-12 xl:col-span-6 relative w-full mt-8 lg:mt-0"
           >
-            <div className="relative group">
-              {/* Main Image Wrapper */}
-              <div className="relative w-full aspect-[4/5] z-10 rounded-[48px] overflow-hidden border-[8px] border-white shadow-2xl transform lg:rotate-3 group-hover:rotate-0 transition-transform duration-700">
+            {/* Background floating circles */}
+            <motion.div 
+              animate={{ scale: [1, 1.1, 1] }}
+              transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute top-10 right-10 w-32 h-32 sm:w-48 sm:h-48 bg-lime-400/20 rounded-full -z-10" 
+            />
+            <motion.div 
+              animate={{ scale: [1.1, 1, 1.1] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="absolute bottom-10 left-10 w-48 h-48 sm:w-64 sm:h-64 bg-emerald-400/20 rounded-full -z-10" 
+            />
+            
+            {/* Main Illustration Bundle */}
+            <div className="relative z-10 p-2 sm:p-4 max-w-[500px] lg:max-w-full mx-auto">
+              <div className="relative group">
+                <div className="absolute inset-0 bg-white/20 rounded-[30px] sm:rounded-[40px] blur-xl -z-10 group-hover:bg-white/30 transition-colors" />
                 <Image 
-                  src="/hero-bg.png" 
-                  alt="Tech Showcase" 
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className="object-cover scale-105 group-hover:scale-100 transition-transform duration-700" 
+                  src={heroImage} 
+                  alt="Tech Bundle" 
+                  width={800}
+                  height={800}
+                  className="w-full h-auto drop-shadow-[0_20px_50px_rgba(34,197,94,0.15)] group-hover:scale-[1.02] transition-transform duration-700 object-contain" 
+                  priority
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 to-transparent" />
               </div>
-
-              {/* Floating Performance Card */}
+ 
+              {/* Floating micro-elements */}
               <motion.div 
                 animate={{ y: [0, -15, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute -right-8 top-20 z-20 bg-white/90 backdrop-blur-xl p-5 rounded-3xl shadow-2xl border border-white max-w-[180px]"
+                className="absolute top-[10%] left-[-2%] sm:left-[-5%] bg-white p-2 sm:p-3 rounded-xl sm:rounded-2xl shadow-xl border border-green-50 hidden sm:block"
               >
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="p-2 bg-orange-100 text-orange-600 rounded-xl">
-                    <Award size={20} />
-                  </div>
-                  <span className="text-[10px] font-black uppercase text-slate-500">Top Rated</span>
-                </div>
-                <p className="text-sm font-bold text-slate-900 leading-tight">Elite Performance Award 2026</p>
+                <Award className="text-yellow-500" size={20} />
               </motion.div>
-
-              {/* Floating Global Card */}
+              
               <motion.div 
                 animate={{ y: [0, 15, 0] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
-                className="absolute -left-10 bottom-20 z-20 bg-slate-900 text-white p-5 rounded-3xl shadow-2xl border border-slate-700"
+                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                className="absolute bottom-[15%] right-[-2%] sm:right-[-5%] bg-slate-900 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg sm:rounded-xl shadow-2xl hidden sm:block"
               >
-                <div className="flex items-center gap-3">
-                  <div className="p-2 bg-primary rounded-xl">
-                    <Globe size={20} />
-                  </div>
-                  <div>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase">Shipping</p>
-                    <p className="text-sm font-bold">Worldwide</p>
-                  </div>
-                </div>
+                <p className="text-[8px] sm:text-[10px] font-bold uppercase tracking-widest text-emerald-400">Best Sellers</p>
+                <p className="text-[12px] sm:text-sm font-black">2026 Edition</p>
               </motion.div>
             </div>
-
-            {/* Background decorative circles */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] border border-slate-200 rounded-full -z-10" />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[140%] border border-slate-100 rounded-full -z-10" />
           </motion.div>
-
+ 
         </div>
       </div>
     </section>

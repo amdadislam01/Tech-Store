@@ -67,7 +67,7 @@ export default async function DashboardPage({ searchParams }: Props) {
     },
     { 
         label: "Node Revenue", 
-        value: `$${totalRevenue.toLocaleString()}`, 
+        value: `৳${totalRevenue.toLocaleString()}`, 
         icon: DollarSign, 
         change: "+18%", 
         bgColor: "bg-violet-50", 
@@ -220,7 +220,7 @@ export default async function DashboardPage({ searchParams }: Props) {
                                         </div>
                                     </div>
                                     <div className="text-right">
-                                        <p className="text-sm font-black text-primary tracking-tight">${order.totalPrice.toLocaleString()}</p>
+                                        <p className="text-sm font-black text-primary tracking-tight">৳{order.totalPrice.toLocaleString()}</p>
                                         <span className={`text-[8px] px-2 py-0.5 rounded-full font-black uppercase tracking-widest bg-emerald-100 text-emerald-600`}>{order.status || "Processed"}</span>
                                     </div>
                                 </div>
@@ -287,7 +287,7 @@ export default async function DashboardPage({ searchParams }: Props) {
                             </div>
                             <div className="min-w-0">
                                 <p className="text-sm font-black text-foreground group-hover:text-primary transition-colors tracking-tight">Order #{order._id.toString().slice(-8).toUpperCase()}</p>
-                                <p className="text-[9px] sm:text-[10px] text-gray-500 font-bold uppercase tracking-wider truncate">{order.user?.name || "Customer"} · ${order.totalPrice.toLocaleString()}</p>
+                                <p className="text-[9px] sm:text-[10px] text-gray-500 font-bold uppercase tracking-wider truncate">{order.user?.name || "Customer"} · ৳{order.totalPrice.toLocaleString()}</p>
                             </div>
                         </div>
                         ))}

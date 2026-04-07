@@ -15,7 +15,8 @@ import {
   Settings,
   CreditCard,
   Heart,
-  Store
+  Store,
+  Zap
 } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -35,6 +36,7 @@ const Sidebar = ({ role, isOpenMobile, onClose }: SidebarProps) => {
     { name: "Overview", icon: BarChart3, href: "/dashboard", roles: ["super-admin", "admin", "manager", "user"] },
     { name: "Users", icon: Users, href: "/dashboard/users", roles: ["super-admin", "admin"] },
     { name: "Products", icon: Package, href: "/dashboard/products", roles: ["super-admin", "admin", "manager"] },
+    { name: "Banner", icon: Zap, href: "/dashboard/hero", roles: ["super-admin", "admin"] },
     { name: "Orders", icon: ShoppingCart, href: "/dashboard/orders", roles: ["super-admin", "admin", "manager", "user"] },
     { name: "My Wishlist", icon: Heart, href: "/wishlist", roles: ["super-admin", "admin", "manager", "user"] },
     { name: "Site Settings", icon: Settings, href: "/dashboard/settings", roles: ["super-admin"] },

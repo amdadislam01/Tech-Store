@@ -5,6 +5,7 @@ const ProductSchema = new Schema(
     name: { type: String, required: true },
     description: { type: String, required: true },
     price: { type: Number, required: true },
+    regularPrice: { type: Number },
     images: { type: [String], default: [] },
     image: { type: String }, // Legacy field retained for compatibility with existing product documents
     category: { type: String, required: true },

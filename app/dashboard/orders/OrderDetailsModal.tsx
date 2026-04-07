@@ -65,7 +65,7 @@ export default function OrderDetailsModal({ order, isOpen, onClose }: OrderDetai
                             <p className="text-xs text-gray-400">Qty: {item.quantity}</p>
                           </div>
                         </div>
-                        <p className="font-black text-sm text-primary">${(item.price * item.quantity).toFixed(2)}</p>
+                        <p className="font-black text-sm text-primary">৳{(item.price * item.quantity).toFixed(2)}</p>
                       </div>
                     ))}
                   </div>
@@ -120,7 +120,7 @@ export default function OrderDetailsModal({ order, isOpen, onClose }: OrderDetai
               <div className="mt-12 flex items-center justify-between p-6 bg-zinc-900 rounded-[30px] text-white shadow-2xl shadow-zinc-900/20">
                 <div>
                    <p className="text-[10px] font-black uppercase tracking-[0.2em] opacity-40">Grand Total</p>
-                   <p className="text-3xl font-black tracking-tighter">${(order.totalAmount || order.totalPrice).toFixed(2)}</p>
+                   <p className="text-3xl font-black tracking-tighter">৳{(order.totalAmount || order.totalPrice).toFixed(2)}</p>
                 </div>
                 <div className={`px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest ${
                     order.status === "Delivered" ? "bg-green-500/10 text-green-400" : "bg-white/10 text-white/60"

@@ -78,7 +78,7 @@ const CheckoutForm = ({ orderId, total }: { orderId: string, total: number }) =>
         ) : (
             <>
                 <Zap size={24} fill="currentColor" />
-                Pay Now • ${total.toFixed(2)}
+                Pay Now • ৳{total.toFixed(2)}
             </>
         )}
       </motion.button>

@@ -19,6 +19,11 @@ const SettingsSchema = new mongoose.Schema(
     stripeSecretKey: { type: String, default: "" },
     stripeWebhookSecret: { type: String, default: "" },
     paymentInstructions: { type: String, default: "Please make manual payment and provider transaction ID." },
+    heroBadge: { type: String, default: "Hand-Picked Tech Just for You" },
+    heroHeadlinePrimary: { type: String, default: "Stop Settling for" },
+    heroHeadlineSecondary: { type: String, default: "Cheap Gear." },
+    heroDescription: { type: String, default: "Get the tech that actually works for you—from high-performance laptops to the headphones you'll never want to take off. We only stock the good stuff." },
+    heroImage: { type: String, default: "https://i.ibb.co.com/svSnsb6F/tech-removebg-preview.png" },
   },
   { timestamps: true }
 );

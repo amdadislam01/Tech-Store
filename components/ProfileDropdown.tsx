@@ -56,7 +56,7 @@ const ProfileDropdown = ({ user }: ProfileDropdownProps) => {
             initial={{ opacity: 0, y: 12, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 12, scale: 0.95 }}
-            className="absolute right-0 mt-4 w-72 bg-white rounded-[32px] shadow-[0_30px_90px_rgba(0,0,0,0.12)] border border-gray-100 p-3 z-50 overflow-hidden"
+            className="absolute right-0 mt-4 w-[calc(100vw-2rem)] sm:w-72 bg-white rounded-[24px] sm:rounded-[32px] shadow-[0_30px_90px_rgba(0,0,0,0.12)] border border-gray-100 p-2 sm:p-3 z-50 overflow-hidden"
           >
             <div className="px-5 py-6 bg-zinc-50/50 rounded-[28px] mb-3 border border-gray-50">
                 <div className="flex items-center gap-4 mb-4">

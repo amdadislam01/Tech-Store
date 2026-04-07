@@ -29,6 +29,7 @@ export default function AddProductPage() {
     name: "",
     description: "",
     price: "",
+    regularPrice: "",
     category: "",
     stock: "",
     brand: "",
@@ -130,6 +131,7 @@ export default function AddProductPage() {
             images: images,
             image: images[0], // Primary image
             price: Number(formData.price),
+            regularPrice: formData.regularPrice ? Number(formData.regularPrice) : undefined,
             stock: Number(formData.stock)
         }),
       });
@@ -339,18 +341,34 @@ export default function AddProductPage() {
                 </div>
                 
                 <div className="space-y-6">
-                    <div className="space-y-2">
-                        <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">Pricing ($)</label>
-                        <div className="relative">
-                            <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={16} />
-                            <input
-                                required
-                                type="number"
-                                value={formData.price}
-                                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                                className="w-full pl-10 pr-4 py-3.5 bg-gray-50 rounded-xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-sm font-semibold text-foreground outline-none"
-                                placeholder="0.00"
-                            />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">Special Price (৳)</label>
+                            <div className="relative">
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">৳</span>
+                                <input
+                                    required
+                                    type="number"
+                                    value={formData.price}
+                                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                                    className="w-full pl-10 pr-4 py-3.5 bg-gray-50 rounded-xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-sm font-semibold text-foreground outline-none"
+                                    placeholder="0.00"
+                                />
+                            </div>
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400 ml-1">Regular Price (৳)</label>
+                            <div className="relative">
+                                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold text-sm">৳</span>
+                                <input
+                                    type="number"
+                                    value={formData.regularPrice}
+                                    onChange={(e) => setFormData({ ...formData, regularPrice: e.target.value })}
+                                    className="w-full pl-10 pr-4 py-3.5 bg-gray-50 rounded-xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-sm font-semibold text-foreground outline-none"
+                                    placeholder="0.00"
+                                />
+                            </div>
                         </div>
                     </div>
 

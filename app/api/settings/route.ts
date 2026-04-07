@@ -17,6 +17,11 @@ export async function GET() {
       nagadNumber: 1,
       rocketNumber: 1,
       paymentInstructions: 1,
+      heroBadge: 1,
+      heroHeadlinePrimary: 1,
+      heroHeadlineSecondary: 1,
+      heroDescription: 1,
+      heroImage: 1,
     });
 
     if (!settings) {

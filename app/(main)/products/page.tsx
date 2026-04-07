@@ -37,7 +37,7 @@ function ProductsContent() {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/products?category=${category}&search=${search}&page=${page}&limit=9`);
+      const res = await fetch(`/api/products?category=${category}&search=${search}&page=${page}&limit=8`);
       const data = await res.json();
       setProducts(data.products || []);
       setTotalPages(data.totalPages || 1);
@@ -164,10 +164,10 @@ function ProductsContent() {
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -10 }}
-                        className={viewType === "grid" ? "grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8" : "flex flex-col gap-6"}
+                        className={viewType === "grid" ? "grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-6" : "flex flex-col gap-6"}
                     >
                     {loading ? (
-                        Array.from({ length: 6 }).map((_, i) => <ProductSkeleton key={i} />)
+                        Array.from({ length: 8 }).map((_, i) => <ProductSkeleton key={i} />)
                     ) : products.length > 0 ? (
                         products.map((product: any) => (
                           <ProductCard key={product._id} product={product} />

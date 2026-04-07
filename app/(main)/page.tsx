@@ -1,12 +1,22 @@
 import HomePageClient from "./HomePageClient";
 import connectDB from "@/lib/db";
 import Product from "@/models/Product";
+import Settings from "@/models/Settings";
 
 export const revalidate = 60; // Enable Incremental Static Regeneration (ISR) with a 60-second revalidation period
 
 export default async function Home() {
   await connectDB();
   const rawProducts = await Product.find({}).sort({ createdAt: -1 }).lean();
+  
+  // Fetch site settings for dynamic hero and configuration
+  let settings = await Settings.findOne().lean();
+  if (!settings) {
+    settings = await Settings.create({});
+  }
+
+  // Serialize settings to plain object
+  const serializedSettings = JSON.parse(JSON.stringify(settings));
   
   // Normalize and serialize product data to ensure all nested fields (like reviews) are plain objects
   const initialProducts = rawProducts.map((p: any) => {
@@ -35,6 +45,6 @@ export default async function Home() {
   });
 
   return (
-    <HomePageClient initialProducts={initialProducts} />
+    <HomePageClient initialProducts={initialProducts} settings={serializedSettings} />
   );
 }

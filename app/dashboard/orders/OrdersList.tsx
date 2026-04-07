@@ -95,7 +95,7 @@ export default function OrdersList({ orders, isAdmin, avatarColors }: OrdersList
             <td className="px-4 sm:px-8 py-4 sm:py-6">
               <div className="space-y-1.5">
                   <p className="text-base sm:text-lg font-black text-foreground tracking-tight">
-                      ${(order.totalAmount || order.totalPrice).toLocaleString()}
+                      ৳{(order.totalAmount || order.totalPrice).toLocaleString()}
                   </p>
                   <span className={`inline-flex items-center gap-1.5 text-[9px] font-black uppercase tracking-[0.1em] px-2 py-1 rounded-lg border ${
                       order.paymentStatus === "Paid" ? "text-green-600 bg-green-50 border-green-100" : 
