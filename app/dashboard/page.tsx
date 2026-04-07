@@ -12,7 +12,8 @@ import {
 import Link from "next/link";
 import SalesChart from "./SalesChart";
 import InventoryHealth from "./InventoryHealth";
-import UserDashboardStats from "./UserDashboardStats";
+import UserDashboardHeader from "@/components/dashboard/UserDashboardHeader";
+import UserDashboardGrid from "@/components/dashboard/UserDashboardGrid";
 import connectDB from "@/lib/db";
 import User from "@/models/User";
 import Order from "@/models/Order";
@@ -159,110 +160,84 @@ export default async function DashboardPage({ searchParams }: Props) {
     : await Order.find({ user: session.user.id }).sort({ createdAt: -1 }).limit(3);
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-700">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
-            {isAdmin ? "Dashboard Overview" : "Account Hub"}
-          </h1>
-          <p className="text-gray-500 mt-1 text-sm font-medium italic">Welcome back, <span className="font-bold text-primary not-italic">{session?.user.name}</span>!</p>
-        </div>
-        <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-gray-100 shadow-sm text-[10px] font-black uppercase tracking-widest text-gray-400 w-fit">
-          <Clock size={14} className="text-primary/40" />
-          <span>Real-time Sync Active</span>
-        </div>
-      </div>
-
+    <div className="space-y-10 animate-in fade-in duration-700">
       {isAdmin ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-          {stats.map((stat, i) => (
-            <div key={i} className="bg-white p-5 sm:p-6 rounded-3xl sm:rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-premium-hover transition-all duration-500 group relative overflow-hidden">
-               <div className="absolute top-0 left-0 w-1 sm:w-2 h-full opacity-0 group-hover:opacity-100 transition-opacity" style={{ backgroundColor: `currentColor` }} />
-               <div className="flex items-center justify-between mb-4 sm:mb-6">
-                  <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:shadow-lg ${stat.bgColor} ${stat.textColor}`}>
-                      <stat.icon size={20} className="sm:w-6 sm:h-6" />
-                  </div>
-                  <span className={`text-[9px] sm:text-[10px] font-black px-2.5 py-0.5 sm:px-2.5 sm:py-1 rounded-lg tracking-widest uppercase ${stat.badgeColor}`}>
-                      {stat.change}
-                  </span>
-               </div>
-               <p className="text-gray-400 text-[9px] sm:text-[10px] font-black uppercase tracking-widest mb-1 sm:mb-1.5">{stat.label}</p>
-               <h3 className="text-2xl sm:text-3xl font-black text-foreground tracking-tighter group-hover:text-primary transition-colors">{stat.value}</h3>
+        <div className="space-y-8">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight uppercase">
+                Dashboard Overview
+              </h1>
+              <p className="text-gray-500 mt-1 text-sm font-medium italic">Welcome back, <span className="font-bold text-primary not-italic">{session?.user.name}</span>!</p>
             </div>
-          ))}
+            <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-xl border border-gray-100 shadow-sm text-[10px] font-black uppercase tracking-widest text-gray-400 w-fit">
+              <Clock size={14} className="text-primary/40" />
+              <span>Real-time Sync Active</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {stats.map((stat, i) => (
+              <div key={i} className="bg-white p-5 sm:p-6 rounded-3xl sm:rounded-[2.5rem] border border-gray-100 shadow-sm hover:shadow-premium-hover transition-all duration-500 group relative overflow-hidden">
+                 <div className="absolute top-0 left-0 w-1 sm:w-2 h-full opacity-0 group-hover:opacity-100 transition-opacity" style={{ backgroundColor: `currentColor` }} />
+                 <div className="flex items-center justify-between mb-4 sm:mb-6">
+                    <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:shadow-lg ${stat.bgColor} ${stat.textColor}`}>
+                        <stat.icon size={20} className="sm:w-6 sm:h-6" />
+                    </div>
+                    <span className={`text-[9px] sm:text-[10px] font-black px-2.5 py-0.5 sm:px-2.5 sm:py-1 rounded-lg tracking-widest uppercase ${stat.badgeColor}`}>
+                        {stat.change}
+                    </span>
+                 </div>
+                 <p className="text-gray-400 text-[9px] sm:text-[10px] font-black uppercase tracking-widest mb-1 sm:mb-1.5">{stat.label}</p>
+                 <h3 className="text-2xl sm:text-3xl font-black text-foreground tracking-tighter group-hover:text-primary transition-colors">{stat.value}</h3>
+              </div>
+            ))}
+          </div>
         </div>
       ) : (
-        <div className="space-y-8">
-            <UserDashboardStats myOrdersCount={myOrdersCount} />
+        <div className="space-y-10">
+            <UserDashboardHeader 
+              user={session.user} 
+              stats={{ 
+                rewards: 250, 
+                credit: 0, 
+                ordersCount: myOrdersCount 
+              }} 
+            />
             
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Recent Orders for User */}
-                <div className="lg:col-span-2 bg-white p-6 sm:p-8 rounded-[2.5rem] border border-gray-100 shadow-sm flex flex-col min-h-[400px]">
-                    <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-50">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
-                                <ShoppingBag size={20} />
-                            </div>
-                            <h3 className="text-lg font-black text-foreground tracking-tight">Recent Purchases</h3>
-                        </div>
-                        <Link href="/dashboard/orders" className="text-[10px] font-black uppercase tracking-widest text-primary hover:underline">View All History</Link>
-                    </div>
+            <UserDashboardGrid />
 
-                    {recentOrders.length > 0 ? (
-                        <div className="space-y-4">
-                            {recentOrders.map((order) => (
-                                <div key={order._id} className="flex items-center justify-between p-4 rounded-2xl bg-gray-50/50 border border-gray-100/50 group hover:bg-white hover:shadow-md transition-all">
-                                    <div className="flex items-center gap-4">
-                                        <div className="text-xs font-black text-gray-400">#{order._id.toString().slice(-6).toUpperCase()}</div>
-                                        <div>
-                                            <p className="text-sm font-black text-foreground tracking-tight">Order #{order._id.toString().slice(-8).toUpperCase()}</p>
-                                            <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">{new Date(order.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
-                                        </div>
-                                    </div>
-                                    <div className="text-right">
-                                        <p className="text-sm font-black text-primary tracking-tight">৳{order.totalPrice.toLocaleString()}</p>
-                                        <span className={`text-[8px] px-2 py-0.5 rounded-full font-black uppercase tracking-widest bg-emerald-100 text-emerald-600`}>{order.status || "Processed"}</span>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    ) : (
-                        <div className="flex-grow flex flex-col items-center justify-center py-10 opacity-40">
-                             <ShoppingBag size={40} className="text-gray-300 mb-4" />
-                             <p className="text-sm font-bold uppercase tracking-widest text-gray-400">No orders yet</p>
-                        </div>
-                    )}
-                </div>
+            {recentOrders.length > 0 && (
+              <div className="bg-white p-8 md:p-10 rounded-[2.5rem] border border-gray-100 shadow-sm">
+                  <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-50">
+                      <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+                              <ShoppingBag size={20} />
+                          </div>
+                          <h3 className="text-xl font-black text-foreground tracking-tight uppercase">Recent Orders</h3>
+                      </div>
+                      <Link href="/dashboard/orders" className="text-[10px] font-black uppercase tracking-widest text-primary hover:underline">View All History</Link>
+                  </div>
 
-                {/* Membership / Rewards Card */}
-                <div className="bg-zinc-900 p-8 sm:p-10 rounded-[2.5rem] border border-white/10 shadow-2xl flex flex-col justify-between relative overflow-hidden group">
-                    <div className="absolute top-0 right-0 p-10 text-white/5 group-hover:rotate-12 transition-transform duration-1000">
-                        <Sparkles size={120} />
-                    </div>
-                    <div className="relative z-10 space-y-6">
-                        <div className="w-12 h-12 bg-white/10 rounded-2xl flex items-center justify-center text-primary border border-white/10">
-                            <Sparkles size={24} />
-                        </div>
-                        <div className="space-y-2">
-                            <h3 className="text-2xl font-black text-white tracking-tight">Elite Member</h3>
-                            <p className="text-white/50 text-sm font-medium leading-relaxed">Unlock premium support and exclusive digital ecosystem benefits.</p>
-                        </div>
-                        
-                        <div className="py-6 border-y border-white/5 space-y-4">
-                            <div className="flex justify-between items-end">
-                                <span className="text-[10px] font-black uppercase tracking-widest text-white/40">Rewards Balance</span>
-                                <span className="text-xl font-black text-white">250 <span className="text-[10px] text-primary">PTS</span></span>
-                            </div>
-                            <div className="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
-                                <div className="w-[45%] h-full bg-primary shadow-[0_0_10px_rgba(255,54,120,0.5)]" />
-                            </div>
-                            <p className="text-[9px] font-bold text-white/30 uppercase tracking-widest">50 points until next tier unlock</p>
-                        </div>
-                    </div>
-                    
-                    <button className="relative z-10 w-full py-4 mt-8 bg-white text-black rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-primary hover:text-white transition-all active:scale-95">Rewards Hub</button>
-                </div>
-            </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {recentOrders.map((order) => (
+                          <div key={order._id} className="flex items-center justify-between p-6 rounded-[2rem] bg-gray-50/50 border border-gray-100/50 group hover:bg-white hover:shadow-premium-hover transition-all">
+                              <div className="flex items-center gap-4">
+                                  <div className="text-xs font-black text-gray-400">#{order._id.toString().slice(-6).toUpperCase()}</div>
+                                  <div>
+                                      <p className="text-base font-black text-foreground tracking-tight">Order #{order._id.toString().slice(-8).toUpperCase()}</p>
+                                      <p className="text-[10px] text-gray-500 font-bold uppercase tracking-wider">{new Date(order.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
+                                  </div>
+                              </div>
+                              <div className="text-right">
+                                  <p className="text-lg font-black text-primary tracking-tight">৳{order.totalPrice.toLocaleString()}</p>
+                                  <span className={`text-[9px] px-3 py-1 rounded-full font-black uppercase tracking-widest bg-emerald-100 text-emerald-600`}>{order.status || "Processed"}</span>
+                              </div>
+                          </div>
+                      ))}
+                  </div>
+              </div>
+            )}
         </div>
       )}
 
