@@ -7,12 +7,24 @@ const UserSchema = new Schema(
     password: { type: String, required: true },
     role: { type: String, enum: ["user", "admin", "manager", "super-admin"], default: "user" },
     image: { type: String },
+    addresses: [
+      {
+        name: { type: String },
+        phone: { type: String },
+        city: { type: String },
+        area: { type: String },
+        address: { type: String },
+        landmark: { type: String },
+        addressType: { type: String, enum: ["Home", "Office"], default: "Home" },
+        isDefault: { type: Boolean, default: false },
+      }
+    ],
   },
   { timestamps: true }
 );
 
 // Force re-registration if fields are missing (Common Next.js HMR issue)
-if (models.User && !models.User.schema.path("image")) {
+if (models.User && (!models.User.schema.path("image") || !models.User.schema.path("addresses"))) {
   delete models.User;
 }
 
