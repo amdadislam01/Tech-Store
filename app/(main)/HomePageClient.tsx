@@ -14,7 +14,13 @@ import TechInsights from "@/components/Sections/TechInsights";
 import CommunityPulse from "@/components/Sections/CommunityPulse";
 import ProductCatalog from "@/components/Sections/ProductCatalog";
 
-export default function HomePageClient({ initialProducts }: { initialProducts: any[] }) {
+export default function HomePageClient({ 
+  initialProducts, 
+  settings 
+}: { 
+  initialProducts: any[]; 
+  settings: any; 
+}) {
   const router = useRouter();
   const [products, setProducts] = useState(initialProducts);
   const [categories, setCategories] = useState(["All"]);
@@ -74,6 +80,7 @@ export default function HomePageClient({ initialProducts }: { initialProducts: a
         search={search} 
         setSearch={setSearch} 
         handleSearch={handleSearch} 
+        settings={settings}
       />
       
       <BrandPartners />
@@ -110,6 +117,8 @@ export default function HomePageClient({ initialProducts }: { initialProducts: a
             search={search}
             setCategory={setCategory}
             setSearch={setSearch}
+            columns={5}
+            limit={5}
           />
         </motion.div>
         
@@ -156,6 +165,45 @@ export default function HomePageClient({ initialProducts }: { initialProducts: a
           transition={{ delay: 0.7 }}
         >
           <CommunityPulse />
+        </motion.div>
+
+        {/* Structured SEO/Shop Description Section - Star Tech Style */}
+        <motion.div
+           initial={{ opacity: 1 }}
+           className="mt-20 pt-16 border-t border-gray-200"
+        >
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 text-sm text-gray-600 leading-relaxed">
+            <div className="space-y-4">
+              <h3 className="text-lg font-bold text-slate-900 border-l-4 border-primary pl-3">Top Laptop Gallery in Bangladesh</h3>
+              <p>
+                Whether you're looking for a high-performance gaming laptop or a sleek ultrabook for work, we offer the latest models from top brands like HP, Asus, Dell, and Apple. Our collection is curated for durability and power.
+              </p>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-lg font-bold text-slate-900 border-l-4 border-primary pl-3">Premium PC Components</h3>
+              <p>
+                Build your dream rig with our wide range of processors, motherboards, graphics cards, and storage solutions. We provide genuine components that ensure your system runs at peak performance for years to come.
+              </p>
+            </div>
+            <div className="space-y-4">
+              <h3 className="text-lg font-bold text-slate-900 border-l-4 border-primary pl-3">Next-Gen Audio & Gadgets</h3>
+              <p>
+                Experience superior sound with our premium headphones and speakers. From professional studio gear to portable Bluetooth speakers, we've got something for every audiophile and gadget enthusiast.
+              </p>
+            </div>
+          </div>
+          
+          <div className="mt-16 bg-white p-8 rounded-xl border border-gray-100 shadow-sm">
+            <h2 className="text-xl font-bold text-slate-900 mb-6 uppercase tracking-wider">Leading Computer, Laptop & Gadget Shop in Bangladesh</h2>
+            <div className="space-y-4 text-justify">
+              <p>
+                Welcome to our tech store, your one-stop destination for all things technology. Since our inception, we have been committed to providing our customers with the best quality products at the most affordable prices. Whether you are a professional gamer, a creative designer, or just a tech enthusiast, we have the right gear for you.
+              </p>
+              <p>
+                We specialize in **Laptops**, **Desktops**, **Graphics Cards**, and **Gaming Peripherals**. Our after-sales service is what sets us apart, ensuring that you have peace of mind with every purchase. Explore our flagship collection today and join our growing community of satisfied customers.
+              </p>
+            </div>
+          </div>
         </motion.div>
       </motion.section>
     </div>
