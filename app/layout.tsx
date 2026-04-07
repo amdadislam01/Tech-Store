@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 import { AuthProvider } from "@/components/AuthProvider";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 export const viewport: Viewport = {
   themeColor: "#ffffff",
@@ -53,6 +54,7 @@ export default function RootLayout({
           <StoreProvider>
             <Toaster position="top-right" />
             {children}
+            <WhatsAppButton />
           </StoreProvider>
         </AuthProvider>
       </body>
