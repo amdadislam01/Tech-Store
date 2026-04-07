@@ -32,7 +32,7 @@ const Navbar = () => {
     { name: "Support", href: "/support", icon: LifeBuoy }
   ];
   const { items } = useSelector((state: RootState) => state.cart);
-  const cartCount = items.reduce((total, item) => total + item.quantity, 0);
+  const cartCount = items.length;
   const { wishlistItems } = useSelector((state: RootState) => state.wishlist);
   const { data: session } = useSession();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
