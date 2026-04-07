@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
 import { clearCart } from "@/redux/slices/cartSlice";
 import { useRouter } from "next/navigation";
-import { CreditCard, Truck, CheckCircle2, ArrowLeft, ShieldCheck, Zap } from "lucide-react";
+import { CreditCard, Truck, CheckCircle2, ArrowLeft, ShieldCheck, Zap, Home, Briefcase } from "lucide-react";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
@@ -23,6 +23,8 @@ export default function CheckoutPage() {
     landmark: "",
     addressType: "Home"
   });
+  const [savedAddresses, setSavedAddresses] = useState<any[]>([]);
+  const [isAddressesLoading, setIsAddressesLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [settingsLoading, setSettingsLoading] = useState(true);
   const [activeMethods, setActiveMethods] = useState<string[]>(["cod"]);
@@ -32,6 +34,7 @@ export default function CheckoutPage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    // Fetch Settings
     fetch("/api/settings")
       .then(res => res.json())
       .then(data => {
@@ -42,7 +45,44 @@ export default function CheckoutPage() {
         setSettingsLoading(false);
       })
       .catch(() => setSettingsLoading(false));
+
+    // Fetch Saved Addresses
+    setIsAddressesLoading(true);
+    fetch("/api/user/addresses")
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) {
+          setSavedAddresses(data);
+          const defaultAddr = data.find(a => a.isDefault);
+          if (defaultAddr) {
+            setFormData({
+              name: defaultAddr.name,
+              phone: defaultAddr.phone,
+              city: defaultAddr.city,
+              area: defaultAddr.area,
+              address: defaultAddr.address,
+              landmark: defaultAddr.landmark || "",
+              addressType: defaultAddr.addressType
+            });
+          }
+        }
+        setIsAddressesLoading(false);
+      })
+      .catch(() => setIsAddressesLoading(false));
   }, []);
+
+  const selectSavedAddress = (addr: any) => {
+    setFormData({
+      name: addr.name,
+      phone: addr.phone,
+      city: addr.city,
+      area: addr.area,
+      address: addr.address,
+      landmark: addr.landmark || "",
+      addressType: addr.addressType
+    });
+    toast.success(`Shipping to: ${addr.addressType}`);
+  };
 
   const PAYMENT_METHODS: any = {
     cod: { label: "Cash on Delivery", description: "Pay upon arrival", icon: <Truck size={22} /> },
@@ -117,7 +157,7 @@ export default function CheckoutPage() {
           >
             <CheckCircle2 size={48} />
           </motion.div>
-          <h2 className="text-4xl font-black mb-4 tracking-tight">Order Confirmed!</h2>
+          <h2 className="text-2xl sm:text-4xl font-black mb-4 tracking-tight">Order Confirmed!</h2>
           <p className="text-gray-500 mb-2 font-medium">Thank you for your purchase. We've received your order.</p>
           <p className="inline-block bg-gray-50 px-4 py-2 rounded-xl text-sm font-bold text-gray-500 border border-gray-100 mb-10">
             Order ID: <span className="text-foreground uppercase tracking-wider">#{orderId.slice(-12)}</span>
@@ -144,7 +184,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="bg-[#F8FAFC] min-h-screen py-16">
+    <div className="bg-[#F8FAFC] min-h-screen py-8 sm:py-16">
       <div className="container-custom">
         <div className="flex items-center gap-4 mb-12">
             <button 
@@ -154,8 +194,8 @@ export default function CheckoutPage() {
                 <ArrowLeft size={20} />
             </button>
             <div>
-                <h1 className="text-4xl font-black text-foreground tracking-tight">Checkout</h1>
-                <p className="text-gray-500 mt-1 font-medium">Complete your order details below.</p>
+                <h1 className="text-2xl sm:text-4xl font-black text-foreground tracking-tight">Checkout</h1>
+                <p className="text-xs sm:text-sm text-gray-500 mt-1 font-medium">Complete your order details below.</p>
             </div>
         </div>
 
@@ -164,15 +204,47 @@ export default function CheckoutPage() {
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="lg:col-span-7 bg-white p-10 md:p-14 rounded-[45px] shadow-2xl shadow-gray-200/50 border border-gray-100 relative overflow-hidden"
+            className="lg:col-span-7 bg-white p-6 sm:p-10 md:p-14 rounded-[30px] sm:rounded-[45px] shadow-2xl shadow-gray-200/50 border border-gray-100 relative overflow-hidden"
           >
             <div className="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32 blur-3xl pointer-events-none" />
-            <h2 className="text-2xl font-black mb-10 flex items-center gap-4 tracking-tight">
-                <div className="p-3 bg-primary/10 rounded-2xl text-primary border border-primary/20">
-                    <Truck size={24} />
+            <h2 className="text-lg sm:text-2xl font-black mb-6 sm:mb-10 flex items-center gap-3 sm:gap-4 tracking-tight">
+                <div className="p-2 sm:p-3 bg-primary/10 rounded-xl sm:rounded-2xl text-primary border border-primary/20">
+                    <Truck size={20} className="sm:w-[24px] sm:h-[24px]" />
                 </div>
                 <span>Shipping Details</span>
             </h2>
+
+            {/* Saved Addresses Selector */}
+            <AnimatePresence>
+                {savedAddresses.length > 0 && (
+                    <motion.div 
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        className="mb-10 p-6 bg-gray-50/50 rounded-[30px] border border-gray-100"
+                    >
+                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400 mb-4 ml-1">Use Saved Address</p>
+                        <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2">
+                            {savedAddresses.map((addr) => (
+                                <button
+                                    key={addr._id}
+                                    type="button"
+                                    onClick={() => selectSavedAddress(addr)}
+                                    className="flex items-center gap-3 px-5 py-3 bg-white rounded-2xl border border-gray-100 shadow-sm hover:border-primary/30 hover:shadow-md transition-all group shrink-0"
+                                >
+                                    <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all">
+                                        {addr.addressType === "Home" ? <Home size={14} /> : <Briefcase size={14} />}
+                                    </div>
+                                    <div className="text-left">
+                                        <p className="text-xs font-black text-foreground">{addr.name}</p>
+                                        <p className="text-[9px] font-bold text-gray-400 uppercase tracking-widest">{addr.addressType}</p>
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
+
             <form className="space-y-6" onSubmit={handleSubmit}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
@@ -269,13 +341,13 @@ export default function CheckoutPage() {
               </div>
 
               <div className="pt-10">
-                 <h2 className="text-2xl font-black mb-8 flex items-center gap-4 tracking-tight">
-                    <div className="p-3 bg-primary/10 rounded-2xl text-primary border border-primary/20">
-                        <CreditCard size={24} />
+                 <h2 className="text-lg sm:text-2xl font-black mb-6 sm:mb-8 flex items-center gap-3 sm:gap-4 tracking-tight">
+                    <div className="p-2 sm:p-3 bg-primary/10 rounded-xl sm:rounded-2xl text-primary border border-primary/20">
+                        <CreditCard size={20} className="sm:w-[24px] sm:h-[24px]" />
                     </div>
                     <span>Payment Method</span>
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 md:grid-cols-2 gap-3 sm:gap-4">
                     {settingsLoading ? (
                         <div className="col-span-2 py-10 flex justify-center">
                             <div className="w-8 h-8 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
@@ -290,27 +362,27 @@ export default function CheckoutPage() {
                                 <div 
                                     key={methodKey}
                                     onClick={() => setSelectedMethod(methodKey)}
-                                    className={`relative group cursor-pointer p-6 border-2 rounded-[24px] transition-all flex items-center justify-between ${
+                                    className={`relative group cursor-pointer p-3 sm:p-6 border-2 rounded-2xl sm:rounded-[24px] transition-all flex flex-col sm:flex-row items-center sm:items-center justify-center sm:justify-between gap-3 sm:gap-0 h-full ${
                                         isSelected 
                                             ? "border-primary bg-primary/5 shadow-lg shadow-primary/5" 
                                             : "border-gray-50 bg-gray-50 hover:border-gray-200"
                                     }`}
                                 >
-                                    <div className="flex items-center gap-4">
-                                        <div className={`p-3 rounded-xl shadow-sm ${isSelected ? "bg-white text-primary" : "bg-gray-100 text-gray-400"}`}>
+                                    <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
+                                        <div className={`p-1.5 sm:p-3 rounded-lg sm:rounded-xl shadow-sm ${isSelected ? "bg-white text-primary" : "bg-gray-100 text-gray-400"} transition-colors`}>
                                             {method.icon}
                                         </div>
                                         <div>
-                                            <span className={`block font-black ${isSelected ? "text-foreground" : "text-gray-500"}`}>{method.label}</span>
-                                            <span className={`text-[10px] font-bold uppercase tracking-widest ${isSelected ? "text-primary" : "text-gray-400"}`}>
+                                            <span className={`block font-black text-[10px] sm:text-sm ${isSelected ? "text-foreground" : "text-gray-500"}`}>{method.label}</span>
+                                            <span className={`text-[8px] sm:text-[10px] font-bold uppercase tracking-widest leading-none ${isSelected ? "text-primary" : "text-gray-400"}`}>
                                                 {method.description}
                                             </span>
                                         </div>
                                     </div>
-                                    <div className={`w-6 h-6 rounded-full flex items-center justify-center border-2 transition-all ${
-                                        isSelected ? "bg-primary border-white shadow-md" : "bg-white border-gray-100"
+                                    <div className={`absolute top-2 right-2 sm:static w-4 h-4 sm:w-6 sm:h-6 rounded-full flex items-center justify-center border-2 transition-all ${
+                                        isSelected ? "bg-primary border-white shadow-md scale-110" : "bg-white border-gray-100 scale-100"
                                     }`}>
-                                        {isSelected && <div className="w-1.5 h-1.5 bg-white rounded-full"></div>}
+                                        {isSelected && <div className="w-1 h-1 sm:w-1.5 sm:h-1.5 bg-white rounded-full"></div>}
                                     </div>
                                 </div>
                             );
@@ -324,7 +396,7 @@ export default function CheckoutPage() {
                         whileTap={{ scale: 0.98 }}
                         type="submit"
                         disabled={loading || items.length === 0}
-                        className="w-full bg-primary text-white py-6 rounded-[24px] font-black text-xl hover:bg-primary-dark transition-all shadow-2xl shadow-primary/30 disabled:opacity-50 relative overflow-hidden"
+                        className="w-full bg-primary text-white py-4 sm:py-6 rounded-2xl sm:rounded-[24px] font-black text-base sm:text-xl hover:bg-primary-dark transition-all shadow-2xl shadow-primary/30 disabled:opacity-50 relative overflow-hidden"
                     >
                         <div className="relative z-10 flex items-center justify-center gap-3">
                             {loading ? "Processing Order..." : `Confirm Payment • $${total.toFixed(2)}`}
@@ -346,9 +418,9 @@ export default function CheckoutPage() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.2 }}
-                className="bg-white p-10 md:p-12 rounded-[45px] shadow-2xl shadow-gray-200/50 border border-gray-100 sticky top-32"
+                className="bg-white p-6 sm:p-10 md:p-12 rounded-[30px] sm:rounded-[45px] shadow-2xl shadow-gray-200/50 border border-gray-100 sticky top-32"
             >
-               <h2 className="text-2xl font-black mb-8 pb-8 border-b border-gray-100 tracking-tight">Order Summary</h2>
+               <h2 className="text-xl sm:text-2xl font-black mb-6 sm:mb-8 pb-6 sm:pb-8 border-b border-gray-100 tracking-tight">Order Summary</h2>
                <div className="space-y-6 max-h-[350px] overflow-y-auto no-scrollbar mb-10 pr-2">
                     {items.map((item) => (
                         <div key={item._id} className="flex items-center gap-6 group">
@@ -374,10 +446,10 @@ export default function CheckoutPage() {
                     <span>Shipping</span>
                     <span className="font-black text-foreground">$10.00</span>
                   </div>
-                  <div className="pt-8 flex justify-between items-end border-t border-dashed border-gray-200">
+                  <div className="pt-6 sm:pt-8 flex justify-between items-end border-t border-dashed border-gray-200">
                     <div>
-                        <span className="text-xs text-gray-400 font-black uppercase tracking-widest block mb-1">Total Payable</span>
-                        <span className="text-4xl font-black text-primary tracking-tighter">${total.toFixed(2)}</span>
+                        <span className="text-[10px] text-gray-400 font-black uppercase tracking-widest block mb-1">Total Payable</span>
+                        <span className="text-2xl sm:text-4xl font-black text-primary tracking-tighter">${total.toFixed(2)}</span>
                     </div>
                   </div>
                </div>
