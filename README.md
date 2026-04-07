@@ -14,16 +14,23 @@
 
 ### 🎨 Premium UI/UX & Design Philosophy
 - **Glassmorphism Design**: Modern, translucent interfaces that feel light and premium.
-- **Fluid Animations**: Smooth transitions and interactive elements powered by **Framer Motion**.
-- **Responsive Layout**: Optimized for every device, from ultra-wide monitors to mobile screens.
-- **Lucide Iconography**: Clean and consistent visual language across the entire platform.
+- **Tech Inspired Layout**: Professional, high-conversion design with primary green accents and optimized product density.
+- **Fluid Animations**: Smooth transitions and interactive elements powered by **Framer Motion** and **Lenis Scroll**.
+- **Responsive Navigation**: Mobile-optimized navbar with persistent search, compact action buttons, and intuitive mobile drawer.
+- **Dynamic Loading states**: Polished, responsive loading components to ensure a seamless transition between pages.
+- **Custom 404 Experience**: Dedicated, animated error page for a superior brand experience even during broken links.
 
 ### 🛍️ Core Shopping Experience
+- **Interactive Product Details**: Immersive product pages with quantity selectors, technical specification tables, and metadata chips.
 - **Dynamic Category Management**: Real-time category synchronization directly from the product database.
 - **Advanced Filtering & Search**: Instant filtering by category, search terms, and pricing.
-- **High-Fidelity Product Details**: Immersive product pages with interactive media galleries and detailed technical specifications.
 - **Verified Review System**: Robust rating and review mechanism with user identity verification.
 - **Cart & Wishlist Logic**: Persistent state management for a seamless "save for later" and checkout flow.
+
+### ⚙️ Global Site Customization
+- **Dynamic Hero Section**: Administrators can update the badge, headline, description, and hero image directly from the dashboard.
+- **Centralized Settings Catalog**: Manage site name, contact details, site logo, and global descriptions via the administrative suite.
+- **Responsive Branding**: Real-time updates to brand colors and metadata reflected across the entire application.
 
 ### 💳 Integrated Payment Ecosystem
 - **Stripe Integration**: Secure and seamless credit/debit card processing.
@@ -31,24 +38,15 @@
 - **Dynamic Payment UI**: Context-aware payment screens that adapt based on the selected gateway.
 
 ### 🛡️ Smart Access & Advanced Security
-- **Guest Access Management**: Integrated AI search quotas with a 3-free-search limit for guests.
+- **Role-Based Access Control (RBAC)**: Fine-grained permissions for **Super Admin**, **Admin**, and **Manager** roles.
 - **Secure Authentication**: Protected routes and multi-layered user sessions powered by **NextAuth.js**.
-- **Server-Side Route Protection**: Enhanced security for sensitive transactional pages like Cart and Checkout.
+- **Google Site Verification**: Fully integrated for search console ownership and indexing.
 
-### ⚖️ Legal & Compliance Infrastructure
-- **Professional Legal Documentation**: High-fidelity, dedicated pages for **Privacy Policy**, **Terms of Service**, and **Cookie Policy**.
-- **Interactive Experience**: Implementation of sticky tables of contents and polished typography for maximum readability.
-- **Global Compliance Ready**: Standardized language and structure following modern data protection best practices.
-
-### 🛠️ Comprehensive Administrative Suite
-- **Inventory Health Monitoring**: Real-time tracking of stock levels and automated catalog integrity checks.
-- **Sales & Performance Metrics**: Data points for monitoring overall business performance and revenue.
-- **Order Lifecycle Management**: Advanced filtering, status tracking, and end-to-end management for customer orders.
-
-### 🚀 Performance & Infrastructure
-- **Next.js 16 (App Router)**: Utilizing React Server Components and SSR for lightning-fast interactions.
-- **Database Scalability**: Flexible and robust data modeling with **Mongoose** and **MongoDB**.
-- **Edge-Ready Architecture**: Built for high availability and low-latency performance.
+### 📈 SEO & Performance Optimization
+- **Dynamic Sitemaps**: Automated `sitemap.xml` generation for optimal search engine crawling.
+- **Robots.txt Management**: Standardized crawler instructions for better indexing control.
+- **JSON-LD Structured Data**: High-fidelity schema markup for Products and Organizations to enhance Rich Snippets.
+- **Next.js 16 Optimization**: Utilizing React Server Components and SSR for lightning-fast interactions and SEO dominance.
 
 ---
 
@@ -57,12 +55,13 @@
 We are constantly evolving the platform. Here are the features currently in development:
 
 - [x] **Payment Gateway Integration**: Seamless checkout with Stripe and local MFS (bKash/Nagad/Rocket).
+- [x] **SEO Optimization**: Complete sitemap, robots.txt, and JSON-LD integration.
+- [x] **Dynamic Hero Management**: Full administrator control over homepage visuals.
 - [ ] **AI-Powered Recommendations**: Personalized product suggestions based on user browsing history and preferences.
 - [ ] **Real-time Order Tracking**: Interactive dashboard for users to track their order status in real-time.
 - [ ] **Multi-language Support**: Deep localization supporting both **English** and **Bengali (BN)**.
 - [ ] **Advanced Analytics Dashboard**: Enhanced sales visualization and business intelligence for administrators.
 - [ ] **Progressive Web App (PWA)**: Enabling offline access and home screen installation for mobile users.
-- [ ] **Inventory Low-Stock Alerts**: Automated email/push notifications for administrators.
 
 ---
 
@@ -76,7 +75,8 @@ We are constantly evolving the platform. Here are the features currently in deve
 | **State Management** | Redux Toolkit |
 | **Database** | MongoDB with Mongoose |
 | **Payments** | Stripe, Manual Payment (MFS) |
-| **Animations** | Framer Motion |
+| **Animations** | Framer Motion, Lenis Scroll |
+| **SEO** | Next-Sitemap, JSON-LD |
 | **Icons** | Lucide React |
 | **Authentication** | NextAuth.js |
 
@@ -132,8 +132,6 @@ Tech-Store/
 
 ## 🌐 API Endpoints
 
-The Tech-Store provides a robust backend API powered by Next.js Route Handlers.
-
 ### **Authentication**
 - `POST /api/auth/register` - Create a new user account.
 - `POST /api/auth/login` - Authenticate users with credentials (handled via NextAuth).
@@ -159,7 +157,7 @@ The Tech-Store provides a robust backend API powered by Next.js Route Handlers.
 
 ### **Categories & Settings**
 - `GET /api/categories` - Fetch a unique list of all product categories.
-- `GET /api/settings` - Retrieve global application settings (e.g., Contact info, MFS numbers).
+- `GET /api/settings` - Retrieve global application settings (e.g., Contact info, MFS numbers, Hero configurations).
 
 ### **Payment Gateways**
 - `POST /api/payment/create-intent` - Generate a Stripe Payment Intent for secure card transactions.
