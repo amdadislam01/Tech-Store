@@ -26,6 +26,10 @@ export default function OrderFilters() {
   const handleSearch = useCallback(
     (term: string) => {
       const params = new URLSearchParams(searchParams);
+      const currentQuery = params.get("query") || "";
+      
+      if (term === currentQuery) return; // Prevent infinite re-fetching loop
+
       if (term) {
         params.set("query", term);
       } else {
