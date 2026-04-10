@@ -87,11 +87,13 @@ export default async function DashboardPage({ searchParams }: Props) {
   ];
 
   // Low Stock Monitoring (Top 3 lowest)
-  const lowStockProducts = await Product.find()
+  const rawLowStockProducts = await Product.find()
     .sort({ stock: 1 })
     .limit(3)
     .select("name stock")
     .lean();
+
+  const lowStockProducts = JSON.parse(JSON.stringify(rawLowStockProducts));
 
   // Chart Data Logic (Daily vs Monthly)
   const period = params.period?.toString() || "daily";
