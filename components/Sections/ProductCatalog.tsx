@@ -12,6 +12,8 @@ interface ProductCatalogProps {
   search: string;
   setCategory: (val: string) => void;
   setSearch: (val: string) => void;
+  sort: string;
+  setSort: (val: string) => void;
   columns?: number;
   limit?: number;
 }
@@ -23,6 +25,8 @@ export default function ProductCatalog({
   search, 
   setCategory, 
   setSearch,
+  sort,
+  setSort,
   columns = 4,
   limit = 20
 }: ProductCatalogProps) {
@@ -66,9 +70,22 @@ export default function ProductCatalog({
                     <Zap size={16} className="text-primary" />
                     <span>{(Array.isArray(products) ? products : []).slice(0, limit).length} Items</span>
                 </div>
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 group relative">
                     <TrendingUp size={16} className="text-primary" />
-                    <span>Latest First</span>
+                    <select 
+                        value={sort}
+                        onChange={(e) => setSort(e.target.value)}
+                        className="bg-transparent border-none focus:ring-0 text-sm font-bold text-gray-500 cursor-pointer hover:text-primary transition-colors appearance-none pr-4"
+                    >
+                        <option value="newest">Latest First</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
+                    </select>
+                    <div className="absolute right-0 top-1/2 -translate-y-1/2 pointer-events-none">
+                        <svg className="w-4 h-4 text-gray-400 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
                 </div>
             </div>
         </motion.div>
