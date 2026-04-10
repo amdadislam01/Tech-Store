@@ -26,6 +26,7 @@ export default function HomePageClient({
   const [loading, setLoading] = useState(false);
   const [category, setCategory] = useState("All");
   const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("newest");
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   const handleSearch = (e: React.KeyboardEvent) => {
@@ -52,7 +53,7 @@ export default function HomePageClient({
     
     setLoading(true);
     try {
-      const res = await fetch(`/api/products?category=${category}&search=${search}`);
+      const res = await fetch(`/api/products?category=${category}&search=${search}&sort=${sort}`);
       const data = await res.json();
       setProducts(data.products || []);
     } catch (error) {
@@ -71,7 +72,7 @@ export default function HomePageClient({
         fetchProducts();
     }, 300); // Delay execution to prevent frequent API calls during rapid typing
     return () => clearTimeout(timer);
-  }, [category, search]);
+  }, [category, search, sort]);
 
   return (
     <div className="bg-[#F8FAFC] min-h-screen">
@@ -114,8 +115,10 @@ export default function HomePageClient({
             loading={loading}
             category={category}
             search={search}
+            sort={sort}
             setCategory={setCategory}
             setSearch={setSearch}
+            setSort={setSort}
             columns={5}
             limit={10}
           />
