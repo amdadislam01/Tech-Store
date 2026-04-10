@@ -16,6 +16,8 @@ const geistMono = Geist_Mono({
 
 import { AuthProvider } from "@/components/AuthProvider";
 import WhatsAppButton from "@/components/WhatsAppButton";
+import { LenisProvider } from "@/components/LenisProvider";
+import "lenis/dist/lenis.css";
 
 export const viewport: Viewport = {
   themeColor: "#ffffff",
@@ -50,13 +52,15 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen flex flex-col">
-        <AuthProvider>
-          <StoreProvider>
-            <Toaster position="top-right" />
-            {children}
-            <WhatsAppButton />
-          </StoreProvider>
-        </AuthProvider>
+        <LenisProvider>
+          <AuthProvider>
+            <StoreProvider>
+              <Toaster position="top-right" />
+              {children}
+              <WhatsAppButton />
+            </StoreProvider>
+          </AuthProvider>
+        </LenisProvider>
       </body>
     </html>
   );
