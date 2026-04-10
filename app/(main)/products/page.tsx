@@ -23,6 +23,7 @@ function ProductsContent() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalProducts, setTotalProducts] = useState(0);
+  const [sort, setSort] = useState("newest");
 
   const fetchCategories = async () => {
     try {
@@ -37,7 +38,7 @@ function ProductsContent() {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/products?category=${category}&search=${search}&page=${page}&limit=8`);
+      const res = await fetch(`/api/products?category=${category}&search=${search}&page=${page}&limit=8&sort=${sort}`);
       const data = await res.json();
       setProducts(data.products || []);
       setTotalPages(data.totalPages || 1);
@@ -55,14 +56,14 @@ function ProductsContent() {
 
   useEffect(() => {
     setPage(1); // Ensure navigation starts at page one when applying new filters
-  }, [category, search]);
+  }, [category, search, sort]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
         fetchProducts();
     }, 300);
     return () => clearTimeout(timer);
-  }, [category, search, page]);
+  }, [category, search, page, sort]);
 
   return (
     <div className="bg-[#F8FAFC] min-h-screen pt-12 pb-24">
@@ -151,10 +152,14 @@ function ProductsContent() {
             <main className="lg:col-span-3">
                 <div className="flex items-center justify-between mb-8 pb-4 border-b border-gray-100">
                     <p className="text-sm font-bold text-gray-500">Showing <span className="text-foreground">{totalProducts}</span> revolutionary devices</p>
-                    <select className="bg-transparent border-none focus:ring-0 text-sm font-black text-foreground cursor-pointer">
-                        <option>Newest Arrivals</option>
-                        <option>Price: Low to High</option>
-                        <option>Price: High to Low</option>
+                    <select 
+                        value={sort}
+                        onChange={(e) => setSort(e.target.value)}
+                        className="bg-transparent border-none focus:ring-0 text-sm font-black text-foreground cursor-pointer"
+                    >
+                        <option value="newest">Newest Arrivals</option>
+                        <option value="price-asc">Price: Low to High</option>
+                        <option value="price-desc">Price: High to Low</option>
                     </select>
                 </div>
 
