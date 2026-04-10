@@ -58,10 +58,12 @@ export default async function OrdersPage({ searchParams }: Props) {
     filterQuery.status = capitalizedStatus;
   }
 
-  const orders = await Order.find(filterQuery)
+  const rawOrders = await Order.find(filterQuery)
     .sort({ createdAt: -1 })
     .populate("user", "name email image")
     .lean();
+    
+  const orders = JSON.parse(JSON.stringify(rawOrders));
 
   const getInitials = (name: string) => {
     return name
