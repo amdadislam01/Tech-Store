@@ -13,6 +13,7 @@ export async function GET(req: Request) {
     const page = parseInt(searchParams.get("page") || "1");
     const limit = parseInt(searchParams.get("limit") || "12");
     const skip = (page - 1) * limit;
+    const sort = searchParams.get("sort") || "newest";
 
     const query: any = {};
     if (category && category !== "All") {
@@ -22,9 +23,14 @@ export async function GET(req: Request) {
       query.name = { $regex: search, $options: "i" };
     }
 
+    let sortOption: any = { createdAt: -1 };
+    if (sort === "price-asc") sortOption = { price: 1 };
+    else if (sort === "price-desc") sortOption = { price: -1 };
+    else if (sort === "newest") sortOption = { createdAt: -1 };
+
     const totalProducts = await Product.countDocuments(query);
     const products = await Product.find(query)
-      .sort({ createdAt: -1 })
+      .sort(sortOption)
       .skip(skip)
       .limit(limit);
     
