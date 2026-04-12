@@ -29,9 +29,13 @@ export default function HomePageClient({
   const [sort, setSort] = useState("newest");
   const [isFirstLoad, setIsFirstLoad] = useState(true);
 
-  const handleSearch = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && search.trim()) {
+  const handleSearch = (e?: React.KeyboardEvent | React.MouseEvent) => {
+    if (e && 'key' in (e as any) && (e as any).key !== "Enter") return;
+    
+    if (search.trim()) {
       router.push(`/products?search=${encodeURIComponent(search)}`);
+    } else {
+      router.push('/products');
     }
   };
 
