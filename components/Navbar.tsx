@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   ShoppingCart, 
@@ -24,6 +24,9 @@ import ProfileDropdown from "./ProfileDropdown";
 
 const Navbar = () => {
   const pathname = usePathname();
+  const router = useRouter();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [search, setSearch] = useState("");
 
   const links = [
     { name: "Home", href: "/", icon: Home },
@@ -35,7 +38,18 @@ const Navbar = () => {
   const cartCount = items.length;
   const { wishlistItems } = useSelector((state: RootState) => state.wishlist);
   const { data: session } = useSession();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const handleSearch = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+        if (search.trim()) {
+            router.push(`/products?search=${encodeURIComponent(search)}`);
+        } else {
+            router.push(`/products`);
+        }
+        setIsMobileMenuOpen(false);
+        setSearch("");
+    }
+  };
 
   return (
     <nav className="bg-white/80 backdrop-blur-xl border-b border-gray-100 sticky top-0 z-50 transition-all duration-300">
@@ -70,11 +84,25 @@ const Navbar = () => {
  
         <div className="flex items-center gap-1.5 sm:gap-3 lg:gap-5">
           <div className="hidden lg:flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-2xl border border-gray-100 focus-within:bg-white focus-within:ring-2 focus-within:ring-primary/10 transition-all">
-            <Search size={18} className="text-gray-400" />
+            <Search 
+                size={18} 
+                className="text-gray-400 cursor-pointer hover:text-primary transition-colors" 
+                onClick={() => {
+                    if (search.trim()) {
+                        router.push(`/products?search=${encodeURIComponent(search)}`);
+                    } else {
+                        router.push(`/products`);
+                    }
+                    setSearch("");
+                }}
+            />
             <input 
                 type="text" 
                 placeholder="Find anything..." 
                 className="bg-transparent border-none focus:ring-0 text-sm font-medium w-32 xl:w-48 placeholder:text-gray-400"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                onKeyDown={handleSearch}
             />
           </div>
           
@@ -136,11 +164,26 @@ const Navbar = () => {
                 <div className="container-custom py-6 pb-12 flex flex-col gap-4">
                     {/* Mobile Search Box */}
                     <div className="relative group mb-2">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={18} />
+                        <Search 
+                            className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 cursor-pointer" 
+                            size={18} 
+                            onClick={() => {
+                                if (search.trim()) {
+                                    router.push(`/products?search=${encodeURIComponent(search)}`);
+                                } else {
+                                    router.push(`/products`);
+                                }
+                                setIsMobileMenuOpen(false);
+                                setSearch("");
+                            }}
+                        />
                         <input 
                             type="text" 
                             placeholder="Search products..." 
                             className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-100 rounded-2xl focus:bg-white focus:ring-4 focus:ring-primary/10 transition-all text-sm font-bold"
+                            value={search}
+                            onChange={(e) => setSearch(e.target.value)}
+                            onKeyDown={handleSearch}
                         />
                     </div>
  
