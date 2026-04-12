@@ -9,7 +9,7 @@ import Link from "next/link";
 interface HeroProps {
   search: string;
   setSearch: (val: string) => void;
-  handleSearch: (e: React.KeyboardEvent) => void;
+  handleSearch: (e?: React.KeyboardEvent | React.MouseEvent) => void;
   settings?: any;
 }
 
@@ -102,10 +102,13 @@ export default function Hero({ search, setSearch, handleSearch, settings }: Hero
                   onKeyDown={handleSearch}
                 />
               </div>
-              <Link href={'/products'} className="w-full sm:w-auto px-10 py-4 bg-primary shadow-lg shadow-green-200 text-white font-black rounded-[22px] hover:bg-primary-dark transition-all flex items-center justify-center gap-2 group text-sm sm:text-base mb-1 sm:mb-0">
-                Shop Now
+              <button 
+                onClick={handleSearch}
+                className="w-full sm:w-auto px-10 py-4 bg-primary shadow-lg shadow-green-200 text-white font-black rounded-[22px] hover:bg-primary-dark transition-all flex items-center justify-center gap-2 group text-sm sm:text-base mb-1 sm:mb-0"
+              >
+                {search.trim() ? "Search Now" : "Shop Now"}
                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-              </Link>
+              </button>
             </motion.div>
  
             {/* Features summary */}
