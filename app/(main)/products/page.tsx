@@ -55,6 +55,10 @@ function ProductsContent() {
   }, []);
 
   useEffect(() => {
+    setSearch(initialSearch);
+  }, [initialSearch]);
+
+  useEffect(() => {
     setPage(1); // Ensure navigation starts at page one when applying new filters
   }, [category, search, sort]);
 
