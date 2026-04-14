@@ -14,9 +14,9 @@ function ProductsContent() {
   const initialSearch = searchParams.get("search") || "";
   
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState(["All"]);
+  const [categories, setCategories] = useState<any[]>([{ _id: "All", name: "All" }]);
   const [loading, setLoading] = useState(true);
-  const [category, setCategory] = useState("All");
+  const [category, setCategory] = useState<any>("All");
   const [search, setSearch] = useState(initialSearch);
   const [viewType, setViewType] = useState<"grid" | "list">("grid");
   
@@ -29,7 +29,9 @@ function ProductsContent() {
     try {
       const res = await fetch("/api/categories");
       const data = await res.json();
-      if (Array.isArray(data)) setCategories(data);
+      if (Array.isArray(data)) {
+        setCategories([{ _id: "All", name: "All" }, ...data]);
+      }
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
@@ -38,7 +40,8 @@ function ProductsContent() {
   const fetchProducts = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/products?category=${category}&search=${search}&page=${page}&limit=8&sort=${sort}`);
+      const categoryId = typeof category === "object" ? category._id : category;
+      const res = await fetch(`/api/products?category=${categoryId}&search=${search}&page=${page}&limit=8&sort=${sort}`);
       const data = await res.json();
       setProducts(data.products || []);
       setTotalPages(data.totalPages || 1);
@@ -127,20 +130,26 @@ function ProductsContent() {
                         Categories
                     </h3>
                     <div className="flex flex-col gap-2">
-                        {categories.map((cat) => (
-                            <button
-                                key={cat}
-                                onClick={() => setCategory(cat)}
-                                className={`flex items-center justify-between px-5 py-4 rounded-2xl text-sm font-bold transition-all border ${
-                                    category === cat 
-                                    ? "bg-primary text-white border-primary shadow-xl shadow-primary/20 scale-[1.02]" 
-                                    : "bg-white text-gray-500 hover:bg-gray-50 border-gray-100"
-                                }`}
-                            >
-                                <span>{cat}</span>
-                                {category === cat && <Zap size={14} className="fill-white" />}
-                            </button>
-                        ))}
+                        {categories.map((cat) => {
+                            const catName = typeof cat === "string" ? cat : cat.name;
+                            const catId = typeof cat === "string" ? cat : cat._id;
+                            const isActive = typeof category === "object" ? category._id === catId : category === catId;
+                            
+                            return (
+                                <button
+                                    key={catId}
+                                    onClick={() => setCategory(cat)}
+                                    className={`flex items-center justify-between px-5 py-4 rounded-2xl text-sm font-bold transition-all border ${
+                                        isActive 
+                                        ? "bg-primary text-white border-primary shadow-xl shadow-primary/20 scale-[1.02]" 
+                                        : "bg-white text-gray-500 hover:bg-gray-50 border-gray-100"
+                                    }`}
+                                >
+                                    <span>{catName}</span>
+                                    {isActive && <Zap size={14} className="fill-white" />}
+                                </button>
+                            );
+                        })}
                     </div>
                 </div>
                 
