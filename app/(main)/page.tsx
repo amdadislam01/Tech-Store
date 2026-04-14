@@ -18,30 +18,16 @@ export default async function Home() {
   // Serialize settings to plain object
   const serializedSettings = JSON.parse(JSON.stringify(settings));
   
-  // Normalize and serialize product data to ensure all nested fields (like reviews) are plain objects
-  const initialProducts = rawProducts.map((p: any) => {
-    const productObj = { 
-        ...p, 
-        _id: p._id.toString(), 
-        createdAt: p.createdAt?.toISOString(), 
-        updatedAt: p.updatedAt?.toISOString() 
-    };
-
-    // Standardize 'images' array from legacy 'image' field if necessary
-    if (!productObj.images || productObj.images.length === 0) {
-        productObj.images = productObj.image ? [productObj.image] : [];
+  // Robustly serialize all product data (including Category ObjectIds and Dates) to plain objects
+  const serializedProducts = JSON.parse(JSON.stringify(rawProducts));
+  
+  // Normalize product fields and ensure image arrays are valid
+  const initialProducts = serializedProducts.map((p: any) => {
+    // Ensure images array exists
+    if (!p.images || p.images.length === 0) {
+      p.images = p.image ? [p.image] : [];
     }
-
-    // Recursively serialize review objects to prevent Next.js Client Component errors
-    if (productObj.reviews && Array.isArray(productObj.reviews)) {
-        productObj.reviews = productObj.reviews.map((rev: any) => ({
-            ...rev,
-            _id: rev._id.toString(),
-            createdAt: rev.createdAt?.toISOString()
-        }));
-    }
-
-    return productObj;
+    return p;
   });
 
   return (
