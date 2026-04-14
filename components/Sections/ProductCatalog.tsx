@@ -8,9 +8,9 @@ import { ProductSkeleton } from "@/components/Skeleton";
 interface ProductCatalogProps {
   products: any[];
   loading: boolean;
-  category: string;
+  category: any;
   search: string;
-  setCategory: (val: string) => void;
+  setCategory: (val: any) => void;
   setSearch: (val: string) => void;
   sort: string;
   setSort: (val: string) => void;
@@ -92,7 +92,7 @@ export default function ProductCatalog({
 
         <AnimatePresence mode="wait">
             <motion.div 
-                key={category + search}
+                key={(typeof category === 'object' ? category._id : category) + search}
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
