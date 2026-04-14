@@ -167,7 +167,9 @@ export default function ProductDetails() {
             <ChevronRight size={10} className="flex-shrink-0" />
             <Link href="/products" className="hover:text-primary transition-colors flex-shrink-0">Products</Link>
             <ChevronRight size={10} className="flex-shrink-0" />
-            <span className="text-gray-400 flex-shrink-0">{product.category}</span>
+            <span className="text-gray-400 flex-shrink-0">
+                {product.category?.name || (typeof product.category === 'string' ? product.category : "General")}
+            </span>
             <ChevronRight size={10} className="flex-shrink-0" />
             <span className="font-bold text-slate-800 truncate">{product.name}</span>
         </div>
