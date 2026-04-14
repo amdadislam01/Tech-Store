@@ -21,12 +21,15 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
+import { useSession } from "next-auth/react";
 
 export default function EditProductPage() {
+  const { data: session } = useSession();
   const router = useRouter();
   const { id } = useParams();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [categories, setCategories] = useState<{ _id: string; name: string; parent?: string }[]>([]);
   
   const [formData, setFormData] = useState({
     name: "",
@@ -43,39 +46,47 @@ export default function EditProductPage() {
 
   const [images, setImages] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
-  const [newCategory, setNewCategory] = useState("");
-  const [isAddingNewCategory, setIsAddingNewCategory] = useState(false);
 
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchData = async () => {
       try {
-        const res = await fetch(`/api/products/${id}`);
-        const data = await res.json();
-        if (res.ok) {
+        const [prodRes, catRes] = await Promise.all([
+            fetch(`/api/products/${id}`),
+            fetch(`/api/categories`)
+        ]);
+
+        const prodData = await prodRes.json();
+        const catData = await catRes.json();
+
+        if (Array.isArray(catData)) {
+            setCategories(catData);
+        }
+
+        if (prodRes.ok) {
           setFormData({
-            name: data.name,
-            description: data.description,
-            price: data.price.toString(),
-            regularPrice: data.regularPrice ? data.regularPrice.toString() : "",
-            category: data.category,
-            stock: data.stock.toString(),
-            brand: data.brand || "",
-            modelName: data.modelName || "",
-            warranty: data.warranty || "",
-            specifications: data.specifications || "",
+            name: prodData.name,
+            description: prodData.description,
+            price: prodData.price.toString(),
+            regularPrice: prodData.regularPrice ? prodData.regularPrice.toString() : "",
+            category: prodData.category?._id || prodData.category || "",
+            stock: prodData.stock.toString(),
+            brand: prodData.brand || "",
+            modelName: prodData.modelName || "",
+            warranty: prodData.warranty || "",
+            specifications: prodData.specifications || "",
           });
-          setImages(data.images && data.images.length > 0 ? data.images : (data.image ? [data.image] : []));
+          setImages(prodData.images && prodData.images.length > 0 ? prodData.images : (prodData.image ? [prodData.image] : []));
         } else {
           toast.error("Product not found");
           router.push("/dashboard/products");
         }
       } catch (error) {
-        toast.error("Failed to load product");
+        toast.error("Failed to load product data");
       } finally {
         setLoading(false);
       }
     };
-    fetchProduct();
+    fetchData();
   }, [id, router]);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -133,9 +144,10 @@ export default function EditProductPage() {
     setSaving(true);
 
     try {
-      const finalCategory = isAddingNewCategory ? newCategory : formData.category;
-      if (!finalCategory) {
-        toast.error("Please select or add a category");
+      let categoryId = formData.category;
+      
+      if (!categoryId) {
+        toast.error("Please select a category");
         setSaving(false);
         return;
       }
@@ -145,7 +157,7 @@ export default function EditProductPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
            ...formData,
-           category: finalCategory,
+           category: categoryId,
            images: images,
            image: images[0], // Primary image
            price: parseFloat(formData.price),
@@ -348,47 +360,34 @@ export default function EditProductPage() {
                     </div>
 
                     <div className="space-y-2">
+                    <div className="space-y-2">
                         <div className="flex items-center justify-between ml-1">
-                            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Classification</label>
-                            <button
-                                type="button"
-                                onClick={() => setIsAddingNewCategory(!isAddingNewCategory)}
-                                className="text-[10px] font-bold text-primary hover:underline transition-all"
-                            >
-                                {isAddingNewCategory ? "Choose Existing" : "+ New category"}
-                            </button>
+                            <label className="text-[10px] font-black uppercase tracking-widest text-gray-400">Inventory Classification</label>
                         </div>
-                        {isAddingNewCategory ? (
-                            <input
+                        <div className="relative">
+                            <select 
                                 required
-                                type="text"
-                                value={newCategory}
-                                onChange={(e) => setNewCategory(e.target.value)}
-                                className="w-full px-5 py-4 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground"
-                                placeholder="New category name..."
-                            />
-                        ) : (
-                            <div className="relative">
-                                <select 
-                                    required
-                                    className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground appearance-none"
-                                    value={formData.category}
-                                    onChange={(e) => setFormData({...formData, category: e.target.value})}
-                                >
-                                    <option value="">Select Category</option>
-                                    <option value="Smartphones">Smartphones</option>
-                                    <option value="Laptops">Laptops</option>
-                                    <option value="Accessories">Accessories</option>
-                                    <option value="Tablets">Tablets</option>
-                                    <option value="Audio">Audio</option>
-                                    <option value="Wearables">Wearables</option>
-                                    <option value="Home Tech">Home Tech</option>
-                                </select>
-                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                                    <Plus size={14} className="text-gray-400 rotate-45" />
-                                </div>
+                                className="w-full px-6 py-4 bg-gray-50 rounded-2xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all font-bold text-foreground appearance-none shadow-sm"
+                                value={formData.category}
+                                onChange={(e) => setFormData({...formData, category: e.target.value})}
+                            >
+                                <option value="">Assign category</option>
+                                {categories.filter(c => !c.parent).map((parent) => (
+                                    <optgroup key={parent._id} label={parent.name}>
+                                        <option value={parent._id}>{parent.name} (Main)</option>
+                                        {categories.filter(c => c.parent === parent._id).map((sub) => (
+                                            <option key={sub._id} value={sub._id}>
+                                                &nbsp;&nbsp;&nbsp;{sub.name}
+                                            </option>
+                                        ))}
+                                    </optgroup>
+                                ))}
+                            </select>
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                                <Plus size={14} className="text-gray-400 rotate-45" />
                             </div>
-                        )}
+                        </div>
+                    </div>
                     </div>
                 </div>
 
@@ -447,7 +446,7 @@ export default function EditProductPage() {
               className="flex-grow bg-primary text-white py-5 px-10 rounded-[2rem] font-black text-sm uppercase tracking-[4px] shadow-2xl shadow-primary/20 hover:bg-primary-dark transition-all transform active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-50"
             >
               {saving ? <Loader2 size={18} className="animate-spin" /> : <Save size={18} />}
-              {saving ? "Processing Manifest..." : "Commit Manifest Updates"}
+              {saving ? "Processing Manifest..." : "Update Product"}
             </button>
             <Link 
               href="/dashboard/products"
