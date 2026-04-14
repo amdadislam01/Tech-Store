@@ -22,9 +22,9 @@ export default function HomePageClient({
 }) {
   const router = useRouter();
   const [products, setProducts] = useState(initialProducts);
-  const [categories, setCategories] = useState(["All"]);
+  const [categories, setCategories] = useState<any[]>([{ _id: "All", name: "All" }]);
   const [loading, setLoading] = useState(false);
-  const [category, setCategory] = useState("All");
+  const [category, setCategory] = useState<any>("All");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("newest");
   const [isFirstLoad, setIsFirstLoad] = useState(true);
@@ -43,7 +43,9 @@ export default function HomePageClient({
     try {
       const res = await fetch("/api/categories");
       const data = await res.json();
-      if (Array.isArray(data)) setCategories(data);
+      if (Array.isArray(data)) {
+        setCategories([{ _id: "All", name: "All" }, ...data]);
+      }
     } catch (error) {
       console.error("Error fetching categories:", error);
     }
@@ -57,7 +59,8 @@ export default function HomePageClient({
     
     setLoading(true);
     try {
-      const res = await fetch(`/api/products?category=${category}&search=${search}&sort=${sort}`);
+      const categoryParam = typeof category === 'object' ? category._id : category;
+      const res = await fetch(`/api/products?category=${categoryParam}&search=${search}&sort=${sort}`);
       const data = await res.json();
       setProducts(data.products || []);
     } catch (error) {
