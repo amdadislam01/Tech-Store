@@ -18,7 +18,7 @@ interface ProductProps {
     regularPrice?: number;
     image: string;
     images?: string[];
-    category: string;
+    category: any;
     description: string;
     brand?: string;
     avgRating?: number;
