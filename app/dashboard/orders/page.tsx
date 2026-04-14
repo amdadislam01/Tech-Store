@@ -1,5 +1,5 @@
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authOptions } from "@/lib/auth";
 import connectDB from "@/lib/db";
 import Order from "@/models/Order";
 import User from "@/models/User"; // Ensure User model is loaded for population
