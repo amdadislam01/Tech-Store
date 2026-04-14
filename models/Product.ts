@@ -8,7 +8,8 @@ const ProductSchema = new Schema(
     regularPrice: { type: Number },
     images: { type: [String], default: [] },
     image: { type: String }, // Legacy field retained for compatibility with existing product documents
-    category: { type: String, required: true },
+    category: { type: Schema.Types.ObjectId, ref: "Category", required: true },
+    subCategory: { type: String }, // Optional: Keep for legacy or extra categorization if needed, but primary is the ref
     brand: { type: String },
     modelName: { type: String },
     warranty: { type: String },
