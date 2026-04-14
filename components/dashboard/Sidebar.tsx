@@ -35,6 +35,7 @@ const Sidebar = ({ role, isOpenMobile, onClose }: SidebarProps) => {
   const menuItems = [
     { name: "Overview", icon: BarChart3, href: "/dashboard", roles: ["super-admin", "admin", "manager", "user"] },
     { name: "Users", icon: Users, href: "/dashboard/users", roles: ["super-admin", "admin"] },
+    { name: "Categories", icon: Store, href: "/dashboard/categories", roles: ["super-admin", "admin"] },
     { name: "Products", icon: Package, href: "/dashboard/products", roles: ["super-admin", "admin", "manager"] },
     { name: "Banner", icon: Zap, href: "/dashboard/hero", roles: ["super-admin", "admin"] },
     { name: "Orders", icon: ShoppingCart, href: "/dashboard/orders", roles: ["super-admin", "admin", "manager", "user"] },
