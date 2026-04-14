@@ -21,8 +21,10 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function AddProductPage() {
+  const { data: session } = useSession();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -40,9 +42,7 @@ export default function AddProductPage() {
 
   const [images, setImages] = useState<string[]>([]);
   const [isUploading, setIsUploading] = useState(false);
-  const [newCategory, setNewCategory] = useState("");
-  const [isAddingNewCategory, setIsAddingNewCategory] = useState(false);
-  const [categories, setCategories] = useState<string[]>([]);
+  const [categories, setCategories] = useState<{ _id: string; name: string; parent?: string }[]>([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -50,8 +50,7 @@ export default function AddProductPage() {
         const res = await fetch("/api/categories");
         const data = await res.json();
         if (Array.isArray(data)) {
-          // Filter out "All" as it's for the main products page filters
-          setCategories(data.filter(cat => cat !== "All"));
+          setCategories(data);
         }
       } catch (error) {
         console.error("Failed to fetch categories:", error);
@@ -115,9 +114,10 @@ export default function AddProductPage() {
     setLoading(true);
 
     try {
-      const finalCategory = isAddingNewCategory ? newCategory : formData.category;
-      if (!finalCategory) {
-        toast.error("Please select or add a category");
+      let categoryId = formData.category;
+      
+      if (!categoryId) {
+        toast.error("Please select a category");
         setLoading(false);
         return;
       }
@@ -127,7 +127,7 @@ export default function AddProductPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
             ...formData,
-            category: finalCategory,
+            category: categoryId,
             images: images,
             image: images[0], // Primary image
             price: Number(formData.price),
@@ -374,50 +374,32 @@ export default function AddProductPage() {
 
                     <div className="space-y-3">
                         <div className="flex items-center justify-between px-1">
-                            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Category</label>
-                            <button
-                                type="button"
-                                onClick={() => setIsAddingNewCategory(!isAddingNewCategory)}
-                                className="px-2.5 py-1 bg-gray-50 text-[9px] font-black uppercase text-gray-500 rounded-lg hover:bg-primary hover:text-white transition-all tracking-wider"
-                            >
-                                {isAddingNewCategory ? "Existing" : "New"}
-                            </button>
+                            <label className="text-[10px] font-bold uppercase tracking-widest text-gray-400">Category Selection</label>
                         </div>
 
-                        {isAddingNewCategory ? (
-                            <input
+                        <div className="relative">
+                            <select
                                 required
-                                type="text"
-                                value={newCategory}
-                                onChange={(e) => setNewCategory(e.target.value)}
-                                className="w-full px-4 py-3.5 bg-gray-50 rounded-xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-sm font-semibold text-foreground outline-none"
-                                placeholder="Category name..."
-                            />
-                        ) : (
-                            <div className="relative">
-                                <select
-                                    required
-                                    value={formData.category}
-                                    onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                                    className="w-full px-4 py-3.5 bg-gray-50 rounded-xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-sm font-semibold text-foreground outline-none appearance-none cursor-pointer"
-                                >
-                                    <option value="">Select category</option>
-                                    {categories.map((cat) => (
-                                        <option key={cat} value={cat}>{cat}</option>
-                                    ))}
-                                    {categories.length === 0 && (
-                                        <>
-                                            <option value="Electronics">Electronics</option>
-                                            <option value="Accessories">Accessories</option>
-                                            <option value="Wearables">Wearables</option>
-                                        </>
-                                    )}
-                                </select>
-                                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
-                                    <Plus size={12} className="text-gray-400 rotate-45" />
-                                </div>
+                                value={formData.category}
+                                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                                className="w-full px-4 py-3.5 bg-gray-50 rounded-xl border border-transparent focus:bg-white focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all text-sm font-semibold text-foreground outline-none appearance-none cursor-pointer"
+                            >
+                                <option value="">Choose category</option>
+                                {categories.filter(c => !c.parent).map((parent) => (
+                                    <optgroup key={parent._id} label={parent.name}>
+                                        <option value={parent._id}>{parent.name} (Main)</option>
+                                        {categories.filter(c => c.parent === parent._id).map((sub) => (
+                                            <option key={sub._id} value={sub._id}>
+                                                &nbsp;&nbsp;&nbsp;{sub.name}
+                                            </option>
+                                        ))}
+                                    </optgroup>
+                                ))}
+                            </select>
+                            <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none">
+                                <Plus size={12} className="text-gray-400 rotate-45" />
                             </div>
-                        )}
+                        </div>
                     </div>
                 </div>
             </motion.div>
