@@ -35,7 +35,7 @@ export async function GET(req: Request) {
       .skip(skip)
       .limit(limit);
     
-    // Normalize product data by ensuring the 'images' array is populated, even for legacy items
+    // Make sure all products have a consistent image format, even for older items
     const migratedProducts = products.map(p => {
         const productObj = p.toObject();
         if (!productObj.images || productObj.images.length === 0) {
