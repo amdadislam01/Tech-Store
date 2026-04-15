@@ -17,10 +17,10 @@ export async function GET() {
 
     const idPattern = /^[0-9a-fA-F]{24}$/;
 
-    // 1. Cleanup: Remove "garbage" categories created by technical IDs
+    // Cleanup: Remove categories that were incorrectly created using raw technical IDs as names
     const deletedCount = await Category.deleteMany({ name: idPattern });
 
-    // 2. Refresh product data
+    // Update the product database with the latest category data
     const products = await Product.find({});
     
     // Find products with legacy string categories (excluding those that are already valid IDs)
@@ -33,7 +33,7 @@ export async function GET() {
         typeof p.category === 'string' && idPattern.test(p.category)
     );
 
-    // Ensure valid IDs are properly linked as ObjectIds
+    // Ensure all products are correctly linked using real database IDs rather than temporary strings
     let idFixCount = 0;
     for (const prod of productsWithStrIds) {
         await Product.updateOne({ _id: prod._id }, { $set: { category: prod.category } });
@@ -44,7 +44,7 @@ export async function GET() {
 
     const createdCategories = [];
 
-    // Ensure all legitimate names have a Category document
+    // Create a official category entry for any unique product label that doesn't have one yet
     for (const name of uniqueCategoryNames) {
       if (!name || idPattern.test(name)) continue;
       
@@ -62,7 +62,7 @@ export async function GET() {
       createdCategories.push(category);
     }
 
-    // Link products to standard IDs
+    // Link products to their respective category records now that we have valid IDs
     let reassignedCount = 0;
     for (const product of productsToFix) {
       const matchingCategory = createdCategories.find(c => c.name === product.category as unknown as string);
@@ -75,7 +75,7 @@ export async function GET() {
     return NextResponse.json({ 
       status: "Success",
       message: "Data integrity restored", 
-      garbagePurged: deletedCount.deletedCount || 0,
+      obsoleteCategoriesRemoved: deletedCount.deletedCount || 0,
       idsCorrected: idFixCount,
       labelsMigrated: uniqueCategoryNames,
       productsReassigned: reassignedCount 
