@@ -24,6 +24,15 @@ const SettingsSchema = new mongoose.Schema(
     heroHeadlineSecondary: { type: String, default: "Cheap Gear." },
     heroDescription: { type: String, default: "Get the tech that actually works for you—from high-performance laptops to the headphones you'll never want to take off. We only stock the good stuff." },
     heroImage: { type: String, default: "https://i.ibb.co.com/svSnsb6F/tech-removebg-preview.png" },
+    heroSlides: [
+      {
+        badge: String,
+        headlinePrimary: String,
+        headlineSecondary: String,
+        description: String,
+        image: String,
+      }
+    ],
   },
   { timestamps: true }
 );
