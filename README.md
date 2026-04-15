@@ -41,12 +41,19 @@
 - **Role-Based Access Control (RBAC)**: Fine-grained permissions for **Super Admin**, **Admin**, and **Manager** roles.
 - **Secure Authentication**: Protected routes and multi-layered user sessions powered by **NextAuth.js**.
 - **Google Site Verification**: Fully integrated for search console ownership and indexing.
+- **Database Maintenance Routine**: Automated tools for cleaning up technical ID garbage and restoring relational integrity.
 
 ### 📈 SEO & Performance Optimization
 - **Dynamic Sitemaps**: Automated `sitemap.xml` generation for optimal search engine crawling.
 - **Robots.txt Management**: Standardized crawler instructions for better indexing control.
 - **JSON-LD Structured Data**: High-fidelity schema markup for Products and Organizations to enhance Rich Snippets.
 - **Next.js 16 Optimization**: Utilizing React Server Components and SSR for lightning-fast interactions and SEO dominance.
+
+### 🛠️ Maintenance & Data Integrity
+- **Legacy Category Cleanup**: Automated identification and removal of orphaned or "technical ID-based" categories to maintain a clean storefront catalog.
+- **Relational Data Healing**: Intelligent migration scripts to link legacy product labels to official database references, ensuring normalized data integrity.
+- **Human-Centric Documentation**: Refactored codebase to replace assistant-style placeholders with professional, human-readable documentation.
+
 
 ---
 
@@ -102,6 +109,7 @@ Tech-Store/
 │   │   ├── products/           # Inventory Management API
 │   │   ├── orders/             # Order Lifecycle & Status Management
 │   │   ├── payment/            # Stripe Integration (Intent Creation)
+│   │   ├── seed-categories/    # Data Integrity & Category Restoration
 │   │   └── webhook/            # Payment Gateway Webhooks (Stripe)
 │   ├── dashboard/              # Comprehensive Administrative Panel
 │   ├── layout.tsx              # Root Layout & Provider Initialization
@@ -158,6 +166,10 @@ Tech-Store/
 ### **Categories & Settings**
 - `GET /api/categories` - Fetch a unique list of all product categories.
 - `GET /api/settings` - Retrieve global application settings (e.g., Contact info, MFS numbers, Hero configurations).
+
+### **Maintenance & Setup**
+- `GET /api/seed` - Initialize the database with primary dummy products (Development only).
+- `GET /api/seed-categories` - Restore database integrity, clean up technical ID categories, and sync product labels.
 
 ### **Payment Gateways**
 - `POST /api/payment/create-intent` - Generate a Stripe Payment Intent for secure card transactions.
