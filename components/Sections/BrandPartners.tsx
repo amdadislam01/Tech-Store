@@ -14,7 +14,7 @@ const brands = [
 
 export default function BrandPartners() {
   return (
-    <section className="bg-white border-y border-gray-100 py-12 overflow-hidden">
+    <section className="bg-white border-y border-gray-100 py-6 lg:py-10 overflow-hidden">
         <motion.div 
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
