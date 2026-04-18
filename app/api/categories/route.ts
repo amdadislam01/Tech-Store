@@ -5,27 +5,59 @@ import Category from "@/models/Category";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 
-export async function GET() {
+export async function GET(req: Request) {
   try {
     await connectDB();
+    const { searchParams } = new URL(req.url);
+    const parentsOnly = searchParams.get("parentsOnly") === "true";
     
     // Aggregation to get categories with product counts
     const categoriesWithCounts = await Category.aggregate([
+      // Stage 1: If parentsOnly, filter for parents
+      ...(parentsOnly ? [{ $match: { parent: null } }] : []),
+      
+      // Stage 2: Lookup products directly assigned to this category
       {
         $lookup: {
           from: "products",
           localField: "_id",
           foreignField: "category",
-          as: "products"
+          as: "directProducts"
         }
       },
+      
+      // Stage 3: Lookup sub-categories (if this is a parent)
+      {
+        $lookup: {
+          from: "categories",
+          localField: "_id",
+          foreignField: "parent",
+          as: "subCategories"
+        }
+      },
+      
+      // Stage 4: Lookup products assigned to sub-categories
+      {
+        $lookup: {
+          from: "products",
+          localField: "subCategories._id",
+          foreignField: "category",
+          as: "subCategoryProducts"
+        }
+      },
+      
       {
         $project: {
           name: 1,
           slug: 1,
           icon: 1,
           parent: 1,
-          productCount: { $size: "$products" }
+          productCount: { 
+            $add: [
+              { $size: "$directProducts" },
+              { $size: "$subCategoryProducts" }
+            ] 
+          }
         }
       },
       {
