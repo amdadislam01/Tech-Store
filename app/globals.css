@@ -1,5 +1,13 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'TrebuchetMS';
+  src: url('/trebuc.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --background: #ffffff;
   --foreground: #111827; /* Gray-900 */
@@ -16,7 +24,7 @@
   --color-primary-light: var(--primary-light);
   --color-primary-dark: var(--primary-dark);
   --color-neutral-gray: var(--neutral-gray);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: 'TrebuchetMS', ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
 }
 
