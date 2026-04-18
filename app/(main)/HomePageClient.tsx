@@ -41,7 +41,7 @@ export default function HomePageClient({
 
   const fetchCategories = async () => {
     try {
-      const res = await fetch("/api/categories");
+      const res = await fetch("/api/categories?parentsOnly=true");
       const data = await res.json();
       if (Array.isArray(data)) {
         setCategories([{ _id: "All", name: "All" }, ...data]);
