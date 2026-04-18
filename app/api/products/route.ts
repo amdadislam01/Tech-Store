@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import connectDB from "@/lib/db";
 import Product from "@/models/Product";
+import Category from "@/models/Category";
 
 export async function GET(req: Request) {
   try {
@@ -14,13 +15,24 @@ export async function GET(req: Request) {
     const limit = parseInt(searchParams.get("limit") || "12");
     const skip = (page - 1) * limit;
     const sort = searchParams.get("sort") || "newest";
+    const minPrice = searchParams.get("minPrice");
+    const maxPrice = searchParams.get("maxPrice");
 
     const query: any = {};
     if (category && category !== "All") {
-      query.category = category;
+      // Fetch sub-categories if any
+      const subCategories = await Category.find({ parent: category }).select("_id").lean();
+      const categoryIds = [category, ...subCategories.map(c => c._id)];
+      query.category = { $in: categoryIds };
     }
     if (search) {
       query.name = { $regex: search, $options: "i" };
+    }
+
+    if (minPrice || maxPrice) {
+      query.price = {};
+      if (minPrice) query.price.$gte = parseFloat(minPrice);
+      if (maxPrice) query.price.$lte = parseFloat(maxPrice);
     }
 
     let sortOption: any = { createdAt: -1 };
