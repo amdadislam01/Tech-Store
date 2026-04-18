@@ -19,12 +19,15 @@ const UserSchema = new Schema(
         isDefault: { type: Boolean, default: false },
       }
     ],
+    isVerified: { type: Boolean, default: true },
+    resetPasswordOTP: { type: String },
+    resetPasswordExpires: { type: Date },
   },
   { timestamps: true }
 );
 
 // Force re-registration if fields are missing (Common Next.js HMR issue)
-if (models.User && (!models.User.schema.path("image") || !models.User.schema.path("addresses"))) {
+if (models.User && (!models.User.schema.path("image") || !models.User.schema.path("resetPasswordOTP"))) {
   delete models.User;
 }
 
