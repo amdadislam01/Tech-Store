@@ -6,13 +6,10 @@ import { Search, Award, Zap, ArrowRight, ShieldCheck, ChevronLeft, ChevronRight 
 import { useState, useEffect, useCallback } from "react";
 
 interface HeroProps {
-  search: string;
-  setSearch: (val: string) => void;
-  handleSearch: (e?: React.KeyboardEvent | React.MouseEvent) => void;
   settings?: any;
 }
 
-export default function Hero({ search, setSearch, handleSearch, settings }: HeroProps) {
+export default function Hero({ settings }: HeroProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
@@ -123,32 +120,8 @@ export default function Hero({ search, setSearch, handleSearch, settings }: Hero
                   {slides[currentSlide].description}
                 </motion.p>
     
-                {/* Search Box */}
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.6, duration: 0.5 }}
-                  className="flex flex-col sm:flex-row items-center gap-2 sm:gap-3 p-1.5 sm:p-2 bg-white/90 backdrop-blur-xl border border-green-100 rounded-[24px] sm:rounded-[28px] shadow-2xl shadow-green-200/30 max-w-2xl mx-auto lg:mx-0"
-                >
-                  <div className="relative flex-1 w-full">
-                    <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                    <input 
-                      type="text" 
-                      placeholder="Need something specific?" 
-                      className="w-full pl-12 pr-4 py-3 sm:py-4 rounded-2xl bg-transparent focus:outline-none text-slate-900 font-bold text-xs sm:text-base"
-                      value={search}
-                      onChange={(e) => setSearch(e.target.value)}
-                      onKeyDown={handleSearch}
-                    />
-                  </div>
-                  <button 
-                    onClick={handleSearch}
-                    className="w-full sm:w-auto px-8 py-3 sm:py-4 bg-primary shadow-lg shadow-green-200 text-white font-black rounded-[18px] sm:rounded-[22px] hover:bg-primary-dark transition-all flex items-center justify-center gap-2 group text-xs sm:text-base"
-                  >
-                    {search.trim() ? "Search" : "Shop Now"}
-                    <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                  </button>
-                </motion.div>
+                {/* Spacing after description */}
+                <div className="mb-8 lg:mb-10" />
     
                 {/* Features */}
                 <motion.div 
@@ -216,16 +189,6 @@ export default function Hero({ search, setSearch, handleSearch, settings }: Hero
         </div>
       </div>
 
-      {/* Progress Bar (Auto-play indicator) */}
-      <div className="absolute bottom-0 left-0 h-1 bg-green-100 w-full overflow-hidden">
-        <motion.div 
-          key={currentSlide + (isAutoPlaying ? "-playing" : "-stopped")}
-          initial={{ x: "-100%" }}
-          animate={isAutoPlaying ? { x: "0%" } : { x: "-100%" }}
-          transition={{ duration: 6, ease: "linear" }}
-          className="h-full bg-primary"
-        />
-      </div>
     </section>
   );
 }
