@@ -3,13 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { UserPlus, User, Mail, Lock, ArrowRight, ShieldCheck, Zap } from "lucide-react";
+import { UserPlus, User, Mail, Lock, ArrowRight, ShieldCheck, Zap, Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import Image from "next/image";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({ name: "", email: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -24,8 +25,10 @@ export default function RegisterPage() {
       });
       const data = await res.json();
       if (res.ok) {
-        toast.success("Account created! Please login.");
-        router.push("/login");
+        toast.success("Registration successful! Please verify your email.", {
+          duration: 6000,
+        });
+        router.push(`/verify-otp?email=${encodeURIComponent(formData.email)}`);
       } else {
         toast.error(data.message || "Something went wrong");
       }
@@ -101,13 +104,20 @@ export default function RegisterPage() {
                         <div className="relative group">
                             <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={20} />
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 required
-                                className="w-full pl-14 pr-6 py-4 bg-slate-50 rounded-2xl border-2 border-transparent focus:bg-white focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all font-bold text-slate-900 placeholder:text-slate-300"
+                                className="w-full pl-14 pr-14 py-4 bg-slate-50 rounded-2xl border-2 border-transparent focus:bg-white focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all font-bold text-slate-900 placeholder:text-slate-300"
                                 placeholder="••••••••"
                                 value={formData.password}
                                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                             />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary transition-colors cursor-pointer"
+                            >
+                                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                            </button>
                         </div>
                     </div>
 
