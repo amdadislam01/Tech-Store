@@ -1,4 +1,4 @@
-#  Tech-Store: High-Performance E-Commerce Experience
+#  Tech-Store: High-Performance E-Commerce platform
 
 [![Next.js](https://img.shields.io/badge/Next.js-16.2.0-black?logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.2.4-blue?logo=react)](https://reactjs.org/)
@@ -6,26 +6,26 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-Latest-47A248?logo=mongodb)](https://www.mongodb.com/)
 [![Redux](https://img.shields.io/badge/Redux_Toolkit-2.11.2-764ABC?logo=redux)](https://redux-toolkit.js.org/)
 
-**Tech-Store** is a premium, high-fidelity e-commerce platform designed for modern consumers. It combines cutting-edge technology with a sleek, minimalist aesthetic to provide a seamless shopping experience for innovative tech gadgets.
+**Tech-Store** is an ultra-professional, high-fidelity e-commerce platform designed for the modern corporate elite. It blends architectural precision with a minimalist aesthetic to provide a seamless, high-performance shopping experience for premium tech gadgets.
 
 ---
 
 ## Key Features & Functionalities
 
 ### 🎨 Premium UI/UX & Design Philosophy
-- **Glassmorphism Design**: Modern, translucent interfaces that feel light and premium.
-- **Tech Inspired Layout**: Professional, high-conversion design with primary green accents and optimized product density.
-- **Fluid Animations**: Smooth transitions and interactive elements powered by **Framer Motion** and **Lenis Scroll**.
-- **Responsive Navigation**: Mobile-optimized navbar with persistent search, compact action buttons, and intuitive mobile drawer.
-- **Dynamic Loading states**: Polished, responsive loading components to ensure a seamless transition between pages.
-- **Custom 404 Experience**: Dedicated, animated error page for a superior brand experience even during broken links.
+- **Corporate Elite Aesthetic**: Architecturally precise, minimalist interfaces that convey trust and professional excellence.
+- **Hierarchical Navigation**: Sophisticated, hover-based category systems for effortless exploration of complex catalogs.
+- **Performance-First Layout**: Optimally dense product grids with primary accents designed for high-conversion corporate environments.
+- **Fluid Animations**: Ultra-smooth transitions and interactive elements powered by **Framer Motion** and **Lenis Scroll**.
+- **Dynamic Loading States**: Polished, skeleton-based loading components to ensure a seamless transition between pages.
+- **Custom 404 Experience**: Dedicated, animated error page maintaining brand integrity even during edge cases.
 
 ### 🛍️ Core Shopping Experience
-- **Interactive Product Details**: Immersive product pages with quantity selectors, technical specification tables, and metadata chips.
-- **Dynamic Category Management**: Real-time category synchronization directly from the product database.
-- **Advanced Filtering & Search**: Instant filtering by category, search terms, and pricing.
+- **Parsed Product Specifications**: Intelligent data extraction and formatting for technical specification tables on product pages.
+- **Hierarchical Category Systems**: Multi-layered category management for structured product organization.
+- **Advanced Price Filtering**: Precision price range sliders and filtering logic for targeted product discovery.
 - **Verified Review System**: Robust rating and review mechanism with user identity verification.
-- **Cart & Wishlist Logic**: Persistent state management for a seamless "save for later" and checkout flow.
+- **Persistent State Management**: Unified cart and wishlist logic for a seamless "save for later" and checkout flow.
 
 ### ⚙️ Global Site Customization
 - **Dynamic Hero Section**: Administrators can update the badge, headline, description, and hero image directly from the dashboard.
@@ -76,15 +76,15 @@ We are constantly evolving the platform. Here are the features currently in deve
 
 | Category | Technology |
 | :--- | :--- |
-| **Framework** | Next.js 16 (App Router) |
+| **Framework** | Next.js 16.2.0 (App Router) |
 | **Language** | TypeScript |
-| **Frontend** | React 19, Tailwind CSS 4 |
-| **State Management** | Redux Toolkit |
-| **Database** | MongoDB with Mongoose |
-| **Payments** | Stripe, Manual Payment (MFS) |
+| **Frontend** | React 19.2.4, Tailwind CSS 4.0 |
+| **State Management** | Redux Toolkit 2.11.2 |
+| **Database** | MongoDB with Mongoose 9.3.1 |
+| **Payments** | Stripe 22.0.0, Manual Payment (MFS) |
 | **Animations** | Framer Motion, Lenis Scroll |
 | **SEO** | Next-Sitemap, JSON-LD |
-| **Icons** | Lucide React |
+| **Validation** | Zod, React Hook Form |
 | **Authentication** | NextAuth.js |
 
 ---
