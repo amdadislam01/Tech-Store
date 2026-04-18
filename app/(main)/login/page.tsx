@@ -4,7 +4,7 @@ import { useState, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { LogIn, Mail, Lock, ArrowRight, ShieldCheck, Quote } from "lucide-react";
+import { LogIn, Mail, Lock, ArrowRight, ShieldCheck, Quote, Eye, EyeOff } from "lucide-react";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 import Image from "next/image";
@@ -12,6 +12,7 @@ import Image from "next/image";
 function LoginContent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -83,18 +84,25 @@ function LoginContent() {
                     <div className="space-y-2">
                         <div className="flex items-center justify-between ml-1 mb-1">
                             <label className="text-[10px] font-black uppercase tracking-widest text-slate-400">Password</label>
-                            <Link href="#" className="text-[10px] font-bold uppercase tracking-widest text-primary hover:text-primary-dark transition-colors">Forgot password?</Link>
+                            <Link href="/forgot-password" className="text-[10px] font-bold uppercase tracking-widest text-primary hover:text-primary-dark transition-colors">Forgot password?</Link>
                         </div>
                         <div className="relative group">
                             <Lock className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors" size={20} />
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 required
-                                className="w-full pl-14 pr-6 py-4 bg-slate-50 rounded-2xl border-2 border-transparent focus:bg-white focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all font-bold text-slate-900 placeholder:text-slate-300"
+                                className="w-full pl-14 pr-14 py-4 bg-slate-50 rounded-2xl border-2 border-transparent focus:bg-white focus:border-primary/20 focus:ring-4 focus:ring-primary/5 transition-all font-bold text-slate-900 placeholder:text-slate-300"
                                 placeholder="••••••••"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
+                            <button
+                                type="button"
+                                onClick={() => setShowPassword(!showPassword)}
+                                className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-primary transition-colors cursor-pointer"
+                            >
+                                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                            </button>
                         </div>
                     </div>
 
