@@ -83,12 +83,7 @@ export default function HomePageClient({
 
   return (
     <div className="bg-[#F8FAFC] min-h-screen">
-      <Hero 
-        search={search} 
-        setSearch={setSearch} 
-        handleSearch={handleSearch} 
-        settings={settings}
-      />
+      <Hero settings={settings} />
       
       <BrandPartners />
 
