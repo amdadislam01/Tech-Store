@@ -101,13 +101,7 @@ const ProductCard = ({ product }: ProductProps) => {
           {product.name}
         </Link>
         
-        {/* Specs Placeholder - Star Tech cards have key specs here */}
-        <div className="mb-2 space-y-0.5 border-b border-gray-50 pb-2">
-            <div className="flex items-center gap-1.5 text-[10px] text-gray-500 truncate">
-                <div className="w-1 h-1 bg-gray-300 rounded-full" />
-                <span>High-performance flagship experience</span>
-            </div>
-        </div>
+
  
         {/* Pricing & Cart */}
         <div className="mt-auto pt-2 flex items-center justify-between">
