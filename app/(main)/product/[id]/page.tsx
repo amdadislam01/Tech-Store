@@ -117,10 +117,22 @@ export default function ProductDetails() {
     product.reviews.forEach((r: any) => {
         if (r.rating >= 1 && r.rating <= 5) stats[5 - r.rating]++;
     });
-    return stats.map(count => ({
+    return stats.map((count: number) => ({
         count,
         percentage: (count / product.reviews.length) * 100
     }));
+  }, [product]);
+
+  const specHighlights = useMemo(() => {
+    if (!product?.specifications) return [];
+    return product.specifications
+      .split("\n")
+      .filter((s: string) => s.trim().length > 0)
+      .slice(0, 5)
+      .map((spec: string) => {
+        const [label, ...value] = spec.includes(":") ? spec.split(":") : [spec, ""];
+        return { label: label.trim(), value: value.join(":").trim() };
+      });
   }, [product]);
 
   if (loading) return (
@@ -241,22 +253,36 @@ export default function ProductDetails() {
                     <div className="pt-4">
                         <h3 className="text-sm font-bold text-slate-800 mb-4 tracking-wide uppercase border-b-2 border-primary/20 inline-block pb-1">Key Features</h3>
                         <ul className="space-y-3">
-                            <li className="flex items-center gap-3 text-xs text-gray-600 font-medium">
-                                <span className="w-1.5 h-1.5 bg-primary rounded-full" />
-                                <span>High-performance flagship experience</span>
-                            </li>
-                            <li className="flex items-center gap-3 text-xs text-gray-600 font-medium">
-                                <span className="w-1.5 h-1.5 bg-primary rounded-full" />
-                                <span>Professional build with durable materials</span>
-                            </li>
-                            <li className="flex items-center gap-3 text-xs text-gray-600 font-medium">
-                                <span className="w-1.5 h-1.5 bg-primary rounded-full" />
-                                <span>Advanced technology for daily lifestyle</span>
-                            </li>
-                            <li className="flex items-center gap-3 text-xs text-gray-600 font-medium">
-                                <span className="w-1.5 h-1.5 bg-primary rounded-full" />
-                                <span>Authentic component verification</span>
-                            </li>
+                            {specHighlights.length > 0 ? (
+                                specHighlights.map((spec: { label: string, value: string }, i: number) => (
+                                    <li key={i} className="flex items-start gap-3 text-xs text-gray-600 font-medium">
+                                        <span className="w-1.5 h-1.5 bg-primary rounded-full mt-1.5 flex-shrink-0" />
+                                        <span>
+                                            <span className="font-bold text-slate-800 mr-1">{spec.label}:</span>
+                                            {spec.value || "Verified Tech"}
+                                        </span>
+                                    </li>
+                                ))
+                            ) : (
+                                <>
+                                    <li className="flex items-center gap-3 text-xs text-gray-600 font-medium">
+                                        <span className="w-1.5 h-1.5 bg-primary rounded-full" />
+                                        <span>High-performance flagship experience</span>
+                                    </li>
+                                    <li className="flex items-center gap-3 text-xs text-gray-600 font-medium">
+                                        <span className="w-1.5 h-1.5 bg-primary rounded-full" />
+                                        <span>Professional build with durable materials</span>
+                                    </li>
+                                    <li className="flex items-center gap-3 text-xs text-gray-600 font-medium">
+                                        <span className="w-1.5 h-1.5 bg-primary rounded-full" />
+                                        <span>Advanced technology for daily lifestyle</span>
+                                    </li>
+                                    <li className="flex items-center gap-3 text-xs text-gray-600 font-medium">
+                                        <span className="w-1.5 h-1.5 bg-primary rounded-full" />
+                                        <span>Authentic component verification</span>
+                                    </li>
+                                </>
+                            )}
                         </ul>
                         <Link href="#specs" onClick={(e) => { e.preventDefault(); setActiveTab("specs"); }} className="text-[11px] font-bold text-[#ef4444] hover:underline mt-4 inline-block">View More Info</Link>
                     </div>
@@ -359,10 +385,37 @@ export default function ProductDetails() {
                              {product.specifications ? (
                                  <div className="bg-white rounded-lg border border-gray-100 overflow-hidden shadow-sm">
                                      <div className="w-full">
+                                         {/* Key Features Group */}
+                                         <div className="bg-slate-50 border-b border-gray-100 px-5 sm:px-8 py-4">
+                                            <h3 className="font-bold text-slate-700 uppercase tracking-wider italic text-xs sm:text-sm flex items-center gap-2">
+                                                <Sparkles size={14} className="text-primary" /> Key Features
+                                            </h3>
+                                         </div>
+                                         <div className="divide-y divide-gray-100 bg-white">
+                                            {[
+                                                "Performance: High-performance flagship experience",
+                                                "Build: Professional build with durable materials",
+                                                "Innovation: Advanced technology for daily lifestyle",
+                                                "Authenticity: Authentic component verification"
+                                            ].map((feat: string, i: number) => {
+                                                const [label, val] = feat.split(": ");
+                                                return (
+                                                    <div key={i} className="flex flex-col sm:flex-row hover:bg-gray-50 transition-colors">
+                                                        <div className="px-5 sm:px-8 py-3 sm:py-5 font-bold text-gray-500 text-[10px] sm:text-xs sm:w-1/3 bg-gray-50/40 uppercase tracking-tight sm:tracking-normal">
+                                                            {label}
+                                                        </div>
+                                                        <div className="px-5 sm:px-8 py-3 sm:py-5 text-slate-800 font-bold sm:font-medium text-[11px] sm:text-xs border-t border-gray-50 sm:border-0">
+                                                            {val}
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                         </div>
+
                                          {/* Group Header */}
-                                         <div className="bg-[#f0fdf4] border-b border-gray-100 px-5 sm:px-8 py-4">
+                                         <div className="bg-[#f0fdf4] border-t border-b border-gray-100 px-5 sm:px-8 py-4 mt-6">
                                             <h3 className="font-bold text-primary uppercase tracking-wider italic text-xs sm:text-sm flex items-center gap-2">
-                                                <ListTodo size={14} /> Main Components
+                                                <ListTodo size={14} /> Technical Specifications
                                             </h3>
                                          </div>
                                          
@@ -372,7 +425,7 @@ export default function ProductDetails() {
                                                  const [label, ...value] = spec.includes(":") ? spec.split(":") : [spec, ""];
                                                  return (
                                                      <div key={i} className="flex flex-col sm:flex-row hover:bg-gray-50 transition-colors">
-                                                         <div className="px-5 sm:px-8 py-3 sm:py-5 font-bold text-gray-500 text-[10px] sm:text-xs sm:w-1/3 bg-gray-50/40 uppercase tracking-tight sm:tracking-normal sm:uppercase-none">
+                                                         <div className="px-5 sm:px-8 py-3 sm:py-5 font-bold text-gray-500 text-[10px] sm:text-xs sm:w-1/3 bg-gray-50/40 uppercase tracking-tight sm:tracking-normal">
                                                              {label.trim()}
                                                          </div>
                                                          <div className="px-5 sm:px-8 py-3 sm:py-5 text-slate-800 font-bold sm:font-medium text-[11px] sm:text-xs border-t border-gray-50 sm:border-0">
@@ -459,7 +512,7 @@ export default function ProductDetails() {
                                         </div>
                                         <div className="text-right">
                                             <div className="flex text-yellow-400 mb-1 justify-end">
-                                                {[1, 2, 3, 4, 5].map((s) => (
+                                                {[1, 2, 3, 4, 5].map((s: number) => (
                                                     <Star key={s} size={14} fill={product.avgRating >= s ? "currentColor" : "none"} className={product.avgRating >= s ? "" : "text-gray-100"} />
                                                 ))}
                                             </div>
@@ -468,7 +521,7 @@ export default function ProductDetails() {
                                     </div>
                                     
                                     <div className="space-y-3">
-                                        {reviewStats?.map((stat, i) => (
+                                        {reviewStats?.map((stat: { percentage: number, count: number }, i: number) => (
                                             <div key={i} className="flex items-center gap-4 group">
                                                 <span className="text-[9px] font-black text-gray-400 w-3">{5 - i}</span>
                                                 <div className="flex-1 h-1.5 bg-white rounded-full overflow-hidden border border-gray-100/50 relative">
@@ -498,7 +551,7 @@ export default function ProductDetails() {
                                             <div>
                                                 <label className="text-[9px] font-black uppercase tracking-widest text-gray-400 block mb-3">Rating Scale</label>
                                                 <div className="flex gap-2">
-                                                    {[1, 2, 3, 4, 5].map((s) => (
+                                                    {[1, 2, 3, 4, 5].map((s: number) => (
                                                         <button
                                                             key={s}
                                                             type="button"
@@ -574,7 +627,7 @@ export default function ProductDetails() {
                                                         </div>
                                                     </div>
                                                     <div className="flex text-yellow-400 gap-0.5">
-                                                        {Array.from({ length: 5 }).map((_, i) => (
+                                                        {Array.from({ length: 5 }).map((_: any, i: number) => (
                                                             <Star key={i} size={12} fill={i < rev.rating ? "currentColor" : "none"} className={i < rev.rating ? "" : "text-gray-100"} />
                                                         ))}
                                                     </div>
