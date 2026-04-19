@@ -36,6 +36,7 @@ export default function ProductDetails() {
   const [comment, setComment] = useState("");
   const [submittingReview, setSubmittingReview] = useState(false);
   const [quantity, setQuantity] = useState(1);
+  const [errorStatus, setErrorStatus] = useState<number | null>(null);
   const { data: session } = useSession();
   const dispatch = useDispatch();
   
@@ -55,19 +56,24 @@ export default function ProductDetails() {
 
   useEffect(() => {
     const fetchProduct = async () => {
+      setLoading(true);
+      setErrorStatus(null);
       try {
         const res = await fetch(`/api/products/${id}`, { cache: "no-store" });
-        const data = await res.json();
         
-        if (data.error) {
-          setProduct(null);
-        } else {
-          setProduct(data);
-          setActiveImage(data.images && data.images.length > 0 ? data.images[0] : data.image);
+        if (!res.ok) {
+          setErrorStatus(res.status);
+          setLoading(false);
+          return;
         }
+
+        const data = await res.json();
+        setProduct(data);
+        setProduct(data);
+        setActiveImage(data.images && data.images.length > 0 ? data.images[0] : data.image);
       } catch (error) {
         console.error("Error:", error);
-        setProduct(null);
+        setErrorStatus(500);
       } finally {
         setLoading(false);
       }
@@ -154,18 +160,45 @@ export default function ProductDetails() {
     </div>
   );
 
-  if (!product) return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white px-6 text-center">
-        <div className="w-32 h-32 bg-zinc-50 rounded-[4rem] flex items-center justify-center mb-10 shadow-2xl shadow-gray-100 border border-white">
-            <ShoppingCart size={40} className="text-gray-200" />
-        </div>
-        <h2 className="text-4xl font-black text-foreground mb-4 tracking-tighter">Identity Not Found</h2>
-        <p className="text-gray-500 max-w-sm mb-12 font-medium leading-relaxed">The requested innovation sequence could not be matched. It may have been archived or repositioned.</p>
-        <Link href="/" className="px-12 py-5 bg-foreground text-white font-black text-xs uppercase tracking-[3px] rounded-3xl shadow-2xl hover:bg-primary transition-all duration-500 active:scale-95">
-            Return to Core
-        </Link>
-    </div>
-  );
+  if (errorStatus || !product) {
+    const is404 = errorStatus === 404 || (!loading && !product);
+    
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-white px-6 text-center">
+          <motion.div 
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="w-32 h-32 bg-zinc-50 rounded-[4rem] flex items-center justify-center mb-10 shadow-2xl shadow-gray-100 border border-white"
+          >
+              <ShoppingCart size={40} className="text-gray-200" />
+          </motion.div>
+          
+          <h2 className="text-4xl font-black text-foreground mb-4 tracking-tighter">
+            {is404 ? "Identity Not Found" : "Connection Interrupted"}
+          </h2>
+          
+          <p className="text-gray-500 max-w-sm mb-12 font-medium leading-relaxed">
+            {is404 
+              ? "The requested innovation sequence could not be matched. It may have been archived or repositioned." 
+              : "We encountered a transmission anomaly while retrieving product data. Please check your connection or try again."}
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4">
+              {!is404 && (
+                <button 
+                  onClick={() => window.location.reload()} 
+                  className="px-12 py-5 bg-primary text-white font-black text-xs uppercase tracking-[3px] rounded-3xl shadow-xl hover:shadow-primary/20 transition-all duration-500 active:scale-95"
+                >
+                  Retry Connection
+                </button>
+              )}
+              <Link href="/" className={`px-12 py-5 ${!is404 ? 'bg-zinc-100 text-zinc-500 hover:bg-zinc-200' : 'bg-foreground text-white hover:bg-primary'} font-black text-xs uppercase tracking-[3px] rounded-3xl shadow-xl transition-all duration-500 active:scale-95 text-center`}>
+                  Return to Core
+              </Link>
+          </div>
+      </div>
+    );
+  }
 
   const regularPrice = product.regularPrice || product.price + Math.floor(product.price * 0.1);
   const discountAmount = regularPrice - product.price;
