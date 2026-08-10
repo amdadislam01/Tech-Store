@@ -18,7 +18,9 @@ import {
   LayoutGrid,
   Zap,
   LifeBuoy,
-  Store
+  Store,
+  Info,
+  PhoneCall
 } from "lucide-react";
 import ProfileDropdown from "./ProfileDropdown";
 
@@ -31,7 +33,8 @@ const Navbar = () => {
   const links = [
     { name: "Home", href: "/", icon: Home },
     { name: "Collection", href: "/products", icon: LayoutGrid },
-    { name: "New Arrivals", href: "/products?sort=newest", icon: Zap },
+    { name: "About Us", href: "/about", icon: Info },
+    { name: "Contact Us", href: "/contact", icon: PhoneCall },
     { name: "Support", href: "/support", icon: LifeBuoy }
   ];
   const { items } = useSelector((state: RootState) => state.cart);
@@ -61,7 +64,7 @@ const Navbar = () => {
           <span className="text-lg sm:text-2xl tracking-tighter">Tech<span className="text-foreground">Store</span></span>
         </Link>
  
-        <div className="hidden lg:flex items-center gap-6 xl:gap-8">
+        <div className="hidden lg:flex items-center gap-4 xl:gap-6">
           {links.map((link) => {
             const isActive = pathname === link.href;
             return (
