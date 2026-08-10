@@ -48,13 +48,20 @@ export default function Footer() {
 
           {/* Quick Links Column */}
           <div>
-            <h3 className="text-white font-black text-sm uppercase tracking-widest mb-8">Support</h3>
+            <h3 className="text-white font-black text-sm uppercase tracking-widest mb-8">Navigation & Support</h3>
             <ul className="space-y-4 text-sm font-medium">
-              {["Help Center", "Order Tracking", "Returns & Refunds", "Technical Setup", "Warranty Policy", "Contact Us"].map((item) => (
-                <li key={item}>
-                  <Link href="/support" className="hover:text-primary transition-colors flex items-center gap-2 group">
+              {[
+                { name: "About Us", href: "/about" },
+                { name: "Contact Us", href: "/contact" },
+                { name: "Support Center", href: "/support" },
+                { name: "Privacy Policy", href: "/privacy" },
+                { name: "Terms of Service", href: "/terms" },
+                { name: "Cookie Policy", href: "/cookies" }
+              ].map((link) => (
+                <li key={link.name}>
+                  <Link href={link.href} className="hover:text-primary transition-colors flex items-center gap-2 group">
                     <span className="w-0 h-px bg-primary group-hover:w-3 transition-all" />
-                    {item}
+                    {link.name}
                   </Link>
                 </li>
               ))}
