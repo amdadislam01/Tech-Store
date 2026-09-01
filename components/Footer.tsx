@@ -68,6 +68,8 @@ export default function Footer() {
             </ul>
           </div>
 
+
+
           {/* Newsletter Column */}
           <div className="space-y-8">
             <h3 className="text-white font-black text-sm uppercase tracking-widest mb-8">Stay Ahead</h3>
