@@ -1,4 +1,4 @@
-#  Tech-Store: High-Performance E-Commerce platform
+#  Tech-Store: High-Performance E-Commerce platfor
 
 [![Next.js](https://img.shields.io/badge/Next.js-16.2.0-black?logo=next.js)](https://nextjs.org/)
 [![React](https://img.shields.io/badge/React-19.2.4-blue?logo=react)](https://reactjs.org/)
